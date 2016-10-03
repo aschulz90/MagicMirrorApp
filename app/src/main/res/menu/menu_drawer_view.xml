@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_main_fragment"
+            android:icon="@drawable/ic_one"
+            android:title="MagicMirror"
+            android:checked="true" />
+        <item
+            android:id="@+id/nav_modules_fragment"
+            android:icon="@drawable/ic_two"
+            android:title="Modules" />
+        <item
+            android:id="@+id/nav_settings_fragment"
+            android:icon="@drawable/ic_three"
+            android:title="Settings" />
+    </group>
+
+    <item android:title="Sub items">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:icon="@drawable/ic_one"
+                    android:title="Sub item 1" />
+                <item
+                    android:icon="@drawable/ic_two"
+                    android:title="Sub item 2" />
+            </group>
+        </menu>
+    </item>
+</menu>
