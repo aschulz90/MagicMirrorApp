@@ -4,16 +4,26 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="TextView"
+        android:text="@string/settings_custom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView" />
+        android:id="@+id/textView3"
+        style="?android:attr/listSeparatorTextViewStyle"/>
+
+    <TextView
+        android:text="Text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/editText" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
         android:ems="10"
-        android:id="@+id/editText" />
+        android:id="@+id/editText"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"/>
 </LinearLayout>

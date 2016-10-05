@@ -11,6 +11,10 @@ import android.view.ViewGroup;
 
 import com.blublabs.magicmirror.R;
 import com.blublabs.magicmirror.common.MagicMirrorFragment;
+import com.blublabs.magicmirror.common.MyCustomLayoutManager;
+import com.blublabs.magicmirror.modules.alert.AlertMagicMirrorModule;
+import com.blublabs.magicmirror.modules.calendar.CalendarMagicMirrorModule;
+import com.blublabs.magicmirror.modules.helloworld.HelloWorldMagicMirrorModule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +23,7 @@ import java.util.List;
  * Created by andrs on 21.09.2016.
  */
 
-public class ModuleFragment extends MagicMirrorFragment {
+public class ModulesFragment extends MagicMirrorFragment {
 
     private List<MagicMirrorModule> moduleList = new ArrayList<>();
     private MagicMirrorModuleListAdapter moduleListAdapter;
@@ -33,18 +37,17 @@ public class ModuleFragment extends MagicMirrorFragment {
 
         recyclerView = (RecyclerView) view.findViewById(R.id.card_recycler_view);
 
-        moduleListAdapter = new MagicMirrorModuleListAdapter(moduleList, getActivity().getApplicationContext());
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        moduleListAdapter = new MagicMirrorModuleListAdapter(moduleList, getActivity().getApplicationContext(), recyclerView, this);
+        RecyclerView.LayoutManager mLayoutManager = new MyCustomLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         /*recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));*/
 
         recyclerView.setAdapter(moduleListAdapter);
 
-        moduleList.add(new MagicMirrorModule("Module1", true, MagicMirrorModule.PositionRegion.top_left));
-        moduleList.add(new MagicMirrorModule("Module2", true, MagicMirrorModule.PositionRegion.top_left));
-        moduleList.add(new MagicMirrorModule("Module3", true, MagicMirrorModule.PositionRegion.top_left));
-        moduleList.add(new MagicMirrorModule("Module4", true, MagicMirrorModule.PositionRegion.top_left));
+        moduleList.add(new HelloWorldMagicMirrorModule(false, MagicMirrorModule.PositionRegion.top_left));
+        moduleList.add(new AlertMagicMirrorModule(false, MagicMirrorModule.PositionRegion.top_left));
+        moduleList.add(new CalendarMagicMirrorModule(true, MagicMirrorModule.PositionRegion.top_left));
 
         return view;
     }

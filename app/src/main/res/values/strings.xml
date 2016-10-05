@@ -7,4 +7,6 @@
     <string name="default_device_list_entry">Connect to mirror</string>
     <string name="preference_file_key">preference_file</string>
     <string name="enabled">Enabled</string>
+    <string name="settings_general">General Settings</string>
+    <string name="settings_custom">Custom Settings</string>
 </resources>

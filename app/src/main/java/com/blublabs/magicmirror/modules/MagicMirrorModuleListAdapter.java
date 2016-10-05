@@ -5,38 +5,45 @@ package com.blublabs.magicmirror.modules;
  */
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.blublabs.magicmirror.R;
+import com.blublabs.magicmirror.common.ExpandAndScrollAnimation;
 
 import java.util.List;
 
-public class MagicMirrorModuleListAdapter extends RecyclerView.Adapter<MagicMirrorModuleListAdapter.MyViewHolder> {
+class MagicMirrorModuleListAdapter extends RecyclerView.Adapter<MagicMirrorModuleListAdapter.MyViewHolder> {
 
-    private List<MagicMirrorModule> moduleList;
-    private Context mAppContext;
+    private final RecyclerView recyclerView;
+    private final List<MagicMirrorModule> moduleList;
+    private final Context appContext;
+    private final Fragment parentFragment;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView title;
         public Spinner positionSpinner;
-        public CheckBox enabledCheckbox;
-        public View settingsContent;
+        public SwitchCompat enabledSwitch;
+        public LinearLayout settingsContent;
 
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.info_text);
             positionSpinner = (Spinner) view.findViewById(R.id.position_spinner);
-            enabledCheckbox = (CheckBox) view.findViewById(R.id.enabled_checkbox);
-            settingsContent = view.findViewById(R.id.module_settings_content);
+            enabledSwitch = (SwitchCompat) view.findViewById(R.id.switch_compat);
+            settingsContent = (LinearLayout) view.findViewById(R.id.module_settings_content);
 
             view.setOnClickListener(this);
         }
@@ -48,9 +55,11 @@ public class MagicMirrorModuleListAdapter extends RecyclerView.Adapter<MagicMirr
     }
 
 
-    public MagicMirrorModuleListAdapter(List<MagicMirrorModule> moduleList, Context applicationContext) {
+    MagicMirrorModuleListAdapter(List<MagicMirrorModule> moduleList, Context applicationContext, RecyclerView recyclerView, ModulesFragment modulesFragment) {
         this.moduleList = moduleList;
-        this.mAppContext = applicationContext;
+        this.appContext = applicationContext;
+        this.parentFragment = modulesFragment;
+        this.recyclerView = recyclerView;
     }
 
     @Override
@@ -61,26 +70,56 @@ public class MagicMirrorModuleListAdapter extends RecyclerView.Adapter<MagicMirr
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final MagicMirrorModule element = moduleList.get(position);
         holder.title.setText(element.getName());
 
-        ArrayAdapter<MagicMirrorModule.PositionRegion> spinnerAdapter = new ArrayAdapter<>(mAppContext, R.layout.item_module_spinner, MagicMirrorModule.PositionRegion.values());
+        ArrayAdapter<MagicMirrorModule.PositionRegion> spinnerAdapter = new ArrayAdapter<>(parentFragment.getActivity(), android.R.layout.simple_spinner_item, MagicMirrorModule.PositionRegion.values());
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         holder.positionSpinner.setAdapter(spinnerAdapter);
         holder.positionSpinner.setSelection(element.getPosition().ordinal());
 
         //in some cases, it will prevent unwanted situations
-        holder.enabledCheckbox.setOnCheckedChangeListener(null);
-        holder.enabledCheckbox.setChecked(element.isActive());
+        holder.enabledSwitch.setOnCheckedChangeListener(null);
+        holder.enabledSwitch.setChecked(element.isActive());
         holder.settingsContent.setVisibility(element.isActive() ? View.VISIBLE : View.GONE);
 
-        holder.enabledCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.enabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                element.setActive(isChecked);
-                holder.settingsContent.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            element.setActive(isChecked);
+
+            holder.settingsContent.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            Animation a;
+            if (!isChecked) {
+                a = new ExpandAndScrollAnimation(holder.settingsContent.getHeight(), 0, holder.settingsContent, recyclerView, holder.itemView);
+            } else {
+                a = new ExpandAndScrollAnimation(holder.settingsContent.getHeight(), holder.settingsContent.getMeasuredHeight(), holder.settingsContent, recyclerView, holder.itemView);
+            }
+            a.setDuration(200);
+
+            holder.settingsContent.startAnimation(a);
             }
         });
+
+        // add custom settings fragment
+        ModuleSettingsFragment settingsFragment = element.getAddtionalSettingsFragment();
+
+        if(settingsFragment != null) {
+            FragmentManager fragmentManager = parentFragment.getChildFragmentManager();
+            FrameLayout frameLayout = new FrameLayout(appContext);
+            frameLayout.setId(position+1); //since id cannot be zero
+            popBackStack(fragmentManager, frameLayout.getId());
+            holder.settingsContent.addView(frameLayout);
+            fragmentManager.beginTransaction().replace(frameLayout.getId(), settingsFragment).commit();
+        }
+    }
+
+    private static void popBackStack(FragmentManager fragmentManager, int numBackStack) {
+        int fragCount = fragmentManager.getBackStackEntryCount();
+        for(int i = 0; i < fragCount-numBackStack; i++){
+            fragmentManager.popBackStack();
+        }
     }
 
     @Override

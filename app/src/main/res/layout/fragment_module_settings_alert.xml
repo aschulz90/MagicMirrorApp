@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="@string/settings_custom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3"
+        style="?android:attr/listSeparatorTextViewStyle"/>
+
+    <TextView
+        android:text="Notification Effect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewNotificationEffect"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/effectNotificationSpinner" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/effectNotificationSpinner">
+
+    </Spinner>
+
+    <TextView
+        android:text="Alert Effect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewAlertEffect"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/effectAlertSpinner" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/effectAlertSpinner">
+
+    </Spinner>
+
+    <TextView
+        android:text="Display Time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewDisplayTime"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/editTextDisplayTime" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editTextDisplayTime" />
+
+    <TextView
+        android:text="Welcome Message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewWelcome"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/editTextWelcome" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/editTextWelcome" />
+
+</LinearLayout>

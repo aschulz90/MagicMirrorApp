@@ -20,7 +20,7 @@ import com.blublabs.magicmirror.common.MagicMirrorFragment;
 import com.blublabs.magicmirror.devices.DeviceListFragment;
 import com.blublabs.magicmirror.devices.HeaderDeviceListAdapter;
 import com.blublabs.magicmirror.devices.PairedDevicesSpinner;
-import com.blublabs.magicmirror.modules.ModuleFragment;
+import com.blublabs.magicmirror.modules.ModulesFragment;
 import com.blublabs.magicmirror.service.BleService;
 
 import java.util.ArrayList;
@@ -167,7 +167,7 @@ public class MainActivity extends MagicMirrorActivity implements NavigationView.
                 fragmentClass = MainFragment.class;
                 break;
             case R.id.nav_modules_fragment:
-                fragmentClass = ModuleFragment.class;
+                fragmentClass = ModulesFragment.class;
                 break;
             case R.id.nav_settings_fragment:
                 fragmentClass = DeviceListFragment.class;

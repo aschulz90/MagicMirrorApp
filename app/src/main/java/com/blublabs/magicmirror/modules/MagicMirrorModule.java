@@ -2,10 +2,11 @@ package com.blublabs.magicmirror.modules;
 
 /**
  * Created by andrs on 30.08.2016.
+ *
  */
-public class MagicMirrorModule<T extends ModuleSettingsFragment> {
+public abstract class MagicMirrorModule {
 
-    public enum PositionRegion {
+    protected enum PositionRegion {
         top_bar,
         bottom_bar,
         top_left,
@@ -53,7 +54,5 @@ public class MagicMirrorModule<T extends ModuleSettingsFragment> {
         this.position = position;
     }
 
-    public T getAddtionalSettingsFragment() {
-        return null;
-    }
+    public abstract ModuleSettingsFragment getAddtionalSettingsFragment();
 }

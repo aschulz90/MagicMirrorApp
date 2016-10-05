@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="@string/settings_custom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3"
+        style="?android:attr/listSeparatorTextViewStyle"/>
+
+    <TextView
+        android:text="Maximum Entries"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewMaxEntries"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/editTextMaxEntries" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editTextMaxEntries" />
+
+    <TextView
+        android:text="Maximum Days"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewMaxDays"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/editTextMaxDays" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editTextMaxDays" />
+
+    <TextView
+        android:text="Display Symbol"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewDisplaySymbol"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/switchDisplaySymbol" />
+
+    <android.support.v7.widget.SwitchCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/switchDisplaySymbol"/>
+
+    <TextView
+        android:text="Default Symbol"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewDefaultSymbol"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/editTextDefaultSymbol" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/editTextDefaultSymbol" />
+
+    <TextView
+        android:text="Maximum Title Length"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewMaxTitleLength"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/editTextMaxTitleLength" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editTextMaxTitleLength" />
+
+    <TextView
+        android:text="Fetch Interval"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewFetchInterval"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/editTextFetchInterval" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editTextFetchInterval" />
+
+    <TextView
+        android:text="Animation Speed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewAnimationSpeed"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/editTextAnimationSpeed" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editTextAnimationSpeed" />
+
+    <TextView
+        android:text="Fade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewFade"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/switchFade" />
+
+    <android.support.v7.widget.SwitchCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/switchFade"/>
+
+    <TextView
+        android:text="Fade Point"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewFadePoint"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/editTextFadePoint"
+        android:enabled="false" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editTextFadePoint"
+        android:enabled="false" />
+
+    <TextView
+        android:text="Calendars"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewCalendars"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/editTextWelcome" />
+    <TextView
+        android:text="Title Replace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewTitleReplace"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/editTextDisplayTime" />
+
+    <TextView
+        android:text="Display Repeating Count Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewDisplayRepeatingCountTitle"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/switchDisplayRepeatingCountTitle" />
+
+    <android.support.v7.widget.SwitchCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/switchDisplayRepeatingCountTitle"/>
+
+    <TextView
+        android:text="Time Format"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewTimeFormat"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/spinnerTimeFormat" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerTimeFormat" />
+
+    <TextView
+        android:text="Urgency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewUrgency"
+        android:paddingTop="5dp"
+        android:labelFor="@+id/editTextUrgency" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editTextUrgency" />
+
+</LinearLayout>
