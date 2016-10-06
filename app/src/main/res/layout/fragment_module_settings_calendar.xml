@@ -149,14 +149,26 @@
         android:layout_height="wrap_content"
         android:id="@+id/textViewCalendars"
         android:paddingTop="5dp"
-        android:labelFor="@+id/editTextWelcome" />
+        android:labelFor="@+id/calendars_list_view" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/calendars_list_view"/>
+
     <TextView
         android:text="Title Replace"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textViewTitleReplace"
         android:paddingTop="5dp"
-        android:labelFor="@+id/editTextDisplayTime" />
+        android:labelFor="@+id/title_replace_recycler_view" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/title_replace_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical" />
 
     <TextView
         android:text="Display Repeating Count Title"
