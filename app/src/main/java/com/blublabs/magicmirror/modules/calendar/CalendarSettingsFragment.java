@@ -1,82 +1,92 @@
 package com.blublabs.magicmirror.modules.calendar;
 
-import android.graphics.Color;
+import android.databinding.BindingAdapter;
+import android.databinding.DataBindingUtil;
+import android.databinding.InverseBindingAdapter;
+import android.databinding.InverseBindingListener;
+import android.databinding.InverseBindingMethod;
+import android.databinding.InverseBindingMethods;
+import android.databinding.Observable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.android.databinding.library.baseAdapters.BR;
 import com.blublabs.magicmirror.R;
 import com.blublabs.magicmirror.common.MyCustomLayoutManager;
 import com.blublabs.magicmirror.common.SwitchOnCheckedChangeListener;
+import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.databinding.FragmentModuleSettingsCalendarBinding;
 import com.blublabs.magicmirror.modules.ModuleSettingsFragment;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import it.sephiroth.android.library.tooltip.Tooltip;
 
 /**
  * Created by andrs on 28.09.2016.
  */
 
-public class CalendarSettingsFragment extends ModuleSettingsFragment {
+public class CalendarSettingsFragment extends ModuleSettingsFragment<CalendarMagicMirrorModule> {
 
-    enum TimeFormat{
+    public enum TimeFormat{
         absolute,
-        relative
+        relative;
+
+        public static TimeFormat from(String position) {
+
+            if(position == null) {
+                return null;
+            }
+
+            for(TimeFormat value : TimeFormat.values()) {
+                if(position.equals(value.toString())) {
+                    return value;
+                }
+            }
+
+            return null;
+        }
     }
 
-    final List<String> calendars = new ArrayList<>();
-    ArrayAdapter<String> calendarsAdapter;
-
-    final Map<String, String> titleReplaceMap = new HashMap<>();
-    CalendarTitleReplaceListAdapter titleReplaceAdapter;
+    private CalendarListAdapter calendarsAdapter;
+    private CalendarTitleReplaceListAdapter titleReplaceAdapter;
+    private FragmentModuleSettingsCalendarBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        final View view = inflater.inflate(R.layout.fragment_module_settings_calendar, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_module_settings_calendar, container, false);
+        final View view = binding.getRoot();
+        binding.setModule(getModule());
+
+        checkSwitchValueChanged(BR.displaySymbol);
+        checkSwitchValueChanged(BR.fade);
 
         // time format
         Spinner timeFormatSpinner = (Spinner) view.findViewById(R.id.spinnerTimeFormat);
         ArrayAdapter<TimeFormat> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, TimeFormat.values());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         timeFormatSpinner.setAdapter(adapter);
-
-        // display symbol switch
-        final SwitchCompat displaySymbolSwitch = (SwitchCompat) view.findViewById(R.id.switchDisplaySymbol);
-        final View[] defaultSymbolViews = new View[] {view.findViewById(R.id.textViewDefaultSymbol), view.findViewById(R.id.editTextDefaultSymbol)};
-        displaySymbolSwitch.setOnCheckedChangeListener(new SwitchOnCheckedChangeListener(defaultSymbolViews));
-        SwitchOnCheckedChangeListener.setEnabled(defaultSymbolViews, displaySymbolSwitch.isChecked());
-
-        // fade switch
-        final SwitchCompat fadeSwitch = (SwitchCompat) view.findViewById(R.id.switchFade);
-        final View[] fadeViews = new View[] {view.findViewById(R.id.textViewFadePoint), view.findViewById(R.id.editTextFadePoint)};
-        fadeSwitch.setOnCheckedChangeListener(new SwitchOnCheckedChangeListener(fadeViews));
-        SwitchOnCheckedChangeListener.setEnabled(fadeViews, fadeSwitch.isChecked());
+        timeFormatSpinner.setSelection(adapter.getPosition(getModule().getTimeFormat()));
 
         // calendars list
-        final ListView calendarListView = (ListView) view.findViewById(R.id.calendars_list_view);
-        calendars.add("Add calendar");
-        calendarsAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, calendars);
+        final RecyclerView calendarListView = (RecyclerView) view.findViewById(R.id.calendars_recycler_view);
+        calendarsAdapter = new CalendarListAdapter(getModule(), getActivity(), calendarListView);
+        calendarListView.setLayoutManager(new MyCustomLayoutManager(getActivity().getApplicationContext()));
+        calendarListView.setItemAnimator(new DefaultItemAnimator());
         calendarListView.setAdapter(calendarsAdapter);
 
+        // title replace list
         final RecyclerView titleReplaceList = (RecyclerView) view.findViewById(R.id.title_replace_recycler_view);
-        titleReplaceAdapter = new CalendarTitleReplaceListAdapter(titleReplaceMap, getActivity(), titleReplaceList);
-        RecyclerView.LayoutManager mLayoutManager = new MyCustomLayoutManager(getActivity().getApplicationContext());
-        titleReplaceList.setLayoutManager(mLayoutManager);
+        titleReplaceAdapter = new CalendarTitleReplaceListAdapter(getModule(), getActivity(), titleReplaceList);
+        titleReplaceList.setLayoutManager(new MyCustomLayoutManager(getActivity().getApplicationContext()));
         titleReplaceList.setItemAnimator(new DefaultItemAnimator());
         titleReplaceList.setAdapter(titleReplaceAdapter);
 
@@ -96,4 +106,25 @@ public class CalendarSettingsFragment extends ModuleSettingsFragment {
 
         return view;
     }
+
+    private void checkSwitchValueChanged(int valueId) {
+        switch (valueId) {
+            case BR.displaySymbol:
+                // display symbol switch
+                final SwitchCompat displaySymbolSwitch = (SwitchCompat) binding.getRoot().findViewById(R.id.switchDisplaySymbol);
+                final View[] defaultSymbolViews = new View[] {binding.getRoot().findViewById(R.id.textViewDefaultSymbol), binding.getRoot().findViewById(R.id.editTextDefaultSymbol)};
+                SwitchOnCheckedChangeListener.setEnabled(defaultSymbolViews, getModule().isDisplaySymbol());
+                break;
+
+            case BR.fade:
+                // fade switch
+                final SwitchCompat fadeSwitch = (SwitchCompat) binding.getRoot().findViewById(R.id.switchFade);
+                final View[] fadeViews = new View[] {binding.getRoot().findViewById(R.id.textViewFadePoint), binding.getRoot().findViewById(R.id.editTextFadePoint)};
+                SwitchOnCheckedChangeListener.setEnabled(fadeViews, getModule().isFade());
+                break;
+            default:
+                break;
+        }
+    }
+
 }

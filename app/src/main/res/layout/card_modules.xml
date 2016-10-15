@@ -1,80 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:weightSum="1">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable name="module" type="com.blublabs.magicmirror.modules.MagicMirrorModule"/>
+    </data>
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
-        android:layout_gravity="center"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        card_view:cardCornerRadius="2dp"
-        card_view:contentPadding="10dp">
+        android:weightSum="1">
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_gravity="center"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:weightSum="1">
+            android:layout_margin="5dp"
+            card_view:cardCornerRadius="2dp"
+            card_view:contentPadding="10dp">
 
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/switch_compat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:checked="false"
-                app:showText="false"/>
-
-            <TextView
-                android:id="@+id/info_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:textSize="24sp" />
-
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/switch_compat"
-                android:id="@+id/module_settings_content"
-                android:paddingTop="5dp">
+                android:weightSum="1">
 
-                <TextView
-                    android:text="@string/settings_general"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView2"
-                    style="?android:attr/listSeparatorTextViewStyle"/>
-
-                <TextView
-                    android:text="Region"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView4"
-                    android:labelFor="@+id/position_spinner"
-                    android:paddingTop="5dp"/>
-
-                <Spinner
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/switch_compat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/position_spinner"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp"/>
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    app:showText="false"
+                    android:checked="@={module.active}"/>
 
-            </LinearLayout>
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/info_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:textSize="24sp"
+                    android:text="@{module.name}"/>
 
-    </android.support.v7.widget.CardView>
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/switch_compat"
+                    android:id="@+id/module_settings_content"
+                    android:paddingTop="5dp">
 
-</LinearLayout>
+                    <TextView
+                        android:text="@string/settings_general"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView2"
+                        style="?android:attr/listSeparatorTextViewStyle"/>
+
+                    <TextView
+                        android:text="Region"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView4"
+                        android:labelFor="@+id/position_spinner"
+                        android:paddingTop="5dp"/>
+
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/position_spinner"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp"/>
+
+                    <TextView
+                        android:text="Header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textViewHeader"
+                        android:labelFor="@+id/editTextHeader"
+                        android:paddingTop="5dp"/>
+
+                    <EditText
+                        android:text="@={module.header}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:ems="10"
+                        android:id="@+id/editTextHeader"/>
+
+                </LinearLayout>
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+</layout>

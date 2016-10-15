@@ -1,9 +1,12 @@
 package com.blublabs.magicmirror.modules;
 
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.databinding.Observable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +15,17 @@ import android.view.ViewGroup;
 import com.blublabs.magicmirror.R;
 import com.blublabs.magicmirror.common.MagicMirrorFragment;
 import com.blublabs.magicmirror.common.MyCustomLayoutManager;
-import com.blublabs.magicmirror.modules.alert.AlertMagicMirrorModule;
-import com.blublabs.magicmirror.modules.calendar.CalendarMagicMirrorModule;
-import com.blublabs.magicmirror.modules.helloworld.HelloWorldMagicMirrorModule;
+import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.service.BleService;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by andrs on 21.09.2016.
@@ -25,9 +33,51 @@ import java.util.List;
 
 public class ModulesFragment extends MagicMirrorFragment {
 
-    private List<MagicMirrorModule> moduleList = new ArrayList<>();
+    private Map<String,String> moduleUuidMap = new HashMap<>();
+    private ArrayList<MagicMirrorModule> moduleList = new ArrayList<>();
     private MagicMirrorModuleListAdapter moduleListAdapter;
     private RecyclerView recyclerView;
+
+    private Handler delayHandler = new Handler();
+    private static final int UPDATE_DELAY = 2000;
+
+    private static final String KEY_MODULE_LIST = "module list";
+
+    private static final UUID SERVICE_MAGICMIRROR_APP_INTERFACE = UUID.fromString("0000280F-0000-1000-8000-00805f9b34fb");
+    private static final UUID CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE_LIST = UUID.fromString("000038cd-0000-1000-8000-00805f9b34fb");
+    private static final String CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE = "-0000-1000-8000-00805f9b34fb";
+
+    private Observable.OnPropertyChangedCallback moduleChangedCallback =  new Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(Observable observable, int i) {
+
+            if(observable instanceof MagicMirrorModule) {
+                final MagicMirrorModule module = (MagicMirrorModule) observable;
+
+                if(module.getUpdateHandler() == null) {
+                    module.setUpdateHandler(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                writeCharacteristic(SERVICE_MAGICMIRROR_APP_INTERFACE, UUID.fromString(Utils.padLeft(moduleUuidMap.get(module.getName()), 8, '0') + CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE), module.toJson().toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            finally {
+                                module.setUpdateHandler(null);
+                            }
+                        }
+                    });
+                }
+                else {
+                    delayHandler.removeCallbacks(module.getUpdateHandler());
+
+                }
+
+                delayHandler.postDelayed(module.getUpdateHandler(), UPDATE_DELAY);
+            }
+        }
+    };
 
     @Nullable
     @Override
@@ -45,11 +95,77 @@ public class ModulesFragment extends MagicMirrorFragment {
 
         recyclerView.setAdapter(moduleListAdapter);
 
-        moduleList.add(new HelloWorldMagicMirrorModule(false, MagicMirrorModule.PositionRegion.top_left));
-        moduleList.add(new AlertMagicMirrorModule(false, MagicMirrorModule.PositionRegion.top_left));
-        moduleList.add(new CalendarMagicMirrorModule(true, MagicMirrorModule.PositionRegion.top_left));
+        if(savedInstanceState != null) {
+            moduleList = savedInstanceState.getParcelableArrayList(KEY_MODULE_LIST);
+            for(MagicMirrorModule module : moduleList) {
+                module.addOnPropertyChangedCallback(moduleChangedCallback);
+            }
+            moduleListAdapter.notifyDataSetChanged();
+        }
+        else if(getState() == BleService.State.CONNECTED) {
+            readCharacteristic(SERVICE_MAGICMIRROR_APP_INTERFACE, CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE_LIST);
+        }
 
         return view;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(KEY_MODULE_LIST, moduleList);
+    }
+
+    @Override
+    protected void onBleServiceConnected() {
+        if(moduleList.isEmpty()) {
+            readCharacteristic(SERVICE_MAGICMIRROR_APP_INTERFACE, CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE_LIST);
+        }
+    }
+
+    @Override
+    protected void onCharacteristicRead(BluetoothGattCharacteristic characteristic, int status) {
+        if(status == BluetoothGatt.GATT_SUCCESS) {
+            if(CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE_LIST.equals(characteristic.getUuid())) {
+                try {
+                    JSONObject moduleList = new JSONObject(characteristic.getStringValue(0));
+
+                    Iterator<?> keys = moduleList.keys();
+
+                    while( keys.hasNext() ) {
+                        String key = (String)keys.next();
+                        String uuid = moduleList.getString(key);
+                        moduleUuidMap.put(key,uuid);
+                        readCharacteristic(SERVICE_MAGICMIRROR_APP_INTERFACE, UUID.fromString(Utils.padLeft(uuid, 8, '0') + CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE));
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                try {
+                    final MagicMirrorModule module = MagicMirrorModule.getModuleForData(new JSONObject(characteristic.getStringValue(0)));
+
+                    if(module != null) {
+
+                        module.addOnPropertyChangedCallback(moduleChangedCallback);
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                moduleList.add(module);
+                                moduleListAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onCharacteristicWrite(BluetoothGattCharacteristic characteristic, int status) {
+
+    }
 }

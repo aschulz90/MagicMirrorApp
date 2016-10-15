@@ -79,27 +79,25 @@ public class MainActivity extends MagicMirrorActivity implements NavigationView.
 
     @Override
     protected void onBleServiceConnected() {
-        Message msg = Message.obtain(null, BleService.MSG_START_SCAN);
-        if (msg != null) {
-            sendMessage(msg);
-        }
-    }
 
-    @Override
-    protected void onDeviceDiscovered(String[] devices) {
-
-        if(selectedMenuItem == R.id.nav_settings_fragment) {
+        if(getDefaultPairedDevice() == null || getDefaultPairedDevice().isEmpty()) {
             return;
         }
 
+        startScan();
+    }
+
+    @Override
+    protected void onDeviceDiscovered(String device) {
+
         String defaultDevice = getDefaultPairedDevice();
 
-        if(defaultDevice != null && Arrays.asList(devices).contains(defaultDevice)) {
-            connectToDevice(defaultDevice);
+        if(defaultDevice != null && defaultDevice.equals(device)) {
             Message msg = Message.obtain(null, BleService.MSG_STOP_SCAN);
             if (msg != null) {
                 sendMessage(msg);
             }
+            connectToDevice(defaultDevice);
         }
     }
 

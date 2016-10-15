@@ -6,6 +6,7 @@ package com.blublabs.magicmirror.modules.calendar;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.databinding.DataBindingUtil;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -19,15 +20,12 @@ import android.widget.Toast;
 import com.blublabs.magicmirror.BR;
 import com.blublabs.magicmirror.R;
 import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.databinding.DialogCalendarBinding;
 
-import java.util.ArrayList;
-import java.util.Map;
+class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapter.MyViewHolder> {
 
-class CalendarTitleReplaceListAdapter extends RecyclerView.Adapter<CalendarTitleReplaceListAdapter.MyViewHolder> {
-    
     private final Context context;
-
-    private final RecyclerView titleReplaceRecyclerView;
+    private final RecyclerView calendarRecyclerView;
     private final CalendarMagicMirrorModule module;
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -42,24 +40,22 @@ class CalendarTitleReplaceListAdapter extends RecyclerView.Adapter<CalendarTitle
 
         @Override
         public void onClick(View view) {
-            int itemPosition = titleReplaceRecyclerView.getChildLayoutPosition(view);
-            ArrayList<Map.Entry<String, String>> titleReplaceList = new ArrayList<>(module.getTitleReplaceMap().entrySet());
+            int itemPosition = calendarRecyclerView.getChildLayoutPosition(view);
 
-            if(itemPosition < titleReplaceList.size()) {
-                Map.Entry<String, String> item = titleReplaceList.get(itemPosition);
-                showTitleReplaceDialog(item);
+            if(itemPosition < module.getCalendars().size()) {
+                showCalendarDialog(module.getCalendars().get(itemPosition));
             }
             else {
-                showTitleReplaceDialog(null);
+                showCalendarDialog(null);
             }
         }
     }
 
-    CalendarTitleReplaceListAdapter(CalendarMagicMirrorModule module, Context context, RecyclerView titleReplaceRecyclerView) {
+    CalendarListAdapter(CalendarMagicMirrorModule module, Context context, RecyclerView calendarRecyclerView) {
 
         this.module = module;
         this.context = context;
-        this.titleReplaceRecyclerView = titleReplaceRecyclerView;
+        this.calendarRecyclerView = calendarRecyclerView;
     }
 
     @Override
@@ -71,38 +67,38 @@ class CalendarTitleReplaceListAdapter extends RecyclerView.Adapter<CalendarTitle
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        if(position < module.getTitleReplaceMap().entrySet().size()) {
-            final Map.Entry<String, String> element = new ArrayList<>(module.getTitleReplaceMap().entrySet()).get(position);
-            holder.text.setText(element.getKey() + " : " + element.getValue());
+
+        if(position < module.getCalendars().size()) {
+            holder.text.setText(module.getCalendars().get(position).toString());
         }
         else {
-            holder.text.setText("Add Title Replacement");
+            holder.text.setText("Add calendar");
         }
     }
 
     @Override
     public int getItemCount() {
-        return module.getTitleReplaceMap().size() + 1;
+        return module.getCalendars().size() + 1;
     }
 
-    private void showTitleReplaceDialog(final Map.Entry<String, String> entry) {
+    private void showCalendarDialog(final Calendar calendar) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
-        View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_title_replace, null);
-        final EditText keyEditText = (EditText) dialogView.findViewById(R.id.input_key);
-        final TextInputLayout keyEditLayout = (TextInputLayout) dialogView.findViewById(R.id.input_layout_key);
-        final EditText valueEditText = (EditText) dialogView.findViewById(R.id.input_value);
-        final TextInputLayout valueEditLayout = (TextInputLayout) dialogView.findViewById(R.id.input_layout_value);
+        DialogCalendarBinding dialogViewBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_calendar, null, false);
+        View dialogView = dialogViewBinding.getRoot();
+        final TextInputLayout urlEditLayout = (TextInputLayout) dialogView.findViewById(R.id.inputLayoutUrl);
 
         // set prompts.xml to alertdialog builder
         alertDialogBuilder.setView(dialogView);
-        if(entry == null) {
-            keyEditText.setText("");
-            valueEditText.setText("");
+
+        final Calendar newCalendar;
+        if(calendar == null) {
+            newCalendar = new Calendar();
+            dialogViewBinding.setCalendar(newCalendar);
         }
         else {
-            keyEditText.setText(entry.getKey());
-            valueEditText.setText(entry.getValue());
+            newCalendar = null;
+            dialogViewBinding.setCalendar(calendar);
         }
 
         // set dialog message
@@ -111,6 +107,7 @@ class CalendarTitleReplaceListAdapter extends RecyclerView.Adapter<CalendarTitle
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
+                                // will be replaced
                             }
                         })
                 .setNegativeButton("Cancel",
@@ -120,11 +117,11 @@ class CalendarTitleReplaceListAdapter extends RecyclerView.Adapter<CalendarTitle
                             }
                         });
 
-        if(entry != null) {
+        if(calendar != null) {
             alertDialogBuilder.setNeutralButton("Remove",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog,int id) {
-                            module.getTitleReplaceMap().remove(entry.getKey());
+                            module.getCalendars().remove(calendar);
                             notifyDataSetChanged();
                         }
                     });
@@ -142,26 +139,22 @@ class CalendarTitleReplaceListAdapter extends RecyclerView.Adapter<CalendarTitle
             @Override
             public void onClick(View v)
             {
-                String key = keyEditText.getText().toString();
-                String value = valueEditText.getText().toString();
 
-                if(module.getTitleReplaceMap().containsKey(key)) {
-                    Toast.makeText(context, "Title Replacement with text '" + key + "' already exists!", Toast.LENGTH_LONG).show();
+                Calendar testCalendar = calendar == null ? newCalendar : calendar;
+
+                if(calendar == null && module.getCalendars().contains(newCalendar)) {
+                    Toast.makeText(context, "Calendar '" + newCalendar + "' already exists!", Toast.LENGTH_LONG).show();
                     return;
                 }
-                else  if(!Utils.validateEditTextValue(key, keyEditLayout, "Title not set!")) {
-                    return;
-                }
-                else if(!Utils.validateEditTextValue(value, valueEditLayout, "Title Replacement not set!")) {
+                else  if(!Utils.validateEditTextValue(testCalendar.getUrl(), urlEditLayout, "URL not set!")) {
                     return;
                 }
 
-                if(entry != null) {
-                    module.getTitleReplaceMap().remove(entry.getKey());
+                if(calendar == null) {
+                    module.getCalendars().add(newCalendar);
                 }
-                module.getTitleReplaceMap().put(key, value);
-                module.notifyPropertyChanged(BR.titleReplaceMap);
                 notifyDataSetChanged();
+                module.notifyPropertyChanged(BR.calendars);
                 alertDialog.dismiss();
             }
         });

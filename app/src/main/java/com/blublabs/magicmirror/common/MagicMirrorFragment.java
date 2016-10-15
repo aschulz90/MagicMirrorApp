@@ -2,6 +2,10 @@ package com.blublabs.magicmirror.common;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -17,9 +21,11 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.blublabs.magicmirror.service.BleRequest;
 import com.blublabs.magicmirror.service.BleService;
 
 import java.lang.ref.WeakReference;
+import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.BIND_AUTO_CREATE;
@@ -50,6 +56,7 @@ public class MagicMirrorFragment extends Fragment {
                         if (msg != null) {
                             msg.replyTo = messenger;
                             MagicMirrorFragment.this.service.send(msg);
+                            onBleServiceConnected();
                         } else {
                             MagicMirrorFragment.this.service = null;
                         }
@@ -63,8 +70,26 @@ public class MagicMirrorFragment extends Fragment {
                 @Override
                 public void onServiceDisconnected(ComponentName name) {
                     service = null;
+                    onBleServiceDisconnected();
                 }
             };
+
+    private BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
+        @Override
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            MagicMirrorFragment.this.onConnectionStateChange(status, newState);
+        }
+
+        @Override
+        public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            MagicMirrorFragment.this.onCharacteristicRead(characteristic, status);
+        }
+
+        @Override
+        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            MagicMirrorFragment.this.onCharacteristicWrite(characteristic, status);
+        }
+    };
 
     public MagicMirrorFragment() {
         super();
@@ -131,12 +156,6 @@ public class MagicMirrorFragment extends Fragment {
             case BleService.MSG_STATE_CHANGED:
                 onStateChanged(BleService.State.values()[msg.arg1]);
                 break;
-            case BleService.MSG_DEVICE_FOUND:
-                data = msg.getData();
-                if (data != null && data.containsKey(BleService.KEY_MAC_ADDRESSES)) {
-                    onDeviceDiscovered(data.getStringArray(BleService.KEY_MAC_ADDRESSES));
-                }
-                break;
             case BleService.MSG_SCAN_STOPPED:
                 data = msg.getData();
                 if (data != null && data.containsKey(BleService.KEY_MAC_ADDRESSES)) {
@@ -148,14 +167,33 @@ public class MagicMirrorFragment extends Fragment {
         }
     }
 
+    protected void onBleServiceConnected() {
+
+    }
+
+    protected void onBleServiceDisconnected() {
+
+    }
+
     protected void onScanStopped(String[] devices) {
 
     }
 
-    protected void onDeviceDiscovered(String[] devices) {
+    protected void onDeviceDiscovered(String devices) {
 
     }
 
+    protected void onCharacteristicWrite(BluetoothGattCharacteristic characteristic, int status) {
+
+    }
+
+    protected void onCharacteristicRead(BluetoothGattCharacteristic characteristic, int status) {
+
+    }
+
+    protected void onConnectionStateChange(int status, int newState) {
+
+    }
 
     protected BleService.State getState() {
         return state;
@@ -202,7 +240,7 @@ public class MagicMirrorFragment extends Fragment {
         }
     }
 
-    protected void startScan() {
+    protected final void startScan() {
 
         if (Build.VERSION.SDK_INT >= 23) {
 
@@ -214,18 +252,64 @@ public class MagicMirrorFragment extends Fragment {
             }
         }
 
-        Message msg = Message.obtain(null, BleService.MSG_START_SCAN);
+        Message msg = Message.obtain(null, BleService.MSG_REQUEST);
         if (msg != null) {
-            try {
-                service.send(msg);
-            } catch (RemoteException e) {
-                Log.w(TAG, "Lost connection to service", e);
-                getActivity().unbindService(connection);
-            }
+            msg.obj = new BleRequest(BleRequest.RequestType.SCAN, null, new BluetoothAdapter.LeScanCallback() {
+                @Override
+                public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
+
+                    onDeviceDiscovered(device.getAddress());
+                }
+            }, null) {
+
+                @Override
+                public void onError(String errormessage) {
+
+                }
+            };
+            sendMessage(msg);
         }
     }
 
-    protected void sendMessage(Message msg) {
+    protected final void stopScan() {
+        Message msg = Message.obtain(null, BleService.MSG_STOP_SCAN);
+        if (msg != null) {
+            sendMessage(msg);
+        }
+    }
+
+    protected final void readCharacteristic(UUID service, UUID characteristic) {
+
+        BleRequest request = new BleRequest(BleRequest.RequestType.CHARACTERISTIC_READ, gattCallback, null, service, characteristic) {
+            @Override
+            public void onError(String errormessage) {
+
+            }
+        };
+
+        Message msg = Message.obtain(null, BleService.MSG_REQUEST);
+        if (msg != null) {
+            msg.obj = request;
+            sendMessage(msg);
+        }
+    }
+
+    protected final void writeCharacteristic(UUID service, UUID characteristic, String value) {
+        BleRequest request = new BleRequest(BleRequest.RequestType.CHARACTERISTIC_WRITE, gattCallback, null, service, characteristic, value) {
+            @Override
+            public void onError(String errormessage) {
+
+            }
+        };
+
+        Message msg = Message.obtain(null, BleService.MSG_REQUEST);
+        if (msg != null) {
+            msg.obj = request;
+            sendMessage(msg);
+        }
+    }
+
+    private void sendMessage(Message msg) {
 
         sendMessage(service, msg);
     }

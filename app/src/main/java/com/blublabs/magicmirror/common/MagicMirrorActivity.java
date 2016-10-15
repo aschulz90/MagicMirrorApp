@@ -2,6 +2,12 @@ package com.blublabs.magicmirror.common;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
+import android.bluetooth.BluetoothProfile;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -23,8 +29,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.blublabs.magicmirror.R;
+import com.blublabs.magicmirror.service.BleRequest;
 import com.blublabs.magicmirror.service.BleService;
+import com.blublabs.magicmirror.utils.GzipUtil;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +46,6 @@ public abstract class MagicMirrorActivity extends AppCompatActivity {
 
     private static final String KEY_PAIRED_DEVICES = "pairedDevices";
     private static final String KEY_DEFAULT_DEVICE = "defaultDevices";
-    private static final String KEY_BOUND_SERVICE = "boundService";
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final int ENABLE_BT_REQUEST_CODE = 2;
@@ -48,14 +56,12 @@ public abstract class MagicMirrorActivity extends AppCompatActivity {
     private Intent serviceIntent;
     private Messenger service = null;
     private BleService.State state = BleService.State.UNKNOWN;
-    private IBinder boundService = null;
     private ServiceConnection connection =
             new ServiceConnection() {
                 @Override
                 public void onServiceConnected(ComponentName name, IBinder service) {
 
                     MagicMirrorActivity.this.service = new Messenger(service);
-                    MagicMirrorActivity.this.boundService = service;
                     try {
                         Message msg = Message.obtain(null,
                                 BleService.MSG_REGISTER);
@@ -65,12 +71,10 @@ public abstract class MagicMirrorActivity extends AppCompatActivity {
                             onBleServiceConnected();
                         } else {
                             MagicMirrorActivity.this.service = null;
-                            MagicMirrorActivity.this.boundService = null;
                         }
                     } catch (Exception e) {
                         Log.w(TAG, "Error connecting to BleService", e);
                         MagicMirrorActivity.this.service = null;
-                        MagicMirrorActivity.this.boundService = null;
                     }
                 }
 
@@ -78,17 +82,45 @@ public abstract class MagicMirrorActivity extends AppCompatActivity {
                 public void onServiceDisconnected(ComponentName name) {
                     onBleServiceDisconnected();
                     MagicMirrorActivity.this.service = null;
-                    MagicMirrorActivity.this.boundService = null;
                 }
             };
 
     private Set<String> pairedDevicesList = new HashSet<>();
     private String defaultPairedDevice = null;
 
+    private BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
+        @Override
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            MagicMirrorActivity.this.onConnectionStateChange(status, newState);
+        }
+
+        @Override
+        public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            MagicMirrorActivity.this.onCharacteristicRead(characteristic, status);
+        }
+
+        @Override
+        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            MagicMirrorActivity.this.onCharacteristicWrite(characteristic, status);
+        }
+    };
+
     public MagicMirrorActivity() {
         super();
 
         messenger = new Messenger(new IncomingHandler(this));
+    }
+
+    public void onConnectionStateChange(int status, int newState) {
+
+    }
+
+    public void onCharacteristicRead(BluetoothGattCharacteristic characteristic, int status) {
+
+    }
+
+    public void onCharacteristicWrite(BluetoothGattCharacteristic characteristic, int status) {
+
     }
 
     protected void onBleServiceConnected() {
@@ -133,7 +165,6 @@ public abstract class MagicMirrorActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Log.w(TAG, "Error unregistering with BleService",  e);
                 service = null;
-                boundService = null;
             } finally {
                 getApplicationContext().unbindService(connection);
             }
@@ -173,12 +204,6 @@ public abstract class MagicMirrorActivity extends AppCompatActivity {
             case BleService.MSG_STATE_CHANGED:
                 onStateChanged(BleService.State.values()[msg.arg1]);
                 break;
-            case BleService.MSG_DEVICE_FOUND:
-                data = msg.getData();
-                if (data != null && data.containsKey(BleService.KEY_MAC_ADDRESSES)) {
-                    onDeviceDiscovered(data.getStringArray(BleService.KEY_MAC_ADDRESSES));
-                }
-                break;
             case BleService.MSG_SCAN_STOPPED:
                 data = msg.getData();
                 if (data != null && data.containsKey(BleService.KEY_MAC_ADDRESSES)) {
@@ -194,7 +219,7 @@ public abstract class MagicMirrorActivity extends AppCompatActivity {
 
     }
 
-    protected void onDeviceDiscovered(String[] devices) {
+    protected void onDeviceDiscovered(String devices) {
 
     }
 
@@ -255,8 +280,21 @@ public abstract class MagicMirrorActivity extends AppCompatActivity {
             }
         }
 
-        Message msg = Message.obtain(null, BleService.MSG_START_SCAN);
+        Message msg = Message.obtain(null, BleService.MSG_REQUEST);
         if (msg != null) {
+            msg.obj = new BleRequest(BleRequest.RequestType.SCAN, null, new BluetoothAdapter.LeScanCallback() {
+                @Override
+                public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
+
+                    onDeviceDiscovered(device.getAddress());
+                }
+            }, null) {
+
+                @Override
+                public void onError(String errormessage) {
+
+                }
+            };
             sendMessage(msg);
         }
     }
@@ -267,9 +305,15 @@ public abstract class MagicMirrorActivity extends AppCompatActivity {
             return;
         }
 
-        Message msg = Message.obtain(null, BleService.MSG_DEVICE_CONNECT);
+        Message msg = Message.obtain(null, BleService.MSG_REQUEST);
         if (msg != null) {
-            msg.obj = deviceAddress;
+            msg.obj = new BleRequest(BleRequest.RequestType.DEVICE_CONNECT, gattCallback, null, deviceAddress) {
+
+                @Override
+                public void onError(String errormessage) {
+
+                }
+            };
             sendMessage(msg);
         }
     }
@@ -285,7 +329,6 @@ public abstract class MagicMirrorActivity extends AppCompatActivity {
             messenger.send(msg);
         } catch (RemoteException e) {
             Log.w(TAG, "Lost connection to client", e);
-            boundService = null;
             service = null;
             success = false;
         }

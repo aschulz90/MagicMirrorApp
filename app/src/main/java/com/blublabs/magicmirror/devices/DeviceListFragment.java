@@ -3,7 +3,6 @@ package com.blublabs.magicmirror.devices;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.blublabs.magicmirror.service.BleService;
 import com.blublabs.magicmirror.common.MagicMirrorFragment;
@@ -69,17 +67,14 @@ public class DeviceListFragment extends MagicMirrorFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if(item.getItemId() == R.id.action_scan) {
-            if(getState() != BleService.State.CONNECTED && getState() != BleService.State.SCANNING) {
+            if(getState() != BleService.State.SCANNING) {
                 deviceList.clear();
                 deviceListAdapter.notifyDataSetChanged();
                 startScan();
                 getView().findViewById(R.id.progress_circle).setVisibility(View.VISIBLE);
             }
-            else if(getState() == BleService.State.SCANNING) {
-                Message msg = Message.obtain(null, BleService.MSG_STOP_SCAN);
-                if (msg != null) {
-                    sendMessage(msg);
-                }
+            else {
+                stopScan();
             }
             return true;
         }
@@ -89,27 +84,22 @@ public class DeviceListFragment extends MagicMirrorFragment {
 
     @Override
     protected void onScanStopped(String[] devices) {
-        /*if(devices.length == 1) {
-            Message sendMsg = Message.obtain(null, BleService.MSG_DEVICE_CONNECT);
-            if (sendMsg != null) {
-                sendMsg.obj = devices[0];
-                sendMessage(sendMsg);
-            }
-        }*/
-
         getView().findViewById(R.id.progress_circle).setVisibility(View.GONE);
-        updateDevices(devices);
-    }
-
-    @Override
-    protected void onDeviceDiscovered(String[] devices) {
-        updateDevices(devices);
-    }
-
-    private void updateDevices(String[] devices) {
         deviceList.clear();
         deviceList.addAll(Arrays.asList(devices));
         deviceListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onDeviceDiscovered(String device) {
+        updateDevices(device);
+    }
+
+    private void updateDevices(String device) {
+        if(!deviceList.contains(device)) {
+            deviceList.add(device);
+            deviceListAdapter.notifyDataSetChanged();
+        }
     }
 
     private void setButtonText(final String newText) {
