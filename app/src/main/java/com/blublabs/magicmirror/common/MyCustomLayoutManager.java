@@ -12,6 +12,8 @@ public class MyCustomLayoutManager extends LinearLayoutManager {
     private static final float MILLISECONDS_PER_INCH = 100f;
     private Context mContext;
 
+    private int extraLayoutSpace = 0;
+
     public MyCustomLayoutManager(Context context) {
         super(context);
         mContext = context;
@@ -46,4 +48,16 @@ public class MyCustomLayoutManager extends LinearLayoutManager {
         startSmoothScroll(smoothScroller);
     }
 
+    public void setExtraLayoutSpace(int extraLayoutSpace) {
+        this.extraLayoutSpace = extraLayoutSpace;
+    }
+
+    @Override
+    protected int getExtraLayoutSpace(RecyclerView.State state) {
+        if(extraLayoutSpace > 0) {
+            return extraLayoutSpace;
+        }
+
+        return super.getExtraLayoutSpace(state);
+    }
 }

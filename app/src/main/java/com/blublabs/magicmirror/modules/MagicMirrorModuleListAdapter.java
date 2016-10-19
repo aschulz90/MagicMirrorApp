@@ -7,7 +7,6 @@ package com.blublabs.magicmirror.modules;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,9 +14,9 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -26,23 +25,17 @@ import android.widget.TextView;
 import com.blublabs.magicmirror.BR;
 import com.blublabs.magicmirror.R;
 import com.blublabs.magicmirror.common.ExpandAndScrollAnimation;
+import com.blublabs.magicmirror.common.Utils;
 import com.blublabs.magicmirror.databinding.CardModulesBinding;
-import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.List;
 
-class MagicMirrorModuleListAdapter extends RecyclerView.Adapter<MagicMirrorModuleListAdapter.MyViewHolder> implements FastScrollRecyclerView.SectionedAdapter {
+class MagicMirrorModuleListAdapter extends RecyclerView.Adapter<MagicMirrorModuleListAdapter.MyViewHolder> {
 
     private final RecyclerView recyclerView;
     private final List<MagicMirrorModule> moduleList;
     private final Context appContext;
     private final Fragment parentFragment;
-
-    @NonNull
-    @Override
-    public String getSectionName(int position) {
-        return moduleList.get(position).getName().substring(0,1);
-    }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         public CardModulesBinding binding;
@@ -51,14 +44,18 @@ class MagicMirrorModuleListAdapter extends RecyclerView.Adapter<MagicMirrorModul
         public SwitchCompat enabledSwitch;
         public LinearLayout settingsContent;
         public Observable.OnPropertyChangedCallback propertyChangeCallBack;
+        public FrameLayout frameLayout;
 
         MyViewHolder(CardModulesBinding binding) {
             super(binding.getRoot());
-            title = (TextView) binding.getRoot().findViewById(R.id.info_text);
-            positionSpinner = (Spinner) binding.getRoot().findViewById(R.id.position_spinner);
-            enabledSwitch = (SwitchCompat) binding.getRoot().findViewById(R.id.switch_compat);
-            settingsContent = (LinearLayout) binding.getRoot().findViewById(R.id.module_settings_content);
+            this.title = (TextView) binding.getRoot().findViewById(R.id.info_text);
+            this.positionSpinner = (Spinner) binding.getRoot().findViewById(R.id.position_spinner);
+            this.enabledSwitch = (SwitchCompat) binding.getRoot().findViewById(R.id.switch_compat);
+            this.settingsContent = (LinearLayout) binding.getRoot().findViewById(R.id.module_settings_content);
             this.binding = binding;
+
+            this.frameLayout = new FrameLayout(appContext);
+            this.settingsContent.addView(this.frameLayout);
         }
     }
 
@@ -87,8 +84,8 @@ class MagicMirrorModuleListAdapter extends RecyclerView.Adapter<MagicMirrorModul
         ArrayAdapter<MagicMirrorModule.PositionRegion> spinnerAdapter = new ArrayAdapter<>(parentFragment.getActivity(), android.R.layout.simple_spinner_item, MagicMirrorModule.PositionRegion.values());
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         holder.positionSpinner.setAdapter(spinnerAdapter);
-        if(element.getPosition() != null) {
-            holder.positionSpinner.setSelection(element.getPosition().ordinal());
+        if(element.getRegion() != null) {
+            holder.positionSpinner.setSelection(element.getRegion().ordinal());
         }
 
         // Active Switch
@@ -114,22 +111,12 @@ class MagicMirrorModuleListAdapter extends RecyclerView.Adapter<MagicMirrorModul
         holder.settingsContent.setVisibility(element.isActive() ? View.VISIBLE : View.GONE);
 
         // add custom settings fragment
-        ModuleSettingsFragment settingsFragment = element.getAdditionalSettingsFragment();
+        final ModuleSettingsFragment settingsFragment = element.getAdditionalSettingsFragment();
 
         if(settingsFragment != null) {
             FragmentManager fragmentManager = parentFragment.getChildFragmentManager();
-            FrameLayout frameLayout = new FrameLayout(appContext);
-            frameLayout.setId(position+1); //since id cannot be zero
-            popBackStack(fragmentManager, frameLayout.getId());
-            holder.settingsContent.addView(frameLayout);
-            fragmentManager.beginTransaction().replace(frameLayout.getId(), settingsFragment).commit();
-        }
-    }
-
-    private static void popBackStack(FragmentManager fragmentManager, int numBackStack) {
-        int fragCount = fragmentManager.getBackStackEntryCount();
-        for(int i = 0; i < fragCount-numBackStack; i++){
-            fragmentManager.popBackStack();
+            holder.frameLayout.setId(position + 1);
+            fragmentManager.beginTransaction().replace(holder.frameLayout.getId(), settingsFragment).commit();
         }
     }
 

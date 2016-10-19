@@ -72,7 +72,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/textViewDefaultSymbol"
             android:paddingTop="5dp"
-            android:labelFor="@+id/editTextDefaultSymbol" />
+            android:labelFor="@+id/editTextDefaultSymbol"
+            android:enabled="@{module.displaySymbol}"/>
 
         <EditText
             android:text="@={module.defaultSymbol}"
@@ -81,7 +82,8 @@
             android:inputType="textPersonName"
             android:hint="Default: calendar"
             android:ems="10"
-            android:id="@+id/editTextDefaultSymbol" />
+            android:id="@+id/editTextDefaultSymbol"
+            android:enabled="@{module.displaySymbol}"/>
 
         <TextView
             android:text="Maximum Title Length"
@@ -154,7 +156,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/textViewFadePoint"
             android:paddingTop="5dp"
-            android:labelFor="@+id/editTextFadePoint" />
+            android:labelFor="@+id/editTextFadePoint"
+            android:enabled="@{module.fade}"/>
 
         <EditText
             android:text="@={module.fadePoint}"
@@ -163,7 +166,8 @@
             android:inputType="numberDecimal"
             android:hint="Default: 0.25"
             android:ems="10"
-            android:id="@+id/editTextFadePoint" />
+            android:id="@+id/editTextFadePoint"
+            android:enabled="@{module.fade}"/>
 
         <TextView
             android:text="Calendars"

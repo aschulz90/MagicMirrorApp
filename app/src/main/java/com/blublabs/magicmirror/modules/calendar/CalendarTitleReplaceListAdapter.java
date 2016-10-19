@@ -126,6 +126,7 @@ class CalendarTitleReplaceListAdapter extends RecyclerView.Adapter<CalendarTitle
                         public void onClick(DialogInterface dialog,int id) {
                             module.getTitleReplaceMap().remove(entry.getKey());
                             notifyDataSetChanged();
+                            module.notifyPropertyChanged(BR.titleReplaceMap);
                         }
                     });
         }

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="module" type="com.blublabs.magicmirror.modules.clock.ClockMagicMirrorModule"/>
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="@string/settings_custom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            style="?android:attr/listSeparatorTextViewStyle"/>
+
+        <TextView
+            android:text="Time Format"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewTimeFormat"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/spinnerTimeFormat" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerTimeFormat"
+            app:selectedItem="@={module.timeFormat}"/>
+
+        <TextView
+            android:text="Display Seconds"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewDisplaySeconds"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/switchDisplaySecondsss" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchDisplaySecondsss"
+            android:checked="@={module.displaySeconds}"/>
+
+        <TextView
+            android:text="Show Period"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewShowPeriod"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/switchShowPeriod" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchShowPeriod"
+            android:checked="@={module.showPeriod}"/>
+
+        <TextView
+            android:text="Show Period Upper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewShowPeriodUpper"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/switchShowPeriodUpper" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchShowPeriodUpper"
+            android:checked="@={module.showPeriodUpper}"/>
+
+        <TextView
+            android:text="Clock Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewClockBold"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/switchClockBold" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchClockBold"
+            android:checked="@={module.clockBold}"/>
+
+        <TextView
+            android:text="Show Date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewShowDate"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/switchShowDate" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchShowDate"
+            android:checked="@={module.showDate}"/>
+
+        <TextView
+            android:text="Display Type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewDisplayType"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/spinnerDisplayType" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerDisplayType"
+            app:selectedItem="@={module.displayType}"/>
+
+        <TextView
+            android:text="Analog Size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewAnalogSie"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextAnalogSize" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:text="@={module.analogSize}"
+                android:hint="Default: 200"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/editTextAnalogSize" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="px"/>
+        </LinearLayout>
+
+        <TextView
+            android:text="Analog Face"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewAnalogFace"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/spinnerAnalogFace" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerAnalogFace"
+            app:selectedItem="@={module.analogFace}"/>
+
+        <TextView
+            android:text="Seconds Color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewSecondsColor"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/colorPickerSecondsColor" />
+
+        <Button android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/colored_circle"
+            android:id="@+id/buttonColorCircle"/>
+
+        <TextView
+            android:text="Analog Placement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewAnalogPlacement"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/spinnerAnalogPlacement" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerAnalogPlacement"
+            app:selectedItem="@={module.analogPlacement}"/>
+
+        <TextView
+            android:text="Show Analog Date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewShowAnalogDate"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/spinnerShowAnalogDate" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchShowAnalogDatee"
+            android:checked="@={module.analogShowDate}" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerShowAnalogDate"
+            app:selectedItem="@={module.analogDatePlacement}"
+            android:enabled="@{module.analogShowDate}"/>
+    </LinearLayout>
+</layout>

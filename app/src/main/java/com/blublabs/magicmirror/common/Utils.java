@@ -7,7 +7,9 @@ import android.databinding.InverseBindingMethod;
 import android.databinding.InverseBindingMethods;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatSpinner;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
@@ -99,7 +101,7 @@ public final class Utils {
         @BindingAdapter("app:selectedItem")
         public static void setSelectedItem(AppCompatSpinner view, Enum oldValue, Enum newValue) {
 
-            if (objectsEqual(oldValue, newValue)) {
+            if (!objectsEqual(oldValue, newValue)) {
                 view.setSelection((newValue).ordinal());
             }
         }

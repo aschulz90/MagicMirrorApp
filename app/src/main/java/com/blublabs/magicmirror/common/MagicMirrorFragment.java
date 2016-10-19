@@ -17,6 +17,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
@@ -51,8 +52,7 @@ public class MagicMirrorFragment extends Fragment {
 
                     MagicMirrorFragment.this.service = new Messenger(service);
                     try {
-                        Message msg = Message.obtain(null,
-                                BleService.MSG_REGISTER);
+                        Message msg = Message.obtain(null, BleService.MSG_REGISTER);
                         if (msg != null) {
                             msg.replyTo = messenger;
                             MagicMirrorFragment.this.service.send(msg);
@@ -216,7 +216,7 @@ public class MagicMirrorFragment extends Fragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults){
         if(requestCode == LOCATION_PERMISSION_REQUEST_CODE)
         {
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {

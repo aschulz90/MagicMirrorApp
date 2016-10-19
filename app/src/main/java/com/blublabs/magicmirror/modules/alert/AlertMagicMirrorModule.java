@@ -1,11 +1,15 @@
 package com.blublabs.magicmirror.modules.alert;
 
+import android.databinding.Bindable;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.android.databinding.library.baseAdapters.BR;
+import com.blublabs.magicmirror.common.Utils;
 import com.blublabs.magicmirror.modules.MagicMirrorModule;
 import com.blublabs.magicmirror.modules.ModuleSettingsFragment;
+import com.blublabs.magicmirror.modules.compliments.ComplimentsSettingsFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +19,66 @@ import org.json.JSONObject;
  */
 
 public class AlertMagicMirrorModule extends MagicMirrorModule {
+
+    public enum AlertEffect {
+        scale,
+        slide,
+        genie,
+        jelly,
+        flip,
+        exploader,
+        bouncyflip;
+
+        public static AlertEffect from(String effect) {
+
+            if(effect == null) {
+                return null;
+            }
+
+            for(AlertEffect value : AlertEffect.values()) {
+                if(effect.equals(value.toString())) {
+                    return value;
+                }
+            }
+
+            return null;
+        }
+    }
+
+    public enum Position {
+        left,
+        center,
+        right;
+
+        public static Position from(String position) {
+
+            if(position == null) {
+                return null;
+            }
+
+            for(Position value : Position.values()) {
+                if(position.equals(value.toString())) {
+                    return value;
+                }
+            }
+
+            return null;
+        }
+    }
+
+    private static final String KEY_DATA_ALERT_EFFECT = "alert_effect";
+    private static final String KEY_DATA_NOTIFICATION_EFFECT = "effect";
+    private static final String KEY_DATA_DISPLAY_TIME = "display_time";
+    private static final String KEY_DATA_POSITION = "position";
+    private static final String KEY_DATA_WELCOME_MESSAGE = "welcome_message";
+
+    private AlertEffect notificationEffect = AlertEffect.slide;
+    private AlertEffect alertEffect = AlertEffect.jelly;
+    private Double displayTime = null;
+    private Position position = Position.center;
+    private String welcomeMessage = null;
+
+    private AlertSettingsFragment fragment;
 
     public static final Parcelable.Creator<AlertMagicMirrorModule> CREATOR =
             new Parcelable.Creator<AlertMagicMirrorModule>() {
@@ -30,26 +94,189 @@ public class AlertMagicMirrorModule extends MagicMirrorModule {
 
     public AlertMagicMirrorModule(JSONObject data) throws JSONException {
         super(data);
+
+        if(data.has(KEY_DATA_CONFIG)) {
+
+            JSONObject config = data.getJSONObject(KEY_DATA_CONFIG);
+
+            if(config.has(KEY_DATA_ALERT_EFFECT)) {
+                this.alertEffect = AlertEffect.from(config.getString(KEY_DATA_ALERT_EFFECT));
+            }
+
+            if(config.has(KEY_DATA_NOTIFICATION_EFFECT)) {
+                this.notificationEffect = AlertEffect.from(config.getString(KEY_DATA_NOTIFICATION_EFFECT));
+            }
+
+            if(config.has(KEY_DATA_DISPLAY_TIME)) {
+                this.displayTime = config.getDouble(KEY_DATA_DISPLAY_TIME);
+            }
+
+            if(config.has(KEY_DATA_POSITION)) {
+                this.position = Position.from(config.getString(KEY_DATA_POSITION));
+            }
+
+            if(config.has(KEY_DATA_WELCOME_MESSAGE)) {
+                this.welcomeMessage = config.getString(KEY_DATA_WELCOME_MESSAGE);
+            }
+        }
     }
 
     private AlertMagicMirrorModule(Parcel source) {
         super(source);
+
+        notificationEffect = AlertEffect.values()[source.readInt()];
+        alertEffect = AlertEffect.values()[source.readInt()];
+        displayTime = source.readDouble();
+        position = Position.values()[source.readInt()];
+        welcomeMessage = source.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+
+        dest.writeInt(notificationEffect.ordinal());
+        dest.writeInt(alertEffect.ordinal());
+        dest.writeDouble(displayTime);
+        dest.writeInt(position.ordinal());
+        dest.writeString(welcomeMessage);
+    }
+
+    @Bindable
+    public AlertEffect getNotificationEffect() {
+        return notificationEffect;
+    }
+
+    public void setNotificationEffect(AlertEffect notificationEffect) {
+
+        if(notificationEffect == this.notificationEffect) {
+            return;
+        }
+
+        this.notificationEffect = notificationEffect;
+        notifyPropertyChanged(BR.notificationEffect);
+    }
+
+    @Bindable
+    public AlertEffect getAlertEffect() {
+        return alertEffect;
+    }
+
+    public void setAlertEffect(AlertEffect alertEffect) {
+
+        if(alertEffect == this.alertEffect) {
+            return;
+        }
+
+        this.alertEffect = alertEffect;
+        notifyPropertyChanged(BR.alertEffect);
+    }
+
+    @Bindable
+    public Double getDisplayTime() {
+        return displayTime;
+    }
+
+    public void setDisplayTime(Double displayTime) {
+        this.displayTime = displayTime;
+        notifyPropertyChanged(BR.displayTime);
+    }
+
+    @Bindable
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+
+        if(position == this.position) {
+            return;
+        }
+
+        this.position = position;
+        notifyPropertyChanged(BR.position);
+    }
+
+    @Bindable
+    public String getWelcomeMessage() {
+        return welcomeMessage;
+    }
+
+    public void setWelcomeMessage(String welcomeMessage) {
+        this.welcomeMessage = welcomeMessage;
+        notifyPropertyChanged(BR.welcomeMessage);
     }
 
     @Override
     public ModuleSettingsFragment getAdditionalSettingsFragment() {
 
-        AlertSettingsFragment fragment = new AlertSettingsFragment();
-
-        Bundle bundle = new Bundle(1);
-        bundle.putParcelable(ModuleSettingsFragment.KEY_MODULE, this);
-        fragment.setArguments(bundle);
+        if(fragment == null) {
+            fragment = new AlertSettingsFragment();
+            Bundle bundle = new Bundle(1);
+            bundle.putParcelable(ModuleSettingsFragment.KEY_MODULE, this);
+            fragment.setArguments(bundle);
+        }
 
         return fragment;
     }
 
     @Override
     public JSONObject toJson() throws JSONException {
-        return super.toJson();
+        JSONObject json = super.toJson();
+        JSONObject config = new JSONObject();
+
+        if(alertEffect != AlertEffect.jelly) {
+            config.put(KEY_DATA_ALERT_EFFECT, alertEffect);
+        }
+
+        if(notificationEffect != AlertEffect.slide) {
+            config.put(KEY_DATA_NOTIFICATION_EFFECT, notificationEffect);
+        }
+
+        if(displayTime != null) {
+            config.put(KEY_DATA_DISPLAY_TIME, displayTime);
+        }
+
+        if(position != Position.center) {
+            config.put(KEY_DATA_POSITION, position);
+        }
+
+        if(!Utils.isEmpty(welcomeMessage)) {
+            config.put(KEY_DATA_WELCOME_MESSAGE, welcomeMessage);
+        }
+
+        if(config.length() > 0) {
+            json.put(KEY_DATA_CONFIG, config);
+        }
+
+        return json;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        AlertMagicMirrorModule that = (AlertMagicMirrorModule) o;
+
+        if (getNotificationEffect() != that.getNotificationEffect()) return false;
+        if (getAlertEffect() != that.getAlertEffect()) return false;
+        if (getDisplayTime() != null ? !getDisplayTime().equals(that.getDisplayTime()) : that.getDisplayTime() != null)
+            return false;
+        if (getPosition() != that.getPosition()) return false;
+        return getWelcomeMessage() != null ? getWelcomeMessage().equals(that.getWelcomeMessage()) : that.getWelcomeMessage() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + getNotificationEffect().hashCode();
+        result = 31 * result + getAlertEffect().hashCode();
+        result = 31 * result + (getDisplayTime() != null ? getDisplayTime().hashCode() : 0);
+        result = 31 * result + getPosition().hashCode();
+        result = 31 * result + (getWelcomeMessage() != null ? getWelcomeMessage().hashCode() : 0);
+        return result;
     }
 }

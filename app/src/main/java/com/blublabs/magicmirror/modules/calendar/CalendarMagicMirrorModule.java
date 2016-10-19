@@ -28,6 +28,26 @@ import java.util.Map;
 
 public class CalendarMagicMirrorModule extends MagicMirrorModule {
 
+    public enum TimeFormat{
+        absolute,
+        relative;
+
+        public static TimeFormat from(String timeFormat) {
+
+            if(timeFormat == null) {
+                return null;
+            }
+
+            for(TimeFormat value : TimeFormat.values()) {
+                if(timeFormat.equals(value.toString())) {
+                    return value;
+                }
+            }
+
+            return null;
+        }
+    }
+
     private static final String KEY_MAXIMUM_ENTRIES = "maximumEntries";
     private static final String KEY_MAXIMUM_NUMBER_OF_DAYS = "maximumNumberOfDays";
     private static final String KEY_DISPLAY_SYMBOL = "displaySymbol";
@@ -55,8 +75,10 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
     private boolean fade = true;
     private Double fadePoint = null;
     private boolean displayRepeatingCountTitle = false;
-    private CalendarSettingsFragment.TimeFormat timeFormat = CalendarSettingsFragment.TimeFormat.relative;
+    private TimeFormat timeFormat = TimeFormat.relative;
     private Integer urgency = null;
+
+    private CalendarSettingsFragment fragment;
 
     public static final Parcelable.Creator<CalendarMagicMirrorModule> CREATOR =
             new Parcelable.Creator<CalendarMagicMirrorModule>() {
@@ -117,7 +139,7 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
             }
 
             if (config.has(KEY_TIME_FORMAT)) {
-                timeFormat = CalendarSettingsFragment.TimeFormat.from(config.getString(KEY_TIME_FORMAT));
+                timeFormat = TimeFormat.from(config.getString(KEY_TIME_FORMAT));
             }
 
             if (config.has(KEY_URGENCY)) {
@@ -162,7 +184,7 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
         fade = source.readByte() == 1;
         fadePoint = source.readDouble();
         displayRepeatingCountTitle = source.readByte() == 1;
-        timeFormat = CalendarSettingsFragment.TimeFormat.values()[source.readInt()];
+        timeFormat = TimeFormat.values()[source.readInt()];
         urgency = source.readInt();
     }
 
@@ -302,11 +324,11 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
     }
 
     @Bindable
-    public CalendarSettingsFragment.TimeFormat getTimeFormat() {
+    public TimeFormat getTimeFormat() {
         return timeFormat;
     }
 
-    public void setTimeFormat(CalendarSettingsFragment.TimeFormat timeFormat) {
+    public void setTimeFormat(TimeFormat timeFormat) {
 
         if(timeFormat == this.timeFormat) {
             return;
@@ -329,10 +351,12 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
     @Override
     public ModuleSettingsFragment getAdditionalSettingsFragment() {
 
-        CalendarSettingsFragment fragment = new CalendarSettingsFragment();
-        Bundle bundle = new Bundle(1);
-        bundle.putParcelable(ModuleSettingsFragment.KEY_MODULE, this);
-        fragment.setArguments(bundle);
+        if(fragment == null) {
+            fragment = new CalendarSettingsFragment();
+            Bundle bundle = new Bundle(1);
+            bundle.putParcelable(ModuleSettingsFragment.KEY_MODULE, this);
+            fragment.setArguments(bundle);
+        }
 
         return fragment;
     }
@@ -372,7 +396,9 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
             config.put(KEY_MAXIMUM_NUMBER_OF_DAYS, maximumNumberOfDays);
         }
 
-        config.put(KEY_DISPLAY_SYMBOL, displaySymbol);
+        if(!displaySymbol) {
+            config.put(KEY_DISPLAY_SYMBOL, false);
+        }
 
         if(!Utils.isEmpty(defaultSymbol)) {
             config.put(KEY_DEFAULT_SYMBOL, defaultSymbol);
@@ -390,15 +416,19 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
             config.put(KEY_ANIMATION_SPEED, animationSpeed);
         }
 
-        config.put(KEY_FADE, fade);
+        if(!fade) {
+            config.put(KEY_FADE, false);
+        }
 
         if(fadePoint != null) {
             config.put(KEY_FADE_POINT, fadePoint);
         }
 
-        config.put(KEY_DESPLAY_REPEATING_COUNT_TITLE, displayRepeatingCountTitle);
+        if(displayRepeatingCountTitle) {
+            config.put(KEY_DESPLAY_REPEATING_COUNT_TITLE, true);
+        }
 
-        if(timeFormat != null) {
+        if(timeFormat != TimeFormat.relative) {
             config.put(KEY_TIME_FORMAT, timeFormat);
         }
 

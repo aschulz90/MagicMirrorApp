@@ -34,26 +34,6 @@ import com.blublabs.magicmirror.modules.ModuleSettingsFragment;
 
 public class CalendarSettingsFragment extends ModuleSettingsFragment<CalendarMagicMirrorModule> {
 
-    public enum TimeFormat{
-        absolute,
-        relative;
-
-        public static TimeFormat from(String position) {
-
-            if(position == null) {
-                return null;
-            }
-
-            for(TimeFormat value : TimeFormat.values()) {
-                if(position.equals(value.toString())) {
-                    return value;
-                }
-            }
-
-            return null;
-        }
-    }
-
     private CalendarListAdapter calendarsAdapter;
     private CalendarTitleReplaceListAdapter titleReplaceAdapter;
     private FragmentModuleSettingsCalendarBinding binding;
@@ -66,15 +46,11 @@ public class CalendarSettingsFragment extends ModuleSettingsFragment<CalendarMag
         final View view = binding.getRoot();
         binding.setModule(getModule());
 
-        checkSwitchValueChanged(BR.displaySymbol);
-        checkSwitchValueChanged(BR.fade);
-
         // time format
         Spinner timeFormatSpinner = (Spinner) view.findViewById(R.id.spinnerTimeFormat);
-        ArrayAdapter<TimeFormat> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, TimeFormat.values());
+        ArrayAdapter<CalendarMagicMirrorModule.TimeFormat> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, CalendarMagicMirrorModule.TimeFormat.values());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         timeFormatSpinner.setAdapter(adapter);
-        timeFormatSpinner.setSelection(adapter.getPosition(getModule().getTimeFormat()));
 
         // calendars list
         final RecyclerView calendarListView = (RecyclerView) view.findViewById(R.id.calendars_recycler_view);
@@ -105,26 +81,6 @@ public class CalendarSettingsFragment extends ModuleSettingsFragment<CalendarMag
         ).show();*/
 
         return view;
-    }
-
-    private void checkSwitchValueChanged(int valueId) {
-        switch (valueId) {
-            case BR.displaySymbol:
-                // display symbol switch
-                final SwitchCompat displaySymbolSwitch = (SwitchCompat) binding.getRoot().findViewById(R.id.switchDisplaySymbol);
-                final View[] defaultSymbolViews = new View[] {binding.getRoot().findViewById(R.id.textViewDefaultSymbol), binding.getRoot().findViewById(R.id.editTextDefaultSymbol)};
-                SwitchOnCheckedChangeListener.setEnabled(defaultSymbolViews, getModule().isDisplaySymbol());
-                break;
-
-            case BR.fade:
-                // fade switch
-                final SwitchCompat fadeSwitch = (SwitchCompat) binding.getRoot().findViewById(R.id.switchFade);
-                final View[] fadeViews = new View[] {binding.getRoot().findViewById(R.id.textViewFadePoint), binding.getRoot().findViewById(R.id.editTextFadePoint)};
-                SwitchOnCheckedChangeListener.setEnabled(fadeViews, getModule().isFade());
-                break;
-            default:
-                break;
-        }
     }
 
 }

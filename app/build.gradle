@@ -31,5 +31,5 @@ dependencies {
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'it.sephiroth.android.library.targettooltip:target-tooltip-library:+'
-    compile 'com.simplecityapps:recyclerview-fastscroll:1.0.11'
+    compile 'com.github.QuadFlask:colorpicker:0.0.12'
 }

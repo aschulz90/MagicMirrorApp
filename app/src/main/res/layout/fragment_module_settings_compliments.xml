@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable name="module" type="com.blublabs.magicmirror.modules.compliments.ComplimentsMagicMirrorModule"/>
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="@string/settings_custom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            style="?android:attr/listSeparatorTextViewStyle"/>
+
+        <TextView
+            android:text="Update Interval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewUpdateInterval"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextUpdateInterval"/>
+
+        <EditText
+            android:text="@={module.updateInterval}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/editTextUpdateInterval"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:hint="Default: 30000"/>
+
+        <TextView
+            android:text="Fade Speed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewFadeSpeed"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextFadeSpeed"/>
+
+        <EditText
+            android:text="@={module.fadeSpeed}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/editTextFadeSpeed"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:hint="Default: 4000"/>
+
+        <TextView
+            android:text="Compliments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewComliments"
+            android:paddingTop="5dp"/>
+
+        <TextView
+            android:text="Morning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewComplimentsMorning"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/recyclerViewMorning"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerViewMorning"/>
+
+        <TextView
+            android:text="Afternoon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewComplimentsAfternoon"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/recyclerViewAfternoon"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerViewAfternoon"/>
+
+        <TextView
+            android:text="Evening"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewComplimentsEvening"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/recyclerViewEvening"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerViewEvening"/>
+
+    </LinearLayout>
+</layout>

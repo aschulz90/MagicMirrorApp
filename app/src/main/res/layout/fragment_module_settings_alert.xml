@@ -1,73 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:text="@string/settings_custom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView3"
-        style="?android:attr/listSeparatorTextViewStyle"/>
+    <data>
+        <variable name="module" type="com.blublabs.magicmirror.modules.alert.AlertMagicMirrorModule"/>
+    </data>
 
-    <TextView
-        android:text="Notification Effect"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewNotificationEffect"
-        android:paddingTop="5dp"
-        android:labelFor="@+id/effectNotificationSpinner" />
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/effectNotificationSpinner">
+        <TextView
+            android:text="@string/settings_custom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            style="?android:attr/listSeparatorTextViewStyle"/>
 
-    </Spinner>
+        <TextView
+            android:text="Notification Effect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewNotificationEffect"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/effectNotificationSpinner" />
 
-    <TextView
-        android:text="Alert Effect"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewAlertEffect"
-        android:paddingTop="5dp"
-        android:labelFor="@+id/effectAlertSpinner" />
+        <android.support.v7.widget.AppCompatSpinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/effectNotificationSpinner"
+            app:selectedItem="@={module.notificationEffect}">
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/effectAlertSpinner">
+        </android.support.v7.widget.AppCompatSpinner>
 
-    </Spinner>
+        <TextView
+            android:text="Alert Effect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewAlertEffect"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/effectAlertSpinner" />
 
-    <TextView
-        android:text="Display Time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewDisplayTime"
-        android:paddingTop="5dp"
-        android:labelFor="@+id/editTextDisplayTime" />
+        <android.support.v7.widget.AppCompatSpinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/effectAlertSpinner"
+            app:selectedItem="@={module.alertEffect}">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/editTextDisplayTime" />
+        </android.support.v7.widget.AppCompatSpinner>
 
-    <TextView
-        android:text="Welcome Message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewWelcome"
-        android:paddingTop="5dp"
-        android:labelFor="@+id/editTextWelcome" />
+        <TextView
+            android:text="Display Time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewDisplayTime"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextDisplayTime" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/editTextWelcome" />
+        <EditText
+            android:text="@={module.displayTime}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/editTextDisplayTime"
+            android:hint="Default: 3.5"/>
 
-</LinearLayout>
+        <TextView
+            android:text="Position"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewPosition"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/spinnerPosition" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerPosition"
+            app:selectedItem="@={module.position}">
+
+        </android.support.v7.widget.AppCompatSpinner>
+
+        <TextView
+            android:text="Welcome Message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewWelcome"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextWelcome" />
+
+        <EditText
+            android:text="@={module.welcomeMessage}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/editTextWelcome" />
+
+    </LinearLayout>
+</layout>

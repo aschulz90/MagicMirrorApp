@@ -1,7 +1,9 @@
 package com.blublabs.magicmirror.modules;
 
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.content.Intent;
 import android.databinding.Observable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -59,7 +61,8 @@ public class ModulesFragment extends MagicMirrorFragment {
                         @Override
                         public void run() {
                             try {
-                                writeCharacteristic(SERVICE_MAGICMIRROR_APP_INTERFACE, UUID.fromString(Utils.padLeft(moduleUuidMap.get(module.getName()), 8, '0') + CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE), module.toJson().toString());
+                                UUID characteristicUuid = UUID.fromString(Utils.padLeft(moduleUuidMap.get(module.getName()), 8, '0') + CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE);
+                                writeCharacteristic(SERVICE_MAGICMIRROR_APP_INTERFACE, characteristicUuid, module.toJson().toString());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -71,7 +74,6 @@ public class ModulesFragment extends MagicMirrorFragment {
                 }
                 else {
                     delayHandler.removeCallbacks(module.getUpdateHandler());
-
                 }
 
                 delayHandler.postDelayed(module.getUpdateHandler(), UPDATE_DELAY);
@@ -88,10 +90,13 @@ public class ModulesFragment extends MagicMirrorFragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.card_recycler_view);
 
         moduleListAdapter = new MagicMirrorModuleListAdapter(moduleList, getActivity().getApplicationContext(), recyclerView, this);
-        RecyclerView.LayoutManager mLayoutManager = new MyCustomLayoutManager(getActivity().getApplicationContext());
+        MyCustomLayoutManager mLayoutManager = new MyCustomLayoutManager(getActivity().getApplicationContext());
+        mLayoutManager.setExtraLayoutSpace(15000);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        /*recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));*/
+        recyclerView.setItemViewCacheSize(40);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
         recyclerView.setAdapter(moduleListAdapter);
 
@@ -115,9 +120,17 @@ public class ModulesFragment extends MagicMirrorFragment {
     }
 
     @Override
-    protected void onBleServiceConnected() {
-        if(moduleList.isEmpty()) {
-            readCharacteristic(SERVICE_MAGICMIRROR_APP_INTERFACE, CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE_LIST);
+    protected void onStateChanged(BleService.State newState) {
+        super.onStateChanged(newState);
+
+        switch (newState) {
+            case CONNECTED:
+                if(moduleList.isEmpty()) {
+                    readCharacteristic(SERVICE_MAGICMIRROR_APP_INTERFACE, CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE_LIST);
+                }
+                break;
+            case IDLE:
+                break;
         }
     }
 

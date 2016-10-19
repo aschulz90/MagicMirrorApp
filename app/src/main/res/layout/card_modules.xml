@@ -70,12 +70,13 @@
                         android:labelFor="@+id/position_spinner"
                         android:paddingTop="5dp"/>
 
-                    <Spinner
+                    <android.support.v7.widget.AppCompatSpinner
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/position_spinner"
                         android:paddingBottom="5dp"
-                        android:paddingTop="5dp"/>
+                        android:paddingTop="5dp"
+                        app:selectedItem="@={module.region}"/>
 
                     <TextView
                         android:text="Header"

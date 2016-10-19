@@ -9,6 +9,8 @@ import com.blublabs.magicmirror.BR;
 import com.blublabs.magicmirror.common.Utils;
 import com.blublabs.magicmirror.modules.alert.AlertMagicMirrorModule;
 import com.blublabs.magicmirror.modules.calendar.CalendarMagicMirrorModule;
+import com.blublabs.magicmirror.modules.clock.ClockMagicMirrorModule;
+import com.blublabs.magicmirror.modules.compliments.ComplimentsMagicMirrorModule;
 import com.blublabs.magicmirror.modules.helloworld.HelloWorldMagicMirrorModule;
 
 import org.json.JSONException;
@@ -20,7 +22,7 @@ import org.json.JSONObject;
  */
 public abstract class MagicMirrorModule extends BaseObservable implements Parcelable {
 
-    protected enum PositionRegion {
+    public enum PositionRegion {
         none,
         top_bar,
         bottom_bar,
@@ -52,7 +54,7 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
 
     private String name = null;
     private boolean active;
-    private PositionRegion position = PositionRegion.none;
+    private PositionRegion region = PositionRegion.none;
     private String header = null;
 
     private Runnable updateHandler = null;
@@ -66,7 +68,7 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
         this.name = data.getString(KEY_DATA_NAME);
         this.active = true;
         if(data.has(KEY_DATA_POSITION)) {
-            this.position = PositionRegion.from(data.getString(KEY_DATA_POSITION));
+            this.region = PositionRegion.from(data.getString(KEY_DATA_POSITION));
         }
         if(data.has(KEY_DATA_HEADER)) {
             header = data.getString(KEY_DATA_HEADER);
@@ -76,7 +78,7 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
     protected MagicMirrorModule(Parcel source) {
         this.name = source.readString();
         this.active = source.readByte() == 1;
-        this.position = PositionRegion.values()[source.readInt()];
+        this.region = PositionRegion.values()[source.readInt()];
         this.header = source.readString();
     }
 
@@ -114,12 +116,17 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
     }
 
     @Bindable
-    public PositionRegion getPosition() {
-        return position;
+    public PositionRegion getRegion() {
+        return region;
     }
 
-    public void setPosition(PositionRegion position) {
-        this.position = position;
+    public void setRegion(PositionRegion region) {
+
+        if(region == this.region) {
+            return;
+        }
+
+        this.region = region;
         notifyPropertyChanged(BR.position);
     }
 
@@ -141,8 +148,8 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
 
         json.put(KEY_DATA_NAME, getName());
 
-        if(getPosition() != PositionRegion.none) {
-            json.put(KEY_DATA_POSITION, getPosition());
+        if(getRegion() != PositionRegion.none) {
+            json.put(KEY_DATA_POSITION, getRegion());
         }
 
         if(!Utils.isEmpty(getHeader())) {
@@ -161,7 +168,7 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeByte((byte) (active ? 1 : 0));
-        dest.writeInt(position.ordinal());
+        dest.writeInt(region.ordinal());
         dest.writeString(header);
     }
 
@@ -174,7 +181,7 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
 
         if (isActive() != that.isActive()) return false;
         if (!getName().equals(that.getName())) return false;
-        if (getPosition() != that.getPosition()) return false;
+        if (getRegion() != that.getRegion()) return false;
         return getHeader() != null ? getHeader().equals(that.getHeader()) : that.getHeader() == null;
 
     }
@@ -183,7 +190,7 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
     public int hashCode() {
         int result = getName().hashCode();
         result = 31 * result + (isActive() ? 1 : 0);
-        result = 31 * result + (getPosition() != null ? getPosition().hashCode() : 0);
+        result = 31 * result + (getRegion() != null ? getRegion().hashCode() : 0);
         result = 31 * result + (getHeader() != null ? getHeader().hashCode() : 0);
         return result;
     }
@@ -195,10 +202,14 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
         switch(name) {
             case "alert":
                 return new AlertMagicMirrorModule(data);
-            case "hello_world":
+            case "helloworld":
                 return new HelloWorldMagicMirrorModule(data);
             case "calendar":
                 return new CalendarMagicMirrorModule(data);
+            case "clock":
+                return new ClockMagicMirrorModule(data);
+            case "compliments":
+                return new ComplimentsMagicMirrorModule(data);
             default:
                 return null;
         }

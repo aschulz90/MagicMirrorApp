@@ -1,12 +1,7 @@
-package com.blublabs.magicmirror.modules.calendar;
-
-/**
- * Created by andrs on 30.08.2016.
- */
+package com.blublabs.magicmirror.modules.compliments;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.databinding.DataBindingUtil;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -15,18 +10,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.blublabs.magicmirror.BR;
 import com.blublabs.magicmirror.R;
 import com.blublabs.magicmirror.common.Utils;
-import com.blublabs.magicmirror.databinding.DialogCalendarBinding;
 
-class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapter.MyViewHolder> {
+import java.util.List;
+
+/**
+ * Created by andrs on 19.10.2016.
+ */
+
+public class ComplimentsListAdapter extends RecyclerView.Adapter<ComplimentsListAdapter.MyViewHolder> {
 
     private final Context context;
-    private final RecyclerView calendarRecyclerView;
-    private final CalendarMagicMirrorModule module;
+    private final RecyclerView complimentsRecyclerView;
+    private final String complimentTime;
+    private final List<String> compliments;
+    private final ComplimentsMagicMirrorModule module;
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView text;
@@ -40,22 +40,23 @@ class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapter.MyVie
 
         @Override
         public void onClick(View view) {
-            int itemPosition = calendarRecyclerView.getChildLayoutPosition(view);
+            int itemPosition = complimentsRecyclerView.getChildLayoutPosition(view);
 
-            if(itemPosition < module.getCalendars().size()) {
-                showCalendarDialog(module.getCalendars().get(itemPosition));
+            if(itemPosition < compliments.size()) {
+                showComplimentDialog(compliments.get(itemPosition));
             }
             else {
-                showCalendarDialog(null);
+                showComplimentDialog(null);
             }
         }
     }
 
-    CalendarListAdapter(CalendarMagicMirrorModule module, Context context, RecyclerView calendarRecyclerView) {
-
-        this.module = module;
+    ComplimentsListAdapter(Context context, RecyclerView complimentRecyclerView, ComplimentsMagicMirrorModule module, List<String> compliments, String complimentTime) {
         this.context = context;
-        this.calendarRecyclerView = calendarRecyclerView;
+        this.complimentsRecyclerView = complimentRecyclerView;
+        this.complimentTime = complimentTime;
+        this.compliments = compliments;
+        this.module = module;
     }
 
     @Override
@@ -68,38 +69,35 @@ class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapter.MyVie
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
-        if(position < module.getCalendars().size()) {
-            holder.text.setText(module.getCalendars().get(position).toString());
+        if(position < compliments.size()) {
+            holder.text.setText(compliments.get(position));
         }
         else {
-            holder.text.setText("Add calendar");
+            holder.text.setText("Add Compliment");
         }
     }
 
     @Override
     public int getItemCount() {
-        return module.getCalendars().size() + 1;
+        return compliments.size() + 1;
     }
 
-    private void showCalendarDialog(final Calendar calendar) {
+    private void showComplimentDialog(final String compliment) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
-        DialogCalendarBinding dialogViewBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_calendar, null, false);
-        View dialogView = dialogViewBinding.getRoot();
-        final TextInputLayout urlEditLayout = (TextInputLayout) dialogView.findViewById(R.id.inputLayoutUrl);
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_compliments, null, false);
+        final TextInputLayout complimentEditLayout = (TextInputLayout) dialogView.findViewById(R.id.inputLayoutCompliment);
+        final EditText complimentEditText = (EditText) dialogView.findViewById(R.id.editTextCompliment);
+        final TextView title = (TextView) dialogView.findViewById(R.id.textViewComplimentTime);
 
         // set prompts.xml to alertdialog builder
         alertDialogBuilder.setView(dialogView);
 
-        final Calendar newCalendar;
-        if(calendar == null) {
-            newCalendar = new Calendar();
-            dialogViewBinding.setCalendar(newCalendar);
+        if(compliment != null) {
+            complimentEditText.setText(compliment);
         }
-        else {
-            newCalendar = null;
-            dialogViewBinding.setCalendar(calendar);
-        }
+
+        title.setText(complimentTime);
 
         // set dialog message
         alertDialogBuilder
@@ -117,13 +115,13 @@ class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapter.MyVie
                             }
                         });
 
-        if(calendar != null) {
+        if(compliment != null) {
             alertDialogBuilder.setNeutralButton("Remove",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog,int id) {
-                            module.getCalendars().remove(calendar);
+                            compliments.remove(compliment);
                             notifyDataSetChanged();
-                            module.notifyPropertyChanged(BR.calendars);
+                            module.notifyChange();
                         }
                     });
         }
@@ -141,23 +139,23 @@ class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapter.MyVie
             public void onClick(View v)
             {
 
-                Calendar testCalendar = calendar == null ? newCalendar : calendar;
+                final String newCompliment = complimentEditText.getText().toString();
 
-                if(calendar == null && module.getCalendars().contains(newCalendar)) {
-                    Toast.makeText(context, "Calendar '" + newCalendar + "' already exists!", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                else  if(!Utils.validateEditTextValue(testCalendar.getUrl(), urlEditLayout, "URL not set!")) {
+                if(!Utils.validateEditTextValue(newCompliment, complimentEditLayout, "Compliment not set!")) {
                     return;
                 }
 
-                if(calendar == null) {
-                    module.getCalendars().add(newCalendar);
+                if(compliment == null) {
+                   compliments.add(newCompliment);
+                }
+                else {
+                    compliments.set(compliments.indexOf(compliment), newCompliment);
                 }
                 notifyDataSetChanged();
-                module.notifyPropertyChanged(BR.calendars);
+                module.notifyChange();
                 alertDialog.dismiss();
             }
         });
     }
+
 }

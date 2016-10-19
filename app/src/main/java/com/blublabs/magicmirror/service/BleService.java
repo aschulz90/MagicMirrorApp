@@ -253,7 +253,7 @@ public class BleService extends Service implements BluetoothAdapter.LeScanCallba
     public void connect(String macAddress) {
         BluetoothDevice device = devices.get(macAddress);
         if (device != null) {
-            gatt = device.connectGatt(this, true, gattCallback);
+            gatt = device.connectGatt(this, false, gattCallback);
         }
     }
 

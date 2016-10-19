@@ -1,29 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:text="@string/settings_custom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView3"
-        style="?android:attr/listSeparatorTextViewStyle"/>
+    <data>
+        <variable name="module" type="com.blublabs.magicmirror.modules.helloworld.HelloWorldMagicMirrorModule"/>
+    </data>
 
-    <TextView
-        android:text="Text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:paddingTop="5dp"
-        android:labelFor="@+id/editText" />
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/editText"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"/>
-</LinearLayout>
+        <TextView
+            android:text="@string/settings_custom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            style="?android:attr/listSeparatorTextViewStyle"/>
+
+        <TextView
+            android:text="Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editText" />
+
+        <EditText
+            android:text="@={module.text}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/editText"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:hint="Default: 'Hello world!'"/>
+    </LinearLayout>
+</layout>
