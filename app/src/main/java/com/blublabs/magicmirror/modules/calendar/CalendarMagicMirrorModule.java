@@ -214,6 +214,11 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
     }
 
     public void setMaximumEntries(Integer maximumEntries) {
+
+        if(Utils.objectsEqual(this.maximumEntries, maximumEntries)) {
+            return;
+        }
+
         this.maximumEntries = maximumEntries;
         notifyPropertyChanged(BR.maximumEntries);
     }
@@ -224,6 +229,11 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
     }
 
     public void setMaximumNumberOfDays(Integer maximumNumberOfDays) {
+
+        if(Utils.objectsEqual(this.maximumNumberOfDays, maximumNumberOfDays)) {
+            return;
+        }
+
         this.maximumNumberOfDays = maximumNumberOfDays;
         notifyPropertyChanged(BR.maximumNumberOfDays);
     }
@@ -249,6 +259,11 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
     }
 
     public void setDefaultSymbol(String defaultSymbol) {
+
+        if(Utils.objectsEqual(this.defaultSymbol, defaultSymbol)) {
+            return;
+        }
+
         this.defaultSymbol = defaultSymbol;
         notifyPropertyChanged(BR.defaultSymbol);
     }
@@ -259,6 +274,11 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
     }
 
     public void setMaxTitleLength(Integer maxTitleLength) {
+
+        if(Utils.objectsEqual(this.maxTitleLength, maxTitleLength)) {
+            return;
+        }
+
         this.maxTitleLength = maxTitleLength;
         notifyPropertyChanged(BR.maxTitleLength);
     }
@@ -269,6 +289,11 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
     }
 
     public void setFetchInterval(Integer fetchInterval) {
+
+        if(Utils.objectsEqual(this.fetchInterval, fetchInterval)) {
+            return;
+        }
+
         this.fetchInterval = fetchInterval;
         notifyPropertyChanged(BR.fetchInterval);
     }
@@ -279,6 +304,11 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
     }
 
     public void setAnimationSpeed(Integer animationSpeed) {
+
+        if(Utils.objectsEqual(this.animationSpeed, animationSpeed)) {
+            return;
+        }
+
         this.animationSpeed = animationSpeed;
         notifyPropertyChanged(BR.animationSpeed);
     }
@@ -304,6 +334,11 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
     }
 
     public void setFadePoint(Double fadePoint) {
+
+        if(Utils.objectsEqual(this.fadePoint, fadePoint)) {
+            return;
+        }
+
         this.fadePoint = fadePoint;
         notifyPropertyChanged(BR.fadePoint);
     }
@@ -344,6 +379,11 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
     }
 
     public void setUrgency(Integer urgency) {
+
+        if(Utils.objectsEqual(this.urgency, urgency)) {
+            return;
+        }
+
         this.urgency = urgency;
         notifyPropertyChanged(BR.urgency);
     }

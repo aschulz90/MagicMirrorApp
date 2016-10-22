@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 
 import com.blublabs.magicmirror.BR;
+import com.blublabs.magicmirror.common.Utils;
 import com.blublabs.magicmirror.modules.MagicMirrorModule;
 import com.blublabs.magicmirror.modules.ModuleSettingsFragment;
 
@@ -398,6 +399,11 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
     }
 
     public void setAnalogSize(Integer analogSize) {
+
+        if(Utils.objectsEqual(this.analogSize, analogSize)) {
+            return;
+        }
+
         this.analogSize = analogSize;
         notifyPropertyChanged(BR.analogSize);
     }
@@ -423,6 +429,11 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
     }
 
     public void setSecondsColor(Integer secondsColor) {
+
+        if(Utils.objectsEqual(this.secondsColor, secondsColor)) {
+            return;
+        }
+
         this.secondsColor = secondsColor;
         notifyPropertyChanged(BR.secondsColor);
     }
@@ -538,7 +549,7 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
         if(!analogShowDate) {
             config.put(KEY_DATA_ANALOG_DATE_PLACEMENT, false);
         }
-        else if(analogDatePlacement != AnalogDatePlacement.bottom) {
+        else if(analogDatePlacement != AnalogDatePlacement.top) {
             config.put(KEY_DATA_ANALOG_DATE_PLACEMENT, analogDatePlacement);
         }
 

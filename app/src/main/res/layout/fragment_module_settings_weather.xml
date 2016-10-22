@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="module" type="com.blublabs.magicmirror.modules.weather.WeatherMagicMirrorModule"/>
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="@string/settings_custom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            style="?android:attr/listSeparatorTextViewStyle"/>
+
+        <TextView
+            android:text="Location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewLocation"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextLocation" />
+
+        <EditText
+            android:text="@={module.location}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/editTextLocation"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:hint="Default: 'New York'"/>
+
+        <TextView
+            android:text="Location ID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewLocationId"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextLocationId" />
+
+        <EditText
+            android:text="@={module.locationID}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/editTextLocationId"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"/>
+
+        <TextView
+            android:text="APP ID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewAppId"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextAppId" />
+
+        <EditText
+            android:text="@={module.appid}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/editTextAppId"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:hint="REQUIRED!"/>
+
+        <TextView
+            android:text="Units"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewUnits"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/spinnerUnits" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerUnits"
+            app:selectedItem="@={module.units}"/>
+
+        <TextView
+            android:text="Max Number Of Days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewMaxNumberOfDays"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextMaxNumberOfDays" />
+
+        <EditText
+            android:text="@={module.maxNumberOfDays}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/editTextMaxNumberOfDays"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:hint="Default: 7"/>
+
+        <TextView
+            android:text="Update Interval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewUpdateInterval"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextUpdateInterval" />
+
+        <EditText
+            android:text="@={module.updateInterval}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/editTextUpdateInterval"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:hint="Default: 300000 (10 minutes)"/>
+
+        <TextView
+            android:text="Animation Speed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewAnimationSpeed"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextAnimationSpeed" />
+
+        <EditText
+            android:text="@={module.animationSpeed}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/editTextAnimationSpeed"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:hint="Default: 2000 (2 seconds)"/>
+
+        <TextView
+            android:text="Language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewLang"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextLang" />
+
+        <EditText
+            android:text="@={module.locationID}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/editTextLang"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:hint="Default: config.language"/>
+
+        <TextView
+            android:text="Fade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewFade"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/switchFade" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchFade"
+            android:checked="@={module.fade}"/>
+
+        <TextView
+            android:text="Fade Point"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewFadePoint"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextFadePoint"
+            android:enabled="@{module.fade}"/>
+
+        <EditText
+            android:text="@={module.fadePoint}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:hint="Default: 0.25"
+            android:ems="10"
+            android:id="@+id/editTextFadePoint"
+            android:enabled="@{module.fade}"/>
+
+        <TextView
+            android:text="Initial Load Delay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewInitialLoadDelay"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextInitialLoadDelay" />
+
+        <EditText
+            android:text="@={module.initialLoadDelay}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/editTextInitialLoadDelay"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:hint="Default: 0"/>
+
+        <TextView
+            android:text="Retry Delay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewretryDelay"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextRetryDelay" />
+
+        <EditText
+            android:text="@={module.retryDelay}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/editTextRetryDelay"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:hint="Default: 2500 (2.5 Seconds)"/>
+
+        <TextView
+            android:text="API Version"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewApiVersion"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextApiVersion" />
+
+        <EditText
+            android:text="@={module.apiVersion}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/editTextApiVersion"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:hint="Default: '2.5'"/>
+
+        <TextView
+            android:text="API Base"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewApiBase"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextApiVersion" />
+
+        <EditText
+            android:text="@={module.apiBase}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/editTextApiBase"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:hint="Default: 'http://api.openweathermap.org/data/'"/>
+
+        <TextView
+            android:text="Weather Endpoint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewWeatherEndpoint"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextWeatherEndpoint" />
+
+        <EditText
+            android:text="@={module.weatherEndpoint}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/editTextWeatherEndpoint"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:hint="Default: 'forecast/daily'"/>
+    </LinearLayout>
+</layout>

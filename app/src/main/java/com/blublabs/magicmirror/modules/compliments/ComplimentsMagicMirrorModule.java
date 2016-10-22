@@ -121,6 +121,11 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
     }
 
     public void setUpdateInterval(Integer updateInterval) {
+
+        if(Utils.objectsEqual(this.updateInterval, updateInterval)) {
+            return;
+        }
+
         this.updateInterval = updateInterval;
         notifyPropertyChanged(BR.updateInterval);
     }
@@ -131,6 +136,11 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
     }
 
     public void setFadeSpeed(Integer fadeSpeed) {
+
+        if(Utils.objectsEqual(this.fadeSpeed, fadeSpeed)) {
+            return;
+        }
+
         this.fadeSpeed = fadeSpeed;
         notifyPropertyChanged(BR.fadeSpeed);
     }

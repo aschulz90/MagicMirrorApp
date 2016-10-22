@@ -4,6 +4,7 @@ package com.blublabs.magicmirror.modules;
  * Created by andrs on 30.08.2016.
  */
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
@@ -18,6 +19,7 @@ import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -40,18 +42,19 @@ class MagicMirrorModuleListAdapter extends RecyclerView.Adapter<MagicMirrorModul
     class MyViewHolder extends RecyclerView.ViewHolder {
         public CardModulesBinding binding;
         public TextView title;
+        public View titleBar;
         public Spinner positionSpinner;
-        public SwitchCompat enabledSwitch;
         public LinearLayout settingsContent;
-        public Observable.OnPropertyChangedCallback propertyChangeCallBack;
         public FrameLayout frameLayout;
+        public ImageView expandIndicator;
 
         MyViewHolder(CardModulesBinding binding) {
             super(binding.getRoot());
             this.title = (TextView) binding.getRoot().findViewById(R.id.info_text);
             this.positionSpinner = (Spinner) binding.getRoot().findViewById(R.id.position_spinner);
-            this.enabledSwitch = (SwitchCompat) binding.getRoot().findViewById(R.id.switch_compat);
             this.settingsContent = (LinearLayout) binding.getRoot().findViewById(R.id.module_settings_content);
+            this.expandIndicator = (ImageView) binding.getRoot().findViewById(R.id.indicatorExpand);
+            this.titleBar = binding.getRoot().findViewById(R.id.titleBar);
             this.binding = binding;
 
             this.frameLayout = new FrameLayout(appContext);
@@ -88,34 +91,35 @@ class MagicMirrorModuleListAdapter extends RecyclerView.Adapter<MagicMirrorModul
             holder.positionSpinner.setSelection(element.getRegion().ordinal());
         }
 
-        // Active Switch
-        element.removeOnPropertyChangedCallback(holder.propertyChangeCallBack);
-        holder.propertyChangeCallBack = new Observable.OnPropertyChangedCallback() {
+        holder.settingsContent.setVisibility(element.isActive() ? View.VISIBLE : View.GONE);
+        holder.expandIndicator.setRotation(element.isActive() ? 180 : 0);
+
+        holder.titleBar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onPropertyChanged(Observable observable, int i) {
-                if(i == BR.active) {
+            public void onClick(View v) {
+                element.setActive(!element.isActive());
+
+                if(holder.titleBar.getAnimation() == null) {
                     holder.settingsContent.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     Animation a;
-                    if (!((MagicMirrorModule) observable).isActive()) {
-                        a = new ExpandAndScrollAnimation(holder.settingsContent.getHeight(), 0, holder.settingsContent, recyclerView, holder.itemView);
+                    if (!element.isActive()) {
+                        a = new ExpandAndScrollAnimation(holder.settingsContent.getHeight(), 0, holder.settingsContent, recyclerView, holder.itemView, holder.expandIndicator);
                     } else {
-                        a = new ExpandAndScrollAnimation(holder.settingsContent.getHeight(), holder.settingsContent.getMeasuredHeight(), holder.settingsContent, recyclerView, holder.itemView);
+                        a = new ExpandAndScrollAnimation(holder.settingsContent.getHeight(), holder.settingsContent.getMeasuredHeight(), holder.settingsContent, recyclerView, holder.itemView, holder.expandIndicator);
                     }
                     a.setDuration(200);
 
-                    holder.settingsContent.startAnimation(a);
+                    holder.titleBar.startAnimation(a);
                 }
             }
-        };
-        element.addOnPropertyChangedCallback(holder.propertyChangeCallBack);
-        holder.settingsContent.setVisibility(element.isActive() ? View.VISIBLE : View.GONE);
+        });
 
         // add custom settings fragment
         final ModuleSettingsFragment settingsFragment = element.getAdditionalSettingsFragment();
 
         if(settingsFragment != null) {
             FragmentManager fragmentManager = parentFragment.getChildFragmentManager();
-            holder.frameLayout.setId(position + 1);
+            holder.frameLayout.setId(Math.abs(element.hashCode()));
             fragmentManager.beginTransaction().replace(holder.frameLayout.getId(), settingsFragment).commit();
         }
     }

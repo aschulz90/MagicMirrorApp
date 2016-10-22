@@ -76,7 +76,7 @@ public class AlertMagicMirrorModule extends MagicMirrorModule {
     private AlertEffect alertEffect = AlertEffect.jelly;
     private Double displayTime = null;
     private Position position = Position.center;
-    private String welcomeMessage = null;
+    private String welcomeMessage = "";
 
     private AlertSettingsFragment fragment;
 
@@ -178,6 +178,11 @@ public class AlertMagicMirrorModule extends MagicMirrorModule {
     }
 
     public void setDisplayTime(Double displayTime) {
+
+        if(Utils.objectsEqual(this.displayTime, displayTime)) {
+            return;
+        }
+
         this.displayTime = displayTime;
         notifyPropertyChanged(BR.displayTime);
     }
@@ -203,6 +208,11 @@ public class AlertMagicMirrorModule extends MagicMirrorModule {
     }
 
     public void setWelcomeMessage(String welcomeMessage) {
+
+        if(Utils.objectsEqual(this.welcomeMessage, welcomeMessage)) {
+            return;
+        }
+
         this.welcomeMessage = welcomeMessage;
         notifyPropertyChanged(BR.welcomeMessage);
     }

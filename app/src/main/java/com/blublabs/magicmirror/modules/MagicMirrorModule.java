@@ -12,6 +12,8 @@ import com.blublabs.magicmirror.modules.calendar.CalendarMagicMirrorModule;
 import com.blublabs.magicmirror.modules.clock.ClockMagicMirrorModule;
 import com.blublabs.magicmirror.modules.compliments.ComplimentsMagicMirrorModule;
 import com.blublabs.magicmirror.modules.helloworld.HelloWorldMagicMirrorModule;
+import com.blublabs.magicmirror.modules.news.NewsMagicMirrorModule;
+import com.blublabs.magicmirror.modules.weather.WeatherMagicMirrorModule;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,10 +54,10 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
         }
     }
 
-    private String name = null;
+    private String name = "";
     private boolean active;
     private PositionRegion region = PositionRegion.none;
-    private String header = null;
+    private String header = "";
 
     private Runnable updateHandler = null;
 
@@ -66,7 +68,7 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
 
     public MagicMirrorModule(JSONObject data) throws JSONException {
         this.name = data.getString(KEY_DATA_NAME);
-        this.active = true;
+        this.active = false;
         if(data.has(KEY_DATA_POSITION)) {
             this.region = PositionRegion.from(data.getString(KEY_DATA_POSITION));
         }
@@ -100,19 +102,12 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
         notifyPropertyChanged(BR.name);
     }
 
-    @Bindable
     public boolean isActive() {
         return active;
     }
 
     public void setActive(boolean active) {
-
-        if(active == this.active) {
-            return;
-        }
-
         this.active = active;
-        notifyPropertyChanged(BR.active);
     }
 
     @Bindable
@@ -136,6 +131,11 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
     }
 
     public void setHeader(String header) {
+
+        if(Utils.objectsEqual(this.header, header)) {
+            return;
+        }
+
         this.header = header;
         notifyPropertyChanged(BR.header);
     }
@@ -210,6 +210,10 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
                 return new ClockMagicMirrorModule(data);
             case "compliments":
                 return new ComplimentsMagicMirrorModule(data);
+            case "newsfeed":
+                return new NewsMagicMirrorModule(data);
+            case "weatherforecast":
+                return new WeatherMagicMirrorModule(data);
             default:
                 return null;
         }

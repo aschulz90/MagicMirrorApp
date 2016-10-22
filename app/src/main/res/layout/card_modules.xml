@@ -28,30 +28,37 @@
                 android:layout_height="wrap_content"
                 android:weightSum="1">
 
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/switch_compat"
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    app:showText="false"
-                    android:checked="@={module.active}"/>
+                    android:id="@+id/titleBar">
 
-                <TextView
-                    android:id="@+id/info_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"
-                    android:textSize="24sp"
-                    android:text="@{module.name}"/>
+                    <ImageView
+                        android:id="@+id/indicatorExpand"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_action_expand"
+                        android:contentDescription="Expand Icon" />
+
+                    <TextView
+                        android:id="@+id/info_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:textSize="24sp"
+                        android:text="@{module.name}"/>
+                </RelativeLayout>
 
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     xmlns:card_view="http://schemas.android.com/apk/res-auto"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/switch_compat"
+                    android:layout_below="@+id/titleBar"
                     android:id="@+id/module_settings_content"
                     android:paddingTop="5dp">
 

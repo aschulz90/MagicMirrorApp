@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="module" type="com.blublabs.magicmirror.modules.news.NewsMagicMirrorModule"/>
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="@string/settings_custom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            style="?android:attr/listSeparatorTextViewStyle"/>
+
+        <TextView
+            android:text="Feeds"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editText" />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerViewFeeds">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:text="Show Source Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewShowSourceTitle"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/switchShowSourceTitle" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchShowSourceTitle"
+            android:checked="@={module.showSourceTitle}"/>
+
+        <TextView
+            android:text="Show Publish Date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewShowPublishDate"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/switchShowPublishDate" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchShowPublishDate"
+            android:checked="@={module.showPublishDate}"/>
+
+        <TextView
+            android:text="Show Description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewShowDescription"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/switchShowDescription" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchShowDescription"
+            android:checked="@={module.showDescription}"/>
+
+        <TextView
+            android:text="Reload Interval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewReloadInterval"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextReloadInterval"/>
+
+        <EditText
+            android:text="@={module.reloadInterval}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:hint="Default: 300000 (5 minutes)"
+            android:ems="10"
+            android:id="@+id/editTextReloadInterval"/>
+
+        <TextView
+            android:text="Update Interval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewUpdateInterval"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextUpdateInterval"/>
+
+        <EditText
+            android:text="@={module.updateInterval}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:hint="Default: 10000 (10 seconds)"
+            android:ems="10"
+            android:id="@+id/editTextUpdateInterval"/>
+
+        <TextView
+            android:text="Animation Speed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewAnimationSpeed"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextAnimationSpeed"/>
+
+        <EditText
+            android:text="@={module.animationSpeed}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:hint="Default: 2000 (2 seconds)"
+            android:ems="10"
+            android:id="@+id/editTextAnimationSpeed"/>
+
+        <TextView
+            android:text="Max News Items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewMaxNewsItems"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/editTextMaxNewsItemss"/>
+
+        <EditText
+            android:text="@={module.maxNewsItems}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:hint="Default: 0 (unlimited)"
+            android:ems="10"
+            android:id="@+id/editTextMaxNewsItemss"/>
+
+        <TextView
+            android:text="Remove Start Tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewRemoveStartTags"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/spinnerRemoveStartTags" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerRemoveStartTags"
+            app:selectedItem="@={module.removeStartTags}"/>
+
+        <TextView
+            android:text="Start Tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewStartTags"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/recyclerViewStartTags" />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerViewStartTags">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:text="Remove End Tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewRemoveEndTags"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/spinnerRemoveEndTagss" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerRemoveEndTagss"
+            app:selectedItem="@={module.removeEndTags}"/>
+
+        <TextView
+            android:text="End Tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewEndTags"
+            android:paddingTop="5dp"
+            android:labelFor="@+id/recyclerViewEndTags" />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerViewEndTags">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+</layout>

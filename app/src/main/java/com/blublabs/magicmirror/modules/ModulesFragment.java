@@ -94,9 +94,6 @@ public class ModulesFragment extends MagicMirrorFragment {
         mLayoutManager.setExtraLayoutSpace(15000);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setItemViewCacheSize(40);
-        recyclerView.setDrawingCacheEnabled(true);
-        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
         recyclerView.setAdapter(moduleListAdapter);
 

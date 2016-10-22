@@ -23,7 +23,7 @@ public class HelloWorldMagicMirrorModule extends MagicMirrorModule {
 
     private static final String KEY_DATA_TEXT = "text";
 
-    private String text = null;
+    private String text = "";
 
     private HelloWorldSettingsFragment fragment;
 
@@ -64,6 +64,11 @@ public class HelloWorldMagicMirrorModule extends MagicMirrorModule {
     }
 
     public void setText(String text) {
+
+        if(Utils.objectsEqual(this.text, text)) {
+            return;
+        }
+
         this.text = text;
         notifyPropertyChanged(BR.text);
     }

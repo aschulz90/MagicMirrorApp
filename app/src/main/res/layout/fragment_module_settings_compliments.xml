@@ -34,7 +34,7 @@
             android:id="@+id/editTextUpdateInterval"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            android:hint="Default: 30000"/>
+            android:hint="Default: 30000 (30 seconds)"/>
 
         <TextView
             android:text="Fade Speed"
@@ -53,7 +53,7 @@
             android:id="@+id/editTextFadeSpeed"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            android:hint="Default: 4000"/>
+            android:hint="Default: 4000 (4 seconds)"/>
 
         <TextView
             android:text="Compliments"
