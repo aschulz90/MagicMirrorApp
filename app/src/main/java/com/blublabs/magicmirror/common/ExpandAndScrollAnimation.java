@@ -1,11 +1,12 @@
 package com.blublabs.magicmirror.common;
 
-import android.animation.ObjectAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.ImageView;
+
+import com.blublabs.magicmirror.modules.ModuleScrollView;
 
 /**
  * Created by andrs on 04.10.2016.
@@ -17,15 +18,15 @@ public class ExpandAndScrollAnimation extends Animation {
     private final float startRotation;
     private final int deltaHeight;
     private final View collapsableView;
-    private final RecyclerView recyclerView;
+    private final ModuleScrollView scrollView;
     private final View item;
     private final ImageView expandIndicator;
 
-    public ExpandAndScrollAnimation(int startHeight, int endHeight, final View collapsableView, final RecyclerView recyclerView, final View item, ImageView expandIndicator) {
+    public ExpandAndScrollAnimation(int startHeight, int endHeight, final View collapsableView, final ModuleScrollView scrollView, final View item, ImageView expandIndicator) {
         this.startHeight = startHeight;
         this.deltaHeight = endHeight - startHeight;
         this.collapsableView = collapsableView;
-        this.recyclerView = recyclerView;
+        this.scrollView = scrollView;
         this.item = item;
         this.expandIndicator = expandIndicator;
         this.startRotation = expandIndicator.getRotation();
@@ -47,18 +48,10 @@ public class ExpandAndScrollAnimation extends Animation {
         collapsableView.requestLayout();
 
         final int bottom = item.getBottom();
-        final int listViewHeight = recyclerView.getHeight();
+        final int top = item.getTop();
+        final int listViewHeight = scrollView.getHeight();
         if (bottom > listViewHeight) {
-            final int top = item.getTop();
-            if (top > 0) {
-                recyclerView.smoothScrollBy(0, Math.min(bottom - listViewHeight + recyclerView.getPaddingBottom(), top));
-            }
-        }
-        else {
-            final int top = item.getTop();
-            if(top < 0) {
-                recyclerView.smoothScrollBy(0, top - recyclerView.getPaddingTop());
-            }
+            scrollView.smoothScrollTo(0, Math.min(bottom - listViewHeight + scrollView.getPaddingBottom(), top));
         }
     }
 

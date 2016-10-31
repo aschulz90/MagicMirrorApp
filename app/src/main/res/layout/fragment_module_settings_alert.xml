@@ -62,7 +62,7 @@
             android:text="@={module.displayTime}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:ems="10"
             android:id="@+id/editTextDisplayTime"
             android:hint="Default: 3.5"/>

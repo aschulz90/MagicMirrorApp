@@ -80,18 +80,6 @@ public class AlertMagicMirrorModule extends MagicMirrorModule {
 
     private AlertSettingsFragment fragment;
 
-    public static final Parcelable.Creator<AlertMagicMirrorModule> CREATOR =
-            new Parcelable.Creator<AlertMagicMirrorModule>() {
-                @Override
-                public AlertMagicMirrorModule createFromParcel(Parcel source) {
-                    return new AlertMagicMirrorModule(source);
-                }
-                @Override
-                public AlertMagicMirrorModule[] newArray(int size) {
-                    return new AlertMagicMirrorModule[size];
-                }
-            };
-
     public AlertMagicMirrorModule(JSONObject data) throws JSONException {
         super(data);
 
@@ -119,27 +107,6 @@ public class AlertMagicMirrorModule extends MagicMirrorModule {
                 this.welcomeMessage = config.getString(KEY_DATA_WELCOME_MESSAGE);
             }
         }
-    }
-
-    private AlertMagicMirrorModule(Parcel source) {
-        super(source);
-
-        notificationEffect = AlertEffect.values()[source.readInt()];
-        alertEffect = AlertEffect.values()[source.readInt()];
-        displayTime = source.readDouble();
-        position = Position.values()[source.readInt()];
-        welcomeMessage = source.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-
-        dest.writeInt(notificationEffect.ordinal());
-        dest.writeInt(alertEffect.ordinal());
-        dest.writeDouble(displayTime);
-        dest.writeInt(position.ordinal());
-        dest.writeString(welcomeMessage);
     }
 
     @Bindable
@@ -289,4 +256,43 @@ public class AlertMagicMirrorModule extends MagicMirrorModule {
         result = 31 * result + (getWelcomeMessage() != null ? getWelcomeMessage().hashCode() : 0);
         return result;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeInt(this.notificationEffect == null ? -1 : this.notificationEffect.ordinal());
+        dest.writeInt(this.alertEffect == null ? -1 : this.alertEffect.ordinal());
+        dest.writeValue(this.displayTime);
+        dest.writeInt(this.position == null ? -1 : this.position.ordinal());
+        dest.writeString(this.welcomeMessage);
+    }
+
+    private AlertMagicMirrorModule(Parcel in) {
+        super(in);
+        int tmpNotificationEffect = in.readInt();
+        this.notificationEffect = tmpNotificationEffect == -1 ? null : AlertEffect.values()[tmpNotificationEffect];
+        int tmpAlertEffect = in.readInt();
+        this.alertEffect = tmpAlertEffect == -1 ? null : AlertEffect.values()[tmpAlertEffect];
+        this.displayTime = (Double) in.readValue(Double.class.getClassLoader());
+        int tmpPosition = in.readInt();
+        this.position = tmpPosition == -1 ? null : Position.values()[tmpPosition];
+        this.welcomeMessage = in.readString();
+    }
+
+    public static final Creator<AlertMagicMirrorModule> CREATOR = new Creator<AlertMagicMirrorModule>() {
+        @Override
+        public AlertMagicMirrorModule createFromParcel(Parcel source) {
+            return new AlertMagicMirrorModule(source);
+        }
+
+        @Override
+        public AlertMagicMirrorModule[] newArray(int size) {
+            return new AlertMagicMirrorModule[size];
+        }
+    };
 }

@@ -58,6 +58,7 @@ public class CalendarSettingsFragment extends ModuleSettingsFragment<CalendarMag
         calendarListView.setLayoutManager(new MyCustomLayoutManager(getActivity().getApplicationContext()));
         calendarListView.setItemAnimator(new DefaultItemAnimator());
         calendarListView.setAdapter(calendarsAdapter);
+        calendarListView.setNestedScrollingEnabled(false);
 
         // title replace list
         final RecyclerView titleReplaceList = (RecyclerView) view.findViewById(R.id.title_replace_recycler_view);
@@ -65,6 +66,7 @@ public class CalendarSettingsFragment extends ModuleSettingsFragment<CalendarMag
         titleReplaceList.setLayoutManager(new MyCustomLayoutManager(getActivity().getApplicationContext()));
         titleReplaceList.setItemAnimator(new DefaultItemAnimator());
         titleReplaceList.setAdapter(titleReplaceAdapter);
+        titleReplaceList.setNestedScrollingEnabled(false);
 
         /*Tooltip.make(getActivity(),
                 new Tooltip.Builder(101)

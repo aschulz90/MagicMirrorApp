@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -79,18 +80,6 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
     private Integer urgency = null;
 
     private CalendarSettingsFragment fragment;
-
-    public static final Parcelable.Creator<CalendarMagicMirrorModule> CREATOR =
-            new Parcelable.Creator<CalendarMagicMirrorModule>() {
-                @Override
-                public CalendarMagicMirrorModule createFromParcel(Parcel source) {
-                    return new CalendarMagicMirrorModule(source);
-                }
-                @Override
-                public CalendarMagicMirrorModule[] newArray(int size) {
-                    return new CalendarMagicMirrorModule[size];
-                }
-            };
 
     public CalendarMagicMirrorModule(JSONObject data) throws JSONException {
         super(data);
@@ -164,28 +153,6 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
                 }
             }
         }
-    }
-
-    private CalendarMagicMirrorModule(Parcel source) {
-        super(source);
-
-        titleReplaceMap = source.readHashMap(String.class.getClassLoader());
-        Parcelable[] calendarsArray = source.readParcelableArray(Calendar.class.getClassLoader());
-        for(Parcelable calendar : calendarsArray) {
-            calendars.add((Calendar) calendar);
-        }
-        maximumEntries = source.readInt();
-        maximumNumberOfDays = source.readInt();
-        displaySymbol = source.readByte() == 1;
-        defaultSymbol = source.readString();
-        maxTitleLength = source.readInt();
-        fetchInterval = source.readInt();
-        animationSpeed = source.readInt();
-        fade = source.readByte() == 1;
-        fadePoint = source.readDouble();
-        displayRepeatingCountTitle = source.readByte() == 1;
-        timeFormat = TimeFormat.values()[source.readInt()];
-        urgency = source.readInt();
     }
 
     @Bindable
@@ -484,26 +451,6 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-
-        dest.writeMap(titleReplaceMap);
-        dest.writeParcelableArray(calendars.toArray(new Calendar[calendars.size()]), 0);
-        dest.writeInt(maximumEntries);
-        dest.writeInt(maximumNumberOfDays);
-        dest.writeByte((byte) (displaySymbol ? 1 : 0));
-        dest.writeString(defaultSymbol);
-        dest.writeInt(maxTitleLength);
-        dest.writeInt(fetchInterval);
-        dest.writeInt(animationSpeed);
-        dest.writeByte((byte) (fade ? 1 : 0));
-        dest.writeDouble(fadePoint);
-        dest.writeByte((byte) (displayRepeatingCountTitle ? 1 : 0));
-        dest.writeInt(timeFormat.ordinal());
-        dest.writeInt(urgency);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -556,4 +503,65 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
         result = 31 * result + (getUrgency() != null ? getUrgency().hashCode() : 0);
         return result;
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeInt(this.titleReplaceMap.size());
+        for (Map.Entry<String, String> entry : this.titleReplaceMap.entrySet()) {
+            dest.writeString(entry.getKey());
+            dest.writeString(entry.getValue());
+        }
+        dest.writeParcelableArray(calendars.toArray(new Calendar[calendars.size()]), 0);
+        dest.writeValue(this.maximumEntries);
+        dest.writeValue(this.maximumNumberOfDays);
+        dest.writeByte(this.displaySymbol ? (byte) 1 : (byte) 0);
+        dest.writeString(this.defaultSymbol);
+        dest.writeValue(this.maxTitleLength);
+        dest.writeValue(this.fetchInterval);
+        dest.writeValue(this.animationSpeed);
+        dest.writeByte(this.fade ? (byte) 1 : (byte) 0);
+        dest.writeValue(this.fadePoint);
+        dest.writeByte(this.displayRepeatingCountTitle ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.timeFormat == null ? -1 : this.timeFormat.ordinal());
+        dest.writeValue(this.urgency);
+    }
+
+    protected CalendarMagicMirrorModule(Parcel in) {
+        super(in);
+        int titleReplaceMapSize = in.readInt();
+        this.titleReplaceMap = new HashMap<String, String>(titleReplaceMapSize);
+        for (int i = 0; i < titleReplaceMapSize; i++) {
+            String key = in.readString();
+            String value = in.readString();
+            this.titleReplaceMap.put(key, value);
+        }
+        Calendar[] calendars = (Calendar[]) in.readParcelableArray(Calendar.class.getClassLoader());
+        this.calendars.addAll(Arrays.asList(calendars));
+        this.maximumEntries = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.maximumNumberOfDays = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.displaySymbol = in.readByte() != 0;
+        this.defaultSymbol = in.readString();
+        this.maxTitleLength = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.fetchInterval = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.animationSpeed = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.fade = in.readByte() != 0;
+        this.fadePoint = (Double) in.readValue(Double.class.getClassLoader());
+        this.displayRepeatingCountTitle = in.readByte() != 0;
+        int tmpTimeFormat = in.readInt();
+        this.timeFormat = tmpTimeFormat == -1 ? null : TimeFormat.values()[tmpTimeFormat];
+        this.urgency = (Integer) in.readValue(Integer.class.getClassLoader());
+    }
+
+    public static final Creator<CalendarMagicMirrorModule> CREATOR = new Creator<CalendarMagicMirrorModule>() {
+        @Override
+        public CalendarMagicMirrorModule createFromParcel(Parcel source) {
+            return new CalendarMagicMirrorModule(source);
+        }
+
+        @Override
+        public CalendarMagicMirrorModule[] newArray(int size) {
+            return new CalendarMagicMirrorModule[size];
+        }
+    };
 }

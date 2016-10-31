@@ -11,6 +11,7 @@ import com.blublabs.magicmirror.modules.alert.AlertMagicMirrorModule;
 import com.blublabs.magicmirror.modules.calendar.CalendarMagicMirrorModule;
 import com.blublabs.magicmirror.modules.clock.ClockMagicMirrorModule;
 import com.blublabs.magicmirror.modules.compliments.ComplimentsMagicMirrorModule;
+import com.blublabs.magicmirror.modules.custom.CustomMagicMirrorModule;
 import com.blublabs.magicmirror.modules.helloworld.HelloWorldMagicMirrorModule;
 import com.blublabs.magicmirror.modules.news.NewsMagicMirrorModule;
 import com.blublabs.magicmirror.modules.weather.WeatherMagicMirrorModule;
@@ -64,7 +65,7 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
     private final static String KEY_DATA_NAME = "module";
     private final static String KEY_DATA_POSITION = "position";
     private final static String KEY_DATA_HEADER = "header";
-    protected final static String KEY_DATA_CONFIG = "config";
+    public final static String KEY_DATA_CONFIG = "config";
 
     public MagicMirrorModule(JSONObject data) throws JSONException {
         this.name = data.getString(KEY_DATA_NAME);
@@ -215,7 +216,7 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
             case "weatherforecast":
                 return new WeatherMagicMirrorModule(data);
             default:
-                return null;
+                return new CustomMagicMirrorModule(data);
         }
     }
 }

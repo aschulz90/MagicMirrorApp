@@ -219,8 +219,8 @@ public class MainActivity extends MagicMirrorActivity implements NavigationView.
             onNavigationItemSelected(navDrawer.getMenu().findItem(R.id.nav_settings_fragment));
             setDeviceSpinnerVisible(View.GONE);
         }
-        else {
-
+        else if(getState() == BleService.State.IDLE) {
+            connectToDevice((String) devicesSpinner.getSelectedItem());
         }
     }
 

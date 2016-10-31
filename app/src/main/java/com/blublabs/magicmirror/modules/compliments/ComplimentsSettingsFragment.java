@@ -39,6 +39,7 @@ public class ComplimentsSettingsFragment extends ModuleSettingsFragment<Complime
         morningRecyclerView.setLayoutManager(new MyCustomLayoutManager(getActivity().getApplicationContext()));
         morningRecyclerView.setItemAnimator(new DefaultItemAnimator());
         morningRecyclerView.setAdapter(morningAdapter);
+        morningRecyclerView.setNestedScrollingEnabled(false);
 
         // afternoon list
         final RecyclerView afternoonRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewAfternoon);
@@ -46,6 +47,7 @@ public class ComplimentsSettingsFragment extends ModuleSettingsFragment<Complime
         afternoonRecyclerView.setLayoutManager(new MyCustomLayoutManager(getActivity().getApplicationContext()));
         afternoonRecyclerView.setItemAnimator(new DefaultItemAnimator());
         afternoonRecyclerView.setAdapter(afternoonAdapter);
+        afternoonRecyclerView.setNestedScrollingEnabled(false);
 
         // evening list
         final RecyclerView eveningRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewEvening);
@@ -53,6 +55,7 @@ public class ComplimentsSettingsFragment extends ModuleSettingsFragment<Complime
         eveningRecyclerView.setLayoutManager(new MyCustomLayoutManager(getActivity().getApplicationContext()));
         eveningRecyclerView.setItemAnimator(new DefaultItemAnimator());
         eveningRecyclerView.setAdapter(eveningAdapter);
+        eveningRecyclerView.setNestedScrollingEnabled(false);
 
         return view;
     }

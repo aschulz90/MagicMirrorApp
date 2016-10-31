@@ -246,7 +246,16 @@ public class BleService extends Service implements BluetoothAdapter.LeScanCallba
         if (device != null && !devices.containsValue(device) && TARGET_DEVICE_NAME.equals(device.getName())) {
             devices.put(device.getAddress(), device);
             Log.d(TAG, "Added " + device.getName() + ": " + device.getAddress());
-            requestQueue.peek().getScanCallback().onLeScan(device,0,null);
+
+            BleRequest request = requestQueue.peek();
+
+            if(request.getType() == BleRequest.RequestType.SCAN) {
+                request.getScanCallback().onLeScan(device, 0, null);
+            }
+            else if(request.getType() == BleRequest.RequestType.DEVICE_CONNECT && request.getExtra()[0].equals(device.getAddress())) {
+                stopScan();
+                connect((String) request.getExtra()[0]);
+            }
         }
     }
 
@@ -254,6 +263,9 @@ public class BleService extends Service implements BluetoothAdapter.LeScanCallba
         BluetoothDevice device = devices.get(macAddress);
         if (device != null) {
             gatt = device.connectGatt(this, false, gattCallback);
+        }
+        else {
+            startScan();
         }
     }
 

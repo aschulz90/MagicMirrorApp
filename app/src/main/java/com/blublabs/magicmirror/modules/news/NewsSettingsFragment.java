@@ -39,6 +39,7 @@ public class NewsSettingsFragment extends ModuleSettingsFragment<NewsMagicMirror
         feedListView.setLayoutManager(new MyCustomLayoutManager(getActivity().getApplicationContext()));
         feedListView.setItemAnimator(new DefaultItemAnimator());
         feedListView.setAdapter(feedsAdapter);
+        feedListView.setNestedScrollingEnabled(false);
 
         // remove start tags
         final Spinner removeStartTagsSpinner = (Spinner) view.findViewById(R.id.spinnerRemoveStartTags);
@@ -56,6 +57,7 @@ public class NewsSettingsFragment extends ModuleSettingsFragment<NewsMagicMirror
         startTagsRecyclerView.setLayoutManager(new MyCustomLayoutManager(getActivity().getApplicationContext()));
         startTagsRecyclerView.setItemAnimator(new DefaultItemAnimator());
         startTagsRecyclerView.setAdapter(startTagsAdapter);
+        startTagsRecyclerView.setNestedScrollingEnabled(false);
 
         // end tags
         final RecyclerView endTagsRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewEndTags);
@@ -63,6 +65,7 @@ public class NewsSettingsFragment extends ModuleSettingsFragment<NewsMagicMirror
         endTagsRecyclerView.setLayoutManager(new MyCustomLayoutManager(getActivity().getApplicationContext()));
         endTagsRecyclerView.setItemAnimator(new DefaultItemAnimator());
         endTagsRecyclerView.setAdapter(endTagsAdapter);
+        endTagsRecyclerView.setNestedScrollingEnabled(false);
 
         return view;
     }

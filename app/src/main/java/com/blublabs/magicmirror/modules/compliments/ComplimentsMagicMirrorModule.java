@@ -42,18 +42,6 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
 
     ComplimentsSettingsFragment fragment = null;
 
-    public static final Creator<ComplimentsMagicMirrorModule> CREATOR =
-            new Creator<ComplimentsMagicMirrorModule>() {
-                @Override
-                public ComplimentsMagicMirrorModule createFromParcel(Parcel source) {
-                    return new ComplimentsMagicMirrorModule(source);
-                }
-                @Override
-                public ComplimentsMagicMirrorModule[] newArray(int size) {
-                    return new ComplimentsMagicMirrorModule[size];
-                }
-            };
-
     public ComplimentsMagicMirrorModule(JSONObject data) throws JSONException {
         super(data);
 
@@ -103,16 +91,6 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
             complimentsAfternoon.addAll(COMPLIMENTS_DEFAULT_AFTERNOON);
             complimentsEvening.addAll(COMPLIMENTS_DEFAULT_EVENING);
         }
-    }
-
-    private ComplimentsMagicMirrorModule(Parcel source) {
-        super(source);
-
-        this.updateInterval = source.readInt();
-        this.fadeSpeed = source.readInt();
-        source.readStringList(this.complimentsMorning);
-        source.readStringList(this.complimentsAfternoon);
-        source.readStringList(this.complimentsEvening);
     }
 
     @Bindable
@@ -243,17 +221,6 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-
-        dest.writeInt(this.updateInterval);
-        dest.writeInt(this.fadeSpeed);
-        dest.writeStringList(this.complimentsMorning);
-        dest.writeStringList(this.complimentsAfternoon);
-        dest.writeStringList(this.complimentsEvening);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -281,4 +248,40 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
         result = 31 * result + getComplimentsEvening().hashCode();
         return result;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeValue(this.updateInterval);
+        dest.writeValue(this.fadeSpeed);
+        dest.writeStringList(this.complimentsMorning);
+        dest.writeStringList(this.complimentsAfternoon);
+        dest.writeStringList(this.complimentsEvening);
+    }
+
+    private ComplimentsMagicMirrorModule(Parcel in) {
+        super(in);
+        this.updateInterval = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.fadeSpeed = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.complimentsMorning = in.createStringArrayList();
+        this.complimentsAfternoon = in.createStringArrayList();
+        this.complimentsEvening = in.createStringArrayList();
+    }
+
+    public static final Creator<ComplimentsMagicMirrorModule> CREATOR = new Creator<ComplimentsMagicMirrorModule>() {
+        @Override
+        public ComplimentsMagicMirrorModule createFromParcel(Parcel source) {
+            return new ComplimentsMagicMirrorModule(source);
+        }
+
+        @Override
+        public ComplimentsMagicMirrorModule[] newArray(int size) {
+            return new ComplimentsMagicMirrorModule[size];
+        }
+    };
 }

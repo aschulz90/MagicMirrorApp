@@ -194,18 +194,6 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
 
     private ClockSettingsFragment fragment;
 
-    public static final Creator<ClockMagicMirrorModule> CREATOR =
-            new Creator<ClockMagicMirrorModule>() {
-                @Override
-                public ClockMagicMirrorModule createFromParcel(Parcel source) {
-                    return new ClockMagicMirrorModule(source);
-                }
-                @Override
-                public ClockMagicMirrorModule[] newArray(int size) {
-                    return new ClockMagicMirrorModule[size];
-                }
-            };
-
     public ClockMagicMirrorModule(JSONObject data) throws JSONException {
         super(data);
 
@@ -268,24 +256,6 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
                 }
             }
         }
-    }
-
-    private ClockMagicMirrorModule(Parcel source) {
-        super(source);
-
-        this.timeFormat = TimeFormat.values()[source.readInt()];
-        this.displaySeconds = source.readByte() == 1;
-        this.showPeriod = source.readByte() == 1;
-        this.showPeriodUpper = source.readByte() == 1;
-        this.clockBold = source.readByte() == 1;
-        this.showDate = source.readByte() == 1;
-        this.displayType = DisplayType.values()[source.readInt()];
-        this.analogSize = source.readInt();
-        this.analogFace = AnalogFace.values()[source.readInt()];
-        this.secondsColor = source.readInt();
-        this.analogPlacement = AnalogPlacement.values()[source.readInt()];
-        this.analogDatePlacement = AnalogDatePlacement.values()[source.readInt()];
-        this.analogShowDate = source.readByte() == 1;
     }
 
     @Bindable
@@ -519,7 +489,7 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
         }
 
         if(clockBold) {
-            config.put(KEY_DATA_DISPLAY_SECONDS, true);
+            config.put(KEY_DATA_CLOCK_BOLD, true);
         }
 
         if(!showDate) {
@@ -558,26 +528,6 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
         }
 
         return json;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-
-        dest.writeInt(this.timeFormat.ordinal());
-        dest.writeByte((byte) (this.displaySeconds ? 1 : 0));
-        dest.writeByte((byte) (this.showPeriod ? 1 : 0));
-        dest.writeByte((byte) (this.showPeriodUpper ? 1 : 0));
-        dest.writeByte((byte) (this.clockBold ? 1 : 0));
-        dest.writeByte((byte) (this.showDate ? 1 : 0));
-        dest.writeInt(displayType.ordinal());
-        dest.writeInt(analogSize);
-        dest.writeInt(analogFace.ordinal());
-        dest.writeInt(secondsColor);
-        dest.writeInt(analogPlacement.ordinal());
-        dest.writeInt(analogDatePlacement.ordinal());
-        dest.writeByte((byte) (analogShowDate ? 1 : 0));
-
     }
 
     @Override
@@ -624,4 +574,56 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
         result = 31 * result + (isAnalogShowDate() ? 1 : 0);
         return result;
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeInt(this.timeFormat == null ? -1 : this.timeFormat.ordinal());
+        dest.writeByte(this.displaySeconds ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.showPeriod ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.showPeriodUpper ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.clockBold ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.showDate ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.displayType == null ? -1 : this.displayType.ordinal());
+        dest.writeValue(this.analogSize);
+        dest.writeInt(this.analogFace == null ? -1 : this.analogFace.ordinal());
+        dest.writeValue(this.secondsColor);
+        dest.writeInt(this.analogPlacement == null ? -1 : this.analogPlacement.ordinal());
+        dest.writeInt(this.analogDatePlacement == null ? -1 : this.analogDatePlacement.ordinal());
+        dest.writeByte(this.analogShowDate ? (byte) 1 : (byte) 0);
+    }
+
+    private ClockMagicMirrorModule(Parcel in) {
+        super(in);
+        int tmpTimeFormat = in.readInt();
+        this.timeFormat = tmpTimeFormat == -1 ? null : TimeFormat.values()[tmpTimeFormat];
+        this.displaySeconds = in.readByte() != 0;
+        this.showPeriod = in.readByte() != 0;
+        this.showPeriodUpper = in.readByte() != 0;
+        this.clockBold = in.readByte() != 0;
+        this.showDate = in.readByte() != 0;
+        int tmpDisplayType = in.readInt();
+        this.displayType = tmpDisplayType == -1 ? null : DisplayType.values()[tmpDisplayType];
+        this.analogSize = (Integer) in.readValue(Integer.class.getClassLoader());
+        int tmpAnalogFace = in.readInt();
+        this.analogFace = tmpAnalogFace == -1 ? null : AnalogFace.values()[tmpAnalogFace];
+        this.secondsColor = (Integer) in.readValue(Integer.class.getClassLoader());
+        int tmpAnalogPlacement = in.readInt();
+        this.analogPlacement = tmpAnalogPlacement == -1 ? null : AnalogPlacement.values()[tmpAnalogPlacement];
+        int tmpAnalogDatePlacement = in.readInt();
+        this.analogDatePlacement = tmpAnalogDatePlacement == -1 ? null : AnalogDatePlacement.values()[tmpAnalogDatePlacement];
+        this.analogShowDate = in.readByte() != 0;
+    }
+
+    public static final Creator<ClockMagicMirrorModule> CREATOR = new Creator<ClockMagicMirrorModule>() {
+        @Override
+        public ClockMagicMirrorModule createFromParcel(Parcel source) {
+            return new ClockMagicMirrorModule(source);
+        }
+
+        @Override
+        public ClockMagicMirrorModule[] newArray(int size) {
+            return new ClockMagicMirrorModule[size];
+        }
+    };
 }

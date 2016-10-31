@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by andrs on 03.10.2016.
@@ -86,7 +87,7 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
     private String apiVersion = "";
     private String apiBase = "";
     private String weatherEndpoint = "";
-    private Map<String, String> iconTable = new HashMap<>();
+    private Map<String, String> iconTable = new TreeMap<>();
 
     private WeatherSettingsFragment fragment;
 
@@ -501,7 +502,7 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
             config.put(KEY_DATA_API_VERSION, apiVersion);
         }
 
-        if(!Utils.isEmpty(apiBase) && !"http://api.openweathermap.org/data/".equals(apiBase)) {
+        if(!Utils.isEmpty(apiBase) && !"http://api.openweathermap.org/objectData/".equals(apiBase)) {
             config.put(KEY_DATA_API_BASE, apiBase);
         }
 

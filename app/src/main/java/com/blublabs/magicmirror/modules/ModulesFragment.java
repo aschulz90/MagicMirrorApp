@@ -36,9 +36,8 @@ import java.util.UUID;
 public class ModulesFragment extends MagicMirrorFragment {
 
     private Map<String,String> moduleUuidMap = new HashMap<>();
-    private ArrayList<MagicMirrorModule> moduleList = new ArrayList<>();
-    private MagicMirrorModuleListAdapter moduleListAdapter;
-    private RecyclerView recyclerView;
+    private ModuleScrollView moduleScrollView;
+    private View progressBar;
 
     private Handler delayHandler = new Handler();
     private static final int UPDATE_DELAY = 2000;
@@ -87,22 +86,17 @@ public class ModulesFragment extends MagicMirrorFragment {
 
         final View view = inflater.inflate(R.layout.fragment_modules, container, false);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.card_recycler_view);
+        moduleScrollView = (ModuleScrollView) view.findViewById(R.id.card_recycler_view);
+        moduleScrollView.setParentFragment(this);
 
-        moduleListAdapter = new MagicMirrorModuleListAdapter(moduleList, getActivity().getApplicationContext(), recyclerView, this);
-        MyCustomLayoutManager mLayoutManager = new MyCustomLayoutManager(getActivity().getApplicationContext());
-        mLayoutManager.setExtraLayoutSpace(15000);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        recyclerView.setAdapter(moduleListAdapter);
+        progressBar = view.findViewById(R.id.progressBar1);
 
         if(savedInstanceState != null) {
-            moduleList = savedInstanceState.getParcelableArrayList(KEY_MODULE_LIST);
+            ArrayList<MagicMirrorModule> moduleList = savedInstanceState.getParcelableArrayList(KEY_MODULE_LIST);
             for(MagicMirrorModule module : moduleList) {
                 module.addOnPropertyChangedCallback(moduleChangedCallback);
+                moduleScrollView.addModule(module);
             }
-            moduleListAdapter.notifyDataSetChanged();
         }
         else if(getState() == BleService.State.CONNECTED) {
             readCharacteristic(SERVICE_MAGICMIRROR_APP_INTERFACE, CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE_LIST);
@@ -113,7 +107,7 @@ public class ModulesFragment extends MagicMirrorFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(KEY_MODULE_LIST, moduleList);
+        outState.putParcelableArrayList(KEY_MODULE_LIST, moduleScrollView.getModuleList());
     }
 
     @Override
@@ -122,7 +116,7 @@ public class ModulesFragment extends MagicMirrorFragment {
 
         switch (newState) {
             case CONNECTED:
-                if(moduleList.isEmpty()) {
+                if(moduleScrollView.getModuleList().isEmpty()) {
                     readCharacteristic(SERVICE_MAGICMIRROR_APP_INTERFACE, CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE_LIST);
                 }
                 break;
@@ -162,8 +156,10 @@ public class ModulesFragment extends MagicMirrorFragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                moduleList.add(module);
-                                moduleListAdapter.notifyDataSetChanged();
+                                moduleScrollView.addModule(module);
+                                if(moduleUuidMap.size() == moduleScrollView.getModuleList().size()) {
+                                    progressBar.setVisibility(View.GONE);
+                                }
                             }
                         });
                     }
