@@ -9,8 +9,6 @@ import com.blublabs.magicmirror.BR;
 import com.blublabs.magicmirror.common.Utils;
 import com.blublabs.magicmirror.modules.MagicMirrorModule;
 import com.blublabs.magicmirror.modules.ModuleSettingsFragment;
-import com.blublabs.magicmirror.modules.alert.AlertMagicMirrorModule;
-import com.blublabs.magicmirror.modules.alert.AlertSettingsFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,8 +37,13 @@ public class HelloWorldMagicMirrorModule extends MagicMirrorModule {
                 }
             };
 
-    public HelloWorldMagicMirrorModule(JSONObject data) throws JSONException {
-        super(data);
+    public HelloWorldMagicMirrorModule(String name) {
+        super(name);
+    }
+
+    @Override
+    public void setData(JSONObject data) throws JSONException {
+        super.setData(data);
 
         if(data.has(KEY_DATA_CONFIG)) {
 

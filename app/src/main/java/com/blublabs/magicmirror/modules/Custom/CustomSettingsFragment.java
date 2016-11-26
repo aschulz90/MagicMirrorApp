@@ -37,17 +37,20 @@ public class CustomSettingsFragment extends ModuleSettingsFragment<CustomMagicMi
         final DynamicJSONObjectView dynamicJSONObjectView = (DynamicJSONObjectView) view.findViewById(R.id.dynamicConfigView);
         dynamicJSONObjectView.addOnPropertyChangedCallback(propertyChangedCallback);
 
-        try {
-            if(!getModule().getData().has(KEY_DATA_CONFIG)) {
+        return view;
+    }
 
-                getModule().getData().put(KEY_DATA_CONFIG, new JSONObject());
+    public void setData(JSONObject data) {
+        try {
+            if(!data.has(KEY_DATA_CONFIG)) {
+
+                data.put(KEY_DATA_CONFIG, new JSONObject());
             }
 
-            dynamicJSONObjectView.setObjectData(getModule().getData().getJSONObject(KEY_DATA_CONFIG));
+            final DynamicJSONObjectView dynamicJSONObjectView = (DynamicJSONObjectView) getView().findViewById(R.id.dynamicConfigView);
+            dynamicJSONObjectView.setObjectData(data.getJSONObject(KEY_DATA_CONFIG));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        return view;
     }
 }

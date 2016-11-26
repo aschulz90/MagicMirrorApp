@@ -3,13 +3,11 @@ package com.blublabs.magicmirror.modules.alert;
 import android.databinding.Bindable;
 import android.os.Bundle;
 import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.blublabs.magicmirror.common.Utils;
 import com.blublabs.magicmirror.modules.MagicMirrorModule;
 import com.blublabs.magicmirror.modules.ModuleSettingsFragment;
-import com.blublabs.magicmirror.modules.compliments.ComplimentsSettingsFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,8 +78,13 @@ public class AlertMagicMirrorModule extends MagicMirrorModule {
 
     private AlertSettingsFragment fragment;
 
-    public AlertMagicMirrorModule(JSONObject data) throws JSONException {
-        super(data);
+    public AlertMagicMirrorModule(String name) {
+        super(name);
+    }
+
+    @Override
+    public void setData(JSONObject data) throws JSONException {
+        super.setData(data);
 
         if(data.has(KEY_DATA_CONFIG)) {
 

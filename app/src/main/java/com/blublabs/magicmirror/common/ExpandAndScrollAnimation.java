@@ -1,12 +1,14 @@
 package com.blublabs.magicmirror.common;
 
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.ImageView;
 
 import com.blublabs.magicmirror.modules.ModuleScrollView;
+
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * Created by andrs on 04.10.2016.
@@ -18,11 +20,11 @@ public class ExpandAndScrollAnimation extends Animation {
     private final float startRotation;
     private final int deltaHeight;
     private final View collapsableView;
-    private final ModuleScrollView scrollView;
+    private final NestedScrollView scrollView;
     private final View item;
     private final ImageView expandIndicator;
 
-    public ExpandAndScrollAnimation(int startHeight, int endHeight, final View collapsableView, final ModuleScrollView scrollView, final View item, ImageView expandIndicator) {
+    public ExpandAndScrollAnimation(int startHeight, int endHeight, final View collapsableView, final NestedScrollView scrollView, final View item, ImageView expandIndicator) {
         this.startHeight = startHeight;
         this.deltaHeight = endHeight - startHeight;
         this.collapsableView = collapsableView;
@@ -35,7 +37,12 @@ public class ExpandAndScrollAnimation extends Animation {
     @Override
     protected void applyTransformation(float interpolatedTime,  Transformation t) {
         final int newHeight = (int) (startHeight + deltaHeight * interpolatedTime);
-        collapsableView.getLayoutParams().height = newHeight;
+        if(interpolatedTime == 1) {
+            collapsableView.getLayoutParams().height = WRAP_CONTENT;
+        }
+        else {
+            collapsableView.getLayoutParams().height = newHeight;
+        }
 
         final float newRotation = startRotation + (180 * interpolatedTime * Math.signum(deltaHeight));
         expandIndicator.setRotation(newRotation);

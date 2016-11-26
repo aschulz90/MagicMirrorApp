@@ -15,6 +15,11 @@ import android.widget.TextView;
 
 import com.blublabs.magicmirror.modules.calendar.CalendarSettingsFragment;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -54,6 +59,25 @@ public final class Utils {
 
     public static boolean objectsEqual(Object a, Object b){
         return (a == b) || (a != null && a.equals(b));
+    }
+
+    public static JSONArray remove(final int idx, final JSONArray from) {
+        final List<Object> objs = asList(from);
+        objs.remove(idx);
+
+        return new JSONArray(objs);
+    }
+
+    public static List<Object> asList(final JSONArray ja) {
+        final int len = ja.length();
+        final ArrayList<Object> result = new ArrayList<Object>(len);
+        for (int i = 0; i < len; i++) {
+            final Object obj = ja.opt(i);
+            if (obj != null) {
+                result.add(obj);
+            }
+        }
+        return result;
     }
 
     public static class TextIntegerBinder {

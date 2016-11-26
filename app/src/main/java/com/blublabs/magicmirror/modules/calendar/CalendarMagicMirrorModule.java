@@ -2,10 +2,8 @@ package com.blublabs.magicmirror.modules.calendar;
 
 import android.databinding.Bindable;
 import android.databinding.ObservableArrayList;
-import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.blublabs.magicmirror.BR;
 import com.blublabs.magicmirror.common.Utils;
@@ -16,7 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -81,8 +78,13 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
 
     private CalendarSettingsFragment fragment;
 
-    public CalendarMagicMirrorModule(JSONObject data) throws JSONException {
-        super(data);
+    public CalendarMagicMirrorModule(String name) {
+        super(name);
+    }
+
+    @Override
+    public void setData(JSONObject data) throws JSONException {
+        super.setData(data);
 
         if(data.has(KEY_DATA_CONFIG)) {
             JSONObject config = data.getJSONObject(KEY_DATA_CONFIG);

@@ -42,8 +42,13 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
 
     ComplimentsSettingsFragment fragment = null;
 
-    public ComplimentsMagicMirrorModule(JSONObject data) throws JSONException {
-        super(data);
+    public ComplimentsMagicMirrorModule(String name) {
+        super(name);
+    }
+
+    @Override
+    public void setData(JSONObject data) throws JSONException {
+        super.setData(data);
 
         if(data.has(KEY_DATA_CONFIG)) {
 

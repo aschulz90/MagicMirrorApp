@@ -279,6 +279,10 @@ public class MagicMirrorFragment extends Fragment {
     }
 
     protected final void readCharacteristic(UUID service, UUID characteristic) {
+        readCharacteristic(service, characteristic, gattCallback);
+    }
+
+    protected final void readCharacteristic(UUID service, UUID characteristic, BluetoothGattCallback gattCallback) {
 
         BleRequest request = new BleRequest(BleRequest.RequestType.CHARACTERISTIC_READ, gattCallback, null, service, characteristic) {
             @Override
@@ -295,6 +299,10 @@ public class MagicMirrorFragment extends Fragment {
     }
 
     protected final void writeCharacteristic(UUID service, UUID characteristic, String value) {
+        writeCharacteristic(service, characteristic, value, gattCallback);
+    }
+
+    protected final void writeCharacteristic(UUID service, UUID characteristic, String value, BluetoothGattCallback gattCallback) {
         BleRequest request = new BleRequest(BleRequest.RequestType.CHARACTERISTIC_WRITE, gattCallback, null, service, characteristic, value) {
             @Override
             public void onError(String errormessage) {

@@ -1,11 +1,8 @@
 package com.blublabs.magicmirror.modules.custom;
 
-import android.databinding.Bindable;
 import android.os.Bundle;
 import android.os.Parcel;
 
-import com.blublabs.magicmirror.BR;
-import com.blublabs.magicmirror.common.Utils;
 import com.blublabs.magicmirror.modules.MagicMirrorModule;
 import com.blublabs.magicmirror.modules.ModuleSettingsFragment;
 
@@ -18,7 +15,7 @@ import org.json.JSONObject;
 
 public class CustomMagicMirrorModule extends MagicMirrorModule {
 
-    private final JSONObject data;
+    private JSONObject data;
 
     private CustomSettingsFragment fragment;
 
@@ -34,10 +31,18 @@ public class CustomMagicMirrorModule extends MagicMirrorModule {
                 }
             };
 
-    public CustomMagicMirrorModule(JSONObject data) throws JSONException {
-        super(data);
+    public CustomMagicMirrorModule(String name) {
+        super(name);
+    }
+
+    @Override
+    public void setData(JSONObject data) throws JSONException {
+
+        super.setData(data);
 
         this.data = data;
+
+        ((CustomSettingsFragment) getAdditionalSettingsFragment()).setData(data);
     }
 
     private CustomMagicMirrorModule(Parcel source) {
@@ -56,7 +61,7 @@ public class CustomMagicMirrorModule extends MagicMirrorModule {
 
     public JSONObject getData() throws JSONException {
 
-        if(data.has(KEY_DATA_CONFIG) && data.getJSONObject(KEY_DATA_CONFIG).length() == 0) {
+        if(data != null && data.has(KEY_DATA_CONFIG) && data.getJSONObject(KEY_DATA_CONFIG).length() == 0) {
             data.remove(KEY_DATA_CONFIG);
         }
 

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/border_left_black"
     android:paddingStart="10dp">
 
@@ -12,12 +13,26 @@
         android:paddingTop="5dp"
         android:labelFor="@+id/dynamicConfigView" />
 
-    <com.blublabs.magicmirror.modules.custom.DynamicJSONObjectView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/dynamicConfigView"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-    </com.blublabs.magicmirror.modules.custom.DynamicJSONObjectView>
+        <com.blublabs.magicmirror.modules.custom.DynamicJSONObjectView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dynamicConfigView"
+            android:orientation="vertical">
+
+        </com.blublabs.magicmirror.modules.custom.DynamicJSONObjectView>
+
+        <ImageView
+            android:id="@+id/deleteIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_delete"
+            android:contentDescription="Delete Icon" />
+    </RelativeLayout>
 
 </LinearLayout>

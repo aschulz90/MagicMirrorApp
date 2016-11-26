@@ -19,6 +19,8 @@ import com.blublabs.magicmirror.modules.weather.WeatherMagicMirrorModule;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.UUID;
+
 /**
  * Created by andrs on 30.08.2016.
  *
@@ -59,23 +61,20 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
     private boolean active;
     private PositionRegion region = PositionRegion.none;
     private String header = "";
+    private final UUID id;
 
     private Runnable updateHandler = null;
+    private boolean initialized = false;
 
     private final static String KEY_DATA_NAME = "module";
     private final static String KEY_DATA_POSITION = "position";
     private final static String KEY_DATA_HEADER = "header";
     public final static String KEY_DATA_CONFIG = "config";
 
-    public MagicMirrorModule(JSONObject data) throws JSONException {
-        this.name = data.getString(KEY_DATA_NAME);
+    public MagicMirrorModule(String name) {
+        this.name = name;
         this.active = false;
-        if(data.has(KEY_DATA_POSITION)) {
-            this.region = PositionRegion.from(data.getString(KEY_DATA_POSITION));
-        }
-        if(data.has(KEY_DATA_HEADER)) {
-            header = data.getString(KEY_DATA_HEADER);
-        }
+        this.id = UUID.randomUUID();
     }
 
     protected MagicMirrorModule(Parcel source) {
@@ -83,6 +82,18 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
         this.active = source.readByte() == 1;
         this.region = PositionRegion.values()[source.readInt()];
         this.header = source.readString();
+        this.id = UUID.fromString(source.readString());
+    }
+
+    public void setData(JSONObject data) throws JSONException {
+        if(data.has(KEY_DATA_POSITION)) {
+            this.region = PositionRegion.from(data.getString(KEY_DATA_POSITION));
+        }
+        if(data.has(KEY_DATA_HEADER)) {
+            header = data.getString(KEY_DATA_HEADER);
+        }
+
+        notifyChange();
     }
 
     public void setUpdateHandler(Runnable runnable){
@@ -91,6 +102,14 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
 
     public Runnable getUpdateHandler() {
         return updateHandler;
+    }
+
+    public boolean isInitialized() {
+        return initialized;
+    }
+
+    public void setInitialized(boolean initialized) {
+        this.initialized = initialized;
     }
 
     @Bindable
@@ -141,6 +160,10 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
         notifyPropertyChanged(BR.header);
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public abstract ModuleSettingsFragment getAdditionalSettingsFragment();
 
     public JSONObject toJson() throws JSONException {
@@ -171,6 +194,7 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
         dest.writeByte((byte) (active ? 1 : 0));
         dest.writeInt(region.ordinal());
         dest.writeString(header);
+        dest.writeString(id.toString());
     }
 
     @Override
@@ -181,6 +205,7 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
         MagicMirrorModule that = (MagicMirrorModule) o;
 
         if (isActive() != that.isActive()) return false;
+        if (!getId().equals(that.getId())) return false;
         if (!getName().equals(that.getName())) return false;
         if (getRegion() != that.getRegion()) return false;
         return getHeader() != null ? getHeader().equals(that.getHeader()) : that.getHeader() == null;
@@ -190,33 +215,32 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
     @Override
     public int hashCode() {
         int result = getName().hashCode();
+        result = 31 * result + id.hashCode();
         result = 31 * result + (isActive() ? 1 : 0);
         result = 31 * result + (getRegion() != null ? getRegion().hashCode() : 0);
         result = 31 * result + (getHeader() != null ? getHeader().hashCode() : 0);
         return result;
     }
 
-    public static MagicMirrorModule getModuleForData(JSONObject data) throws JSONException {
-
-        final String name = data.getString("module");
+    public static MagicMirrorModule getModuleForName(String name) {
 
         switch(name) {
             case "alert":
-                return new AlertMagicMirrorModule(data);
+                return new AlertMagicMirrorModule(name);
             case "helloworld":
-                return new HelloWorldMagicMirrorModule(data);
+                return new HelloWorldMagicMirrorModule(name);
             case "calendar":
-                return new CalendarMagicMirrorModule(data);
+                return new CalendarMagicMirrorModule(name);
             case "clock":
-                return new ClockMagicMirrorModule(data);
+                return new ClockMagicMirrorModule(name);
             case "compliments":
-                return new ComplimentsMagicMirrorModule(data);
+                return new ComplimentsMagicMirrorModule(name);
             case "newsfeed":
-                return new NewsMagicMirrorModule(data);
+                return new NewsMagicMirrorModule(name);
             case "weatherforecast":
-                return new WeatherMagicMirrorModule(data);
+                return new WeatherMagicMirrorModule(name);
             default:
-                return new CustomMagicMirrorModule(data);
+                return new CustomMagicMirrorModule(name);
         }
     }
 }

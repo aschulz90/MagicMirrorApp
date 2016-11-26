@@ -1,35 +1,44 @@
 package com.blublabs.magicmirror;
 
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.blublabs.magicmirror.common.MagicMirrorActivity;
+import com.blublabs.magicmirror.adapter.IMagicMirrorAdapter;
+import com.blublabs.magicmirror.adapter.MagicMirrorAdapterFactory;
 import com.blublabs.magicmirror.common.MagicMirrorFragment;
 import com.blublabs.magicmirror.devices.DeviceListFragment;
 import com.blublabs.magicmirror.devices.HeaderDeviceListAdapter;
 import com.blublabs.magicmirror.devices.PairedDevicesSpinner;
 import com.blublabs.magicmirror.modules.ModulesFragment;
-import com.blublabs.magicmirror.service.BleService;
+import com.idevicesinc.sweetblue.BleDevice;
+import com.idevicesinc.sweetblue.BleDeviceState;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class MainActivity extends MagicMirrorActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
     private static final String KEY_LAST_SELECTED_ITEM = "lastSelectedItem";
+    private static final String KEY_PAIRED_DEVICES = "pairedDevices";
+    private static final String KEY_DEFAULT_DEVICE = "defaultDevices";
 
     private DrawerLayout drawer;
     private NavigationView navDrawer;
@@ -39,6 +48,23 @@ public class MainActivity extends MagicMirrorActivity implements NavigationView.
     private ArrayAdapter<String> navHeaderSpinnerDataAdapter;
     private List<String> spinnerDevicesList = new ArrayList<>();
     private PairedDevicesSpinner devicesSpinner;
+
+    private Set<String> pairedDevicesList = new HashSet<>();
+    private String defaultPairedDevice = null;
+
+    private IMagicMirrorAdapter adapter = null;
+
+    private BleDevice.StateListener deviceStateListener = new BleDevice.StateListener() {
+        @Override
+        public void onEvent(BleDevice.StateListener.StateEvent stateEvent) {
+            if(stateEvent.didEnter(BleDeviceState.CONNECTED)) {
+                setConnectStatusText(getString(R.string.connected));
+            }
+            else if(stateEvent.didEnter(BleDeviceState.DISCONNECTED)) {
+                setConnectStatusText(getString(R.string.disconnected));
+            }
+        }
+    };
 
     public MainActivity() {
         super();
@@ -50,6 +76,8 @@ public class MainActivity extends MagicMirrorActivity implements NavigationView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         setupNavMenu();
 
         if(savedInstanceState != null && savedInstanceState.containsKey(KEY_LAST_SELECTED_ITEM)) {
@@ -60,44 +88,43 @@ public class MainActivity extends MagicMirrorActivity implements NavigationView.
         }
 
         setupHeader();
+
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+        pairedDevicesList.addAll(sharedPref.getStringSet(KEY_PAIRED_DEVICES, new HashSet<String>()));
+        defaultPairedDevice = sharedPref.getString(KEY_DEFAULT_DEVICE, null);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        if(getPairedDevicesList().size() == 0) {
+        if(pairedDevicesList.size() == 0) {
             setDeviceSpinnerVisible(View.GONE);
         }
         else {
             navHeaderSpinnerDataAdapter.clear();
-            navHeaderSpinnerDataAdapter.addAll(getPairedDevicesList());
+            navHeaderSpinnerDataAdapter.addAll(pairedDevicesList);
             navHeaderSpinnerDataAdapter.add(getString(R.string.default_device_list_entry));
-            devicesSpinner.setSelection(getDefaultPairedDevice() == null ? 0 : spinnerDevicesList.indexOf(getDefaultPairedDevice()));
+            devicesSpinner.setSelection(defaultPairedDevice == null ? 0 : spinnerDevicesList.indexOf(defaultPairedDevice));
         }
     }
 
     @Override
-    protected void onBleServiceConnected() {
-
-        if(getDefaultPairedDevice() == null || getDefaultPairedDevice().isEmpty()) {
-            return;
-        }
-
-        startScan();
+    protected void onPause() {
+        super.onPause();
+        getAdapter().onPause();
     }
 
     @Override
-    protected void onDeviceDiscovered(String device) {
+    protected void onResume() {
+        super.onResume();
+        getAdapter().onResume();
+    }
 
-        String defaultDevice = getDefaultPairedDevice();
-
-        if(defaultDevice != null && defaultDevice.equals(device)) {
-            Message msg = Message.obtain(null, BleService.MSG_STOP_SCAN);
-            if (msg != null) {
-                sendMessage(msg);
-            }
-            connectToDevice(defaultDevice);
+    protected final void setupToolbar() {
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        if(myToolbar != null) {
+            setSupportActionBar(myToolbar);
         }
     }
 
@@ -158,7 +185,7 @@ public class MainActivity extends MagicMirrorActivity implements NavigationView.
         }
 
         // Create a new fragment and specify the fragment to show based on nav item clicked
-        MagicMirrorFragment fragment = null;
+        Fragment fragment = null;
         Class fragmentClass;
         switch(id) {
             case R.id.nav_main_fragment:
@@ -175,7 +202,7 @@ public class MainActivity extends MagicMirrorActivity implements NavigationView.
         }
 
         try {
-            fragment = (MagicMirrorFragment) fragmentClass.newInstance();
+            fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -219,42 +246,25 @@ public class MainActivity extends MagicMirrorActivity implements NavigationView.
             onNavigationItemSelected(navDrawer.getMenu().findItem(R.id.nav_settings_fragment));
             setDeviceSpinnerVisible(View.GONE);
         }
-        else if(getState() == BleService.State.IDLE) {
-            connectToDevice((String) devicesSpinner.getSelectedItem());
+        else if(!getAdapter().isConnectedToMirror()) {
+
+            setDefaultDevice((String) devicesSpinner.getSelectedItem());
+
+            getAdapter().scanForMagicMirrors(new IMagicMirrorAdapter.MagicMirrorAdapterCallback() {
+                @Override
+                public void onMagicMirrorDiscovered(Object identifier) {
+                    if(defaultPairedDevice.equals(identifier)) {
+                        adapter.stopScanForMagicMirrors();
+                        adapter.connectMirror(deviceStateListener, defaultPairedDevice);
+                    }
+                }
+            });
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
-    }
-
-    @Override
-    public void addPairedDevice(String deviceAddress) {
-        super.addPairedDevice(deviceAddress);
-
-        spinnerDevicesList.clear();
-        spinnerDevicesList.addAll(getPairedDevicesList());
-        spinnerDevicesList.add(getString(R.string.default_device_list_entry));
-        devicesSpinner.setSelection(spinnerDevicesList.indexOf(deviceAddress));
-        setDeviceSpinnerVisible(View.VISIBLE);
-        navHeaderSpinnerDataAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    protected void onStateChanged(BleService.State newState) {
-        super.onStateChanged(newState);
-
-        switch (newState) {
-            case CONNECTED:
-                setConnectStatusText(getString(R.string.connected));
-                break;
-            case IDLE:
-                setConnectStatusText(getString(R.string.disconnected));
-                break;
-            default:
-                break;
-        }
     }
 
     private void setConnectStatusText(final String newText) {
@@ -271,5 +281,41 @@ public class MainActivity extends MagicMirrorActivity implements NavigationView.
                 devicesSpinner.setVisibility(visible);
             }
         });
+    }
+
+    public void addPairedDevice(String deviceAddress) {
+        pairedDevicesList.add(deviceAddress);
+
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+        sharedPref.edit()
+                .putStringSet(KEY_PAIRED_DEVICES, pairedDevicesList)
+                .apply();
+
+        setDefaultDevice(deviceAddress);
+
+        spinnerDevicesList.clear();
+        spinnerDevicesList.addAll(pairedDevicesList);
+        spinnerDevicesList.add(getString(R.string.default_device_list_entry));
+        devicesSpinner.setSelection(spinnerDevicesList.indexOf(deviceAddress));
+        setDeviceSpinnerVisible(View.VISIBLE);
+        navHeaderSpinnerDataAdapter.notifyDataSetChanged();
+    }
+
+    public void setDefaultDevice(String deviceAddress) {
+
+        defaultPairedDevice = deviceAddress;
+
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+        sharedPref.edit()
+                .putString(KEY_DEFAULT_DEVICE, deviceAddress)
+                .apply();
+    }
+
+    private IMagicMirrorAdapter getAdapter() {
+        if(adapter == null) {
+            adapter = MagicMirrorAdapterFactory.getAdapter(MagicMirrorAdapterFactory.AdapteryType.BLE, getApplicationContext());
+        }
+
+        return adapter;
     }
 }

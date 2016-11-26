@@ -194,8 +194,13 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
 
     private ClockSettingsFragment fragment;
 
-    public ClockMagicMirrorModule(JSONObject data) throws JSONException {
-        super(data);
+    public ClockMagicMirrorModule(String name) {
+        super(name);
+    }
+
+    @Override
+    public void setData(JSONObject data) throws JSONException {
+        super.setData(data);
 
         if(data.has(KEY_DATA_CONFIG)) {
 

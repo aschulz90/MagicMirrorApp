@@ -32,6 +32,7 @@ import com.blublabs.magicmirror.utils.GzipUtil;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -260,9 +261,15 @@ public class BleService extends Service implements BluetoothAdapter.LeScanCallba
     }
 
     public void connect(String macAddress) {
+
+        if(gatt != null) {
+            return;
+        }
+
         BluetoothDevice device = devices.get(macAddress);
         if (device != null) {
             gatt = device.connectGatt(this, false, gattCallback);
+            //refreshDeviceCache();
         }
         else {
             startScan();
@@ -334,8 +341,6 @@ public class BleService extends Service implements BluetoothAdapter.LeScanCallba
                             throw new IllegalArgumentException("BleRequest nicht in message gesetzt!");
                         }
                         service.addRequest((BleRequest) msg.obj);
-
-
                     default:
                         super.handleMessage(msg);
                 }
@@ -417,6 +422,16 @@ public class BleService extends Service implements BluetoothAdapter.LeScanCallba
             if(readCharacteristic != null) {
                 gatt.readCharacteristic(readCharacteristic);
             }
+            else {
+                requestQueue.peek().onError("Cannot Read Service: Charactersitic not found!");
+                requestQueue.remove();
+                executeRequest();
+            }
+        }
+        else {
+            requestQueue.peek().onError("Cannot Read Service: Service not found!");
+            requestQueue.remove();
+            executeRequest();
         }
     }
 
@@ -430,6 +445,7 @@ public class BleService extends Service implements BluetoothAdapter.LeScanCallba
 
         if(!servicesDiscovered) {
             gatt.discoverServices();
+            return;
         }
 
         BluetoothGattService bleService = gatt.getService(service);
@@ -440,6 +456,16 @@ public class BleService extends Service implements BluetoothAdapter.LeScanCallba
                 writeCharacteristic.setValue(value);
                 gatt.writeCharacteristic(writeCharacteristic);
             }
+            else {
+                requestQueue.peek().onError("Cannot Write Service: Charactersitic not found!");
+                requestQueue.remove();
+                executeRequest();
+            }
+        }
+        else {
+            requestQueue.peek().onError("Cannot Write Service: Service not found!");
+            requestQueue.remove();
+            executeRequest();
         }
     }
 

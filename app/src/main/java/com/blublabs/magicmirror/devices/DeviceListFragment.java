@@ -3,6 +3,7 @@ package com.blublabs.magicmirror.devices;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.blublabs.magicmirror.adapter.IMagicMirrorAdapter;
+import com.blublabs.magicmirror.adapter.MagicMirrorAdapterFactory;
 import com.blublabs.magicmirror.service.BleService;
 import com.blublabs.magicmirror.common.MagicMirrorFragment;
 import com.blublabs.magicmirror.R;
@@ -25,12 +28,16 @@ import java.util.List;
 /**
  * Created by andrs on 19.09.2016.
  */
-public class DeviceListFragment extends MagicMirrorFragment {
+public class DeviceListFragment extends Fragment {
 
     private List<String> deviceList = new ArrayList<>();
     private DeviceListAdapter deviceListAdapter;
     private RecyclerView recyclerView;
     private Menu toolbarMenu;
+
+    private boolean isScanning = false;
+
+    private IMagicMirrorAdapter adapter = null;
 
     @Nullable
     @Override
@@ -67,14 +74,31 @@ public class DeviceListFragment extends MagicMirrorFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if(item.getItemId() == R.id.action_scan) {
-            if(getState() != BleService.State.SCANNING) {
+            if(!isScanning) {
+
+                isScanning = true;
+                setButtonText("Stop");
                 deviceList.clear();
                 deviceListAdapter.notifyDataSetChanged();
-                startScan();
+                getAdapter().scanForMagicMirrors(new IMagicMirrorAdapter.MagicMirrorAdapterCallback() {
+                    @Override
+                    public void onMagicMirrorDiscovered(Object identifier) {
+                        updateDevices((String) identifier);
+                    }
+
+                    @Override
+                    public void onScanFinished() {
+                        isScanning = false;
+                        setButtonText("Scan");
+
+                        getView().findViewById(R.id.progress_circle).setVisibility(View.GONE);
+                    }
+                });
                 getView().findViewById(R.id.progress_circle).setVisibility(View.VISIBLE);
             }
             else {
-                stopScan();
+
+                getAdapter().stopScanForMagicMirrors();
             }
             return true;
         }
@@ -82,17 +106,8 @@ public class DeviceListFragment extends MagicMirrorFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
     protected void onScanStopped(String[] devices) {
-        getView().findViewById(R.id.progress_circle).setVisibility(View.GONE);
-        deviceList.clear();
-        deviceList.addAll(Arrays.asList(devices));
-        deviceListAdapter.notifyDataSetChanged();
-    }
 
-    @Override
-    protected void onDeviceDiscovered(String device) {
-        updateDevices(device);
     }
 
     private void updateDevices(String device) {
@@ -110,17 +125,11 @@ public class DeviceListFragment extends MagicMirrorFragment {
         });
     }
 
-    protected void onStateChanged(BleService.State newState) {
-
-        super.onStateChanged(newState);
-
-        switch (newState) {
-            case SCANNING:
-                setButtonText("Stop");
-                break;
-            default:
-                setButtonText("Scan");
-                break;
+    private IMagicMirrorAdapter getAdapter() {
+        if(adapter == null) {
+            adapter = MagicMirrorAdapterFactory.getAdapter(MagicMirrorAdapterFactory.AdapteryType.BLE, getActivity().getApplicationContext());
         }
+
+        return adapter;
     }
 }

@@ -31,17 +31,8 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/titleBar">
-
-                    <ImageView
-                        android:id="@+id/indicatorExpand"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_action_expand"
-                        android:contentDescription="Expand Icon" />
+                    android:id="@+id/titleBar"
+                    android:background="@drawable/border_bottom_gray">
 
                     <TextView
                         android:id="@+id/info_text"
@@ -51,6 +42,25 @@
                         android:layout_alignParentStart="true"
                         android:textSize="24sp"
                         android:text="@{module.name}"/>
+
+                    <ImageView
+                        android:id="@+id/removeText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/ic_delete_forever_grey_button"
+                        android:contentDescription="Delete Icon" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBar1"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true"
+                        android:max="100"
+                        android:minWidth="200dp"
+                        android:visibility="gone"
+                        android:layout_below="@id/info_text"/>
                 </RelativeLayout>
 
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -100,6 +110,25 @@
                         android:inputType="textPersonName"
                         android:ems="10"
                         android:id="@+id/editTextHeader"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/expandBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/module_settings_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:background="@drawable/border_top_gray">
+
+                    <ImageView
+                        android:id="@+id/indicatorExpand"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_action_expand_button"
+                        android:background="@drawable/ic_action_expand_button"
+                        android:contentDescription="Expand Icon" />
 
                 </LinearLayout>
             </RelativeLayout>

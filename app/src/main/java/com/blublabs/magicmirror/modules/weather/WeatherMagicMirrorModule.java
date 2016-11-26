@@ -91,8 +91,13 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
 
     private WeatherSettingsFragment fragment;
 
-    public WeatherMagicMirrorModule(JSONObject data) throws JSONException {
-        super(data);
+    public WeatherMagicMirrorModule(String name) {
+        super(name);
+    }
+
+    @Override
+    public void setData(JSONObject data) throws JSONException {
+        super.setData(data);
 
         if(data.has(KEY_DATA_CONFIG)) {
 

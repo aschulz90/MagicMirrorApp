@@ -8,7 +8,6 @@ import com.blublabs.magicmirror.BR;
 import com.blublabs.magicmirror.common.Utils;
 import com.blublabs.magicmirror.modules.MagicMirrorModule;
 import com.blublabs.magicmirror.modules.ModuleSettingsFragment;
-import com.google.common.primitives.UnsignedInteger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,8 +72,13 @@ public class NewsMagicMirrorModule extends MagicMirrorModule {
 
     private NewsSettingsFragment fragment;
 
-    public NewsMagicMirrorModule(JSONObject data) throws JSONException {
-        super(data);
+    public NewsMagicMirrorModule(String name) {
+        super(name);
+    }
+
+    @Override
+    public void setData(JSONObject data) throws JSONException {
+        super.setData(data);
 
         if(data.has(KEY_DATA_CONFIG)) {
 

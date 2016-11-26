@@ -8,15 +8,19 @@ import android.databinding.PropertyChangeRegistry;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,6 +29,7 @@ import android.widget.Toast;
 import com.blublabs.magicmirror.R;
 import com.blublabs.magicmirror.common.Utils;
 import com.blublabs.magicmirror.databinding.DialogJsonBinding;
+import com.blublabs.magicmirror.utils.LayoutWrapContentUpdater;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -120,15 +125,15 @@ public class DynamicJSONObjectView extends LinearLayout implements Observable {
 
         if(objectData != null) {
 
-                Iterator<String> nameItr = objectData.keys();
-                while (nameItr.hasNext()) {
-                    try {
-                        String name = nameItr.next();
-                        addConfigValue(name, objectData.get(name));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+            Iterator<String> nameItr = objectData.keys();
+            while (nameItr.hasNext()) {
+                try {
+                    String name = nameItr.next();
+                    addConfigValue(name, objectData.get(name));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+            }
         }
     }
 
@@ -160,6 +165,28 @@ public class DynamicJSONObjectView extends LinearLayout implements Observable {
         }
     }
 
+    private void removeValue(final String key) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        builder.setMessage("Do you really want to remove this value?")
+                .setPositiveButton("Yes",  new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        objectData.remove(key);
+                        removeView(findViewWithTag(key));
+                        notifyChange();
+                        requestLayout();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog,int id) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
+    }
+
     protected void addConfigValue(@NonNull final String name, @NonNull Boolean value) {
         View rowBoolean = LayoutInflater.from(getContext()).inflate(R.layout.row_json_boolean, this, false);
         rowBoolean.setTag(name);
@@ -181,11 +208,19 @@ public class DynamicJSONObjectView extends LinearLayout implements Observable {
             }
         });
 
+        ImageView removeIcon = (ImageView) rowBoolean.findViewById(R.id.deleteIcon);
+        removeIcon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeValue(name);
+            }
+        });
+
         addView(rowBoolean, getChildCount() - 1);
     }
 
-    private EditText createTextRow(@NonNull String name, @NonNull Object value) {
-        View rowText = LayoutInflater.from(getContext()).inflate(R.layout.row_json_text, this, false);
+    private EditText createTextRow(@NonNull final String name, @NonNull Object value) {
+        final View rowText = LayoutInflater.from(getContext()).inflate(R.layout.row_json_text, this, false);
         rowText.setTag(name);
 
         TextView title = (TextView) rowText.findViewById(R.id.textViewText);
@@ -193,6 +228,14 @@ public class DynamicJSONObjectView extends LinearLayout implements Observable {
 
         EditText editText = (EditText) rowText.findViewById(R.id.editText);
         editText.setText(value.toString());
+
+        ImageView removeIcon = (ImageView) rowText.findViewById(R.id.deleteIcon);
+        removeIcon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeValue(name);
+            }
+        });
 
         addView(rowText, getChildCount() - 1);
 
@@ -282,7 +325,7 @@ public class DynamicJSONObjectView extends LinearLayout implements Observable {
         });
     }
 
-    protected void addConfigValue(@NonNull String name, @NonNull JSONArray value) {
+    protected void addConfigValue(@NonNull final String name, @NonNull JSONArray value) {
         View rowArray = LayoutInflater.from(getContext()).inflate(R.layout.row_json_array, this, false);
         rowArray.setTag(name);
 
@@ -293,10 +336,18 @@ public class DynamicJSONObjectView extends LinearLayout implements Observable {
         dynamicConfigView.setArrayData(value);
         dynamicConfigView.addOnPropertyChangedCallback(propertyChangedCallback);
 
+        ImageView removeIcon = (ImageView) rowArray.findViewById(R.id.deleteIcon);
+        removeIcon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeValue(name);
+            }
+        });
+
         addView(rowArray, getChildCount() - 1);
     }
 
-    protected void addConfigValue(@NonNull String name, @NonNull JSONObject value) {
+    protected void addConfigValue(@NonNull final String name, @NonNull JSONObject value) {
         View rowObject = LayoutInflater.from(getContext()).inflate(R.layout.row_json_object, this, false);
         rowObject.setTag(name);
 
@@ -306,6 +357,14 @@ public class DynamicJSONObjectView extends LinearLayout implements Observable {
         DynamicJSONObjectView dynamicJSONObjectView = (DynamicJSONObjectView) rowObject.findViewById(R.id.dynamicConfigView);
         dynamicJSONObjectView.setObjectData(value);
         dynamicJSONObjectView.addOnPropertyChangedCallback(propertyChangedCallback);
+
+        ImageView removeIcon = (ImageView) rowObject.findViewById(R.id.deleteIcon);
+        removeIcon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeValue(name);
+            }
+        });
 
         addView(rowObject, getChildCount() - 1);
     }
@@ -422,6 +481,7 @@ public class DynamicJSONObjectView extends LinearLayout implements Observable {
 
                 requestLayout();
                 notifyChange();
+
                 alertDialog.dismiss();
             }
         });

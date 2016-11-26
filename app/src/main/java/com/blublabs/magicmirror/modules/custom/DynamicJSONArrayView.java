@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -62,6 +63,13 @@ public class DynamicJSONArrayView extends DynamicJSONObjectView {
         addConfigView.setText("Add Value");
         addView(addConfigView);
 
+        addConfigView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddValueDialog();
+            }
+        });
+
         if(arrayData != null) {
             for(int i = 0; i < arrayData.length(); i++) {
                 try {
@@ -91,14 +99,36 @@ public class DynamicJSONArrayView extends DynamicJSONObjectView {
                 addConfigValue(index, (Double) value);
                 break;
             case Array:
-                addConfigValue((JSONArray) value);
+                addConfigValue(index, (JSONArray) value);
                 break;
             case Object:
-                addConfigValue((JSONObject) value);
+                addConfigValue(index, (JSONObject) value);
                 break;
             default:
                 break;
         }
+    }
+
+    private void removeIndex(final int index) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        builder.setMessage("Do you really want to remove this value?")
+                .setPositiveButton("Yes",  new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        arrayData.remove(index);
+                        removeViewAt(index);
+                        notifyChange();
+                        requestLayout();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog,int id) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 
     protected void addConfigValue(final int index, @NonNull Boolean value) {
@@ -121,10 +151,18 @@ public class DynamicJSONArrayView extends DynamicJSONObjectView {
             }
         });
 
+        ImageView removeIcon = (ImageView) rowBoolean.findViewById(R.id.deleteIcon);
+        removeIcon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeIndex(index);
+            }
+        });
+
         addView(rowBoolean, index);
     }
 
-    private EditText createTextRow(@NonNull Object value) {
+    private EditText createTextRow(final int index, @NonNull Object value) {
         View rowText = LayoutInflater.from(getContext()).inflate(R.layout.row_json_text, this, false);
 
         TextView title = (TextView) rowText.findViewById(R.id.textViewText);
@@ -133,13 +171,21 @@ public class DynamicJSONArrayView extends DynamicJSONObjectView {
         EditText editText = (EditText) rowText.findViewById(R.id.editText);
         editText.setText(value.toString());
 
+        ImageView removeIcon = (ImageView) rowText.findViewById(R.id.deleteIcon);
+        removeIcon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeIndex(index);
+            }
+        });
+
         addView(rowText, getChildCount() - 1);
 
         return editText;
     }
 
     protected void addConfigValue(final int index, @NonNull String value) {
-        EditText editText = createTextRow(value);
+        EditText editText = createTextRow(index, value);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -164,7 +210,7 @@ public class DynamicJSONArrayView extends DynamicJSONObjectView {
     }
 
     protected void addConfigValue(final int index, @NonNull Integer value) {
-        EditText editText = createTextRow(value);
+        EditText editText = createTextRow(index, value);
         editText.setInputType(TYPE_CLASS_NUMBER);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -190,7 +236,7 @@ public class DynamicJSONArrayView extends DynamicJSONObjectView {
     }
 
     protected void addConfigValue(final int index, @NonNull Double value) {
-        EditText editText = createTextRow(value);
+        EditText editText = createTextRow(index, value);
         editText.setInputType(TYPE_NUMBER_FLAG_DECIMAL);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -215,7 +261,7 @@ public class DynamicJSONArrayView extends DynamicJSONObjectView {
         });
     }
 
-    protected void addConfigValue(@NonNull JSONArray value) {
+    protected void addConfigValue(final int index, @NonNull JSONArray value) {
         View rowObject = LayoutInflater.from(getContext()).inflate(R.layout.row_json_array, this, false);
 
         TextView title = (TextView) rowObject.findViewById(R.id.textViewText);
@@ -225,10 +271,18 @@ public class DynamicJSONArrayView extends DynamicJSONObjectView {
         dynamicConfigView.setArrayData(value);
         dynamicConfigView.addOnPropertyChangedCallback(propertyChangedCallback);
 
+        ImageView removeIcon = (ImageView) rowObject.findViewById(R.id.deleteIcon);
+        removeIcon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeIndex(index);
+            }
+        });
+
         addView(rowObject, getChildCount() - 1);
     }
 
-    protected void addConfigValue(@NonNull JSONObject value) {
+    protected void addConfigValue(final int index, @NonNull JSONObject value) {
         View rowObject = LayoutInflater.from(getContext()).inflate(R.layout.row_json_object, this, false);
 
         TextView title = (TextView) rowObject.findViewById(R.id.textViewText);
@@ -237,6 +291,14 @@ public class DynamicJSONArrayView extends DynamicJSONObjectView {
         DynamicJSONObjectView dynamicJSONObjectView = (DynamicJSONObjectView) rowObject.findViewById(R.id.dynamicConfigView);
         dynamicJSONObjectView.setObjectData(value);
         dynamicJSONObjectView.addOnPropertyChangedCallback(propertyChangedCallback);
+
+        ImageView removeIcon = (ImageView) rowObject.findViewById(R.id.deleteIcon);
+        removeIcon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeIndex(index);
+            }
+        });
 
         addView(rowObject, getChildCount() - 1);
     }
@@ -307,11 +369,11 @@ public class DynamicJSONArrayView extends DynamicJSONObjectView {
                             break;
                         case Array:
                             arrayData.put(new JSONArray());
-                            addConfigValue(new JSONArray());
+                            addConfigValue(arrayData.length() - 1, new JSONArray());
                             break;
                         case Object:
                             arrayData.put(new JSONObject());
-                            addConfigValue(new JSONObject());
+                            addConfigValue(arrayData.length() - 1, new JSONObject());
                             break;
                     }
                 } catch (JSONException e) {
