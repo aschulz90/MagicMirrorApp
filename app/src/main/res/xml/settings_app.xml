@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="General">
+
+        <ListPreference
+            android:key="@string/key_pref_app_adapter"
+            android:title="MagicMirror Adapter"
+            android:summary="Choose, which adapter to use for communications with the mirror."
+            android:dialogTitle="Adapter"
+            android:entries="@array/magicmirror_adapter_array"
+            android:entryValues="@array/magicmirror_adapter_value_array"
+            android:defaultValue="Bluetooth LE" />
+
+        <com.blublabs.magicmirror.settings.app.general.DeviceListPreference
+            android:key="@string/key_pref_default_device"
+            android:title="Paired Mirror"
+            android:summary="Choose, which mirror you want to communicate with."
+            android:dialogTitle="Device" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

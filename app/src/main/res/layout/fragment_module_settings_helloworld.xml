@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable name="module" type="com.blublabs.magicmirror.modules.helloworld.HelloWorldMagicMirrorModule"/>
+        <variable name="module" type="com.blublabs.magicmirror.settings.mirror.modules.helloworld.HelloWorldMagicMirrorModule"/>
     </data>
 
     <LinearLayout

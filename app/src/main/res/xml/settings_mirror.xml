@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="General">
+
+        <EditTextPreference
+            android:key="@string/key_pref_mirror_config_language"
+            android:title="Language"
+            android:summary="Change the preferred language for modules."
+            android:defaultValue="en"/>
+
+        <ListPreference
+            android:key="@string/key_pref_mirror_config_timeFormat"
+            android:title="Time Format"
+            android:summary="Change the global time format for modules to use, if module hasn't defined it itself."
+            android:dialogTitle="Time Format"
+            android:entries="@array/timeformat_array"
+            android:entryValues="@array/timeformat_array"
+            android:defaultValue="24" />
+
+        <ListPreference
+            android:key="@string/key_pref_mirror_config_units"
+            android:title="Units"
+            android:summary="Change the global unit format for modules to use, if the module hasn't defined it itself."
+            android:dialogTitle="Units"
+            android:entries="@array/units_array"
+            android:entryValues="@array/units_array"
+            android:defaultValue="metric" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Advanced">
+
+        <EditTextPreference
+            android:key="@string/key_pref_mirror_config_port"
+            android:title="Port"
+            android:summary="Change the port used by the MagicMirror application."
+            android:defaultValue="8080"
+            android:inputType="number"/>
+
+        <CheckBoxPreference
+            android:key="@string/key_pref_mirror_config_kioskmode"
+            android:title="Kiosk Mode"
+            android:summary="Change, if other applications can pop up before the MagicMirror application."
+            android:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

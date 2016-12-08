@@ -8,11 +8,11 @@
     android:gravity="bottom"
     android:weightSum="1">
 
-    <com.blublabs.magicmirror.devices.PairedDevicesSpinner
+    <com.blublabs.magicmirror.settings.app.devices.PairedDevicesSpinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/nav_header_spinner"
         android:padding="16dp">
-    </com.blublabs.magicmirror.devices.PairedDevicesSpinner>
+    </com.blublabs.magicmirror.settings.app.devices.PairedDevicesSpinner>
 
 </LinearLayout>

@@ -4,29 +4,54 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_main_fragment"
-            android:icon="@drawable/ic_one"
+            android:icon="@drawable/ic_action_mirror"
             android:title="MagicMirror"
             android:checked="true" />
-        <item
-            android:id="@+id/nav_modules_fragment"
-            android:icon="@drawable/ic_two"
-            android:title="Modules" />
-        <item
-            android:id="@+id/nav_settings_fragment"
-            android:icon="@drawable/ic_three"
-            android:title="Settings" />
     </group>
 
-    <item android:title="Sub items">
+    <item android:title="MagicMirror">
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:icon="@drawable/ic_one"
-                    android:title="Sub item 1" />
+                    android:id="@+id/nav_settings_general_fragment"
+                    android:icon="@drawable/ic_action_settings"
+                    android:title="MagicMirror Settings"
+                    android:enabled="false"/>
                 <item
-                    android:icon="@drawable/ic_two"
-                    android:title="Sub item 2" />
+                    android:id="@+id/nav_modules_fragment"
+                    android:icon="@drawable/ic_action_module"
+                    android:title="Modules"
+                    android:enabled="false"/>
+                <item
+                    android:id="@+id/nav_settings_wifi_fragment"
+                    android:icon="@drawable/ic_action_wifi"
+                    android:title="Wifi"
+                    android:enabled="false"/>
             </group>
         </menu>
     </item>
+
+    <item android:title="App">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_settings_App_fragment"
+                    android:icon="@drawable/ic_action_settings"
+                    android:title="App Settings" />
+                <item
+                    android:id="@+id/nav_devices_fragment"
+                    android:icon="@drawable/ic_action_connect"
+                    android:title="Connect to Mirror" />
+            </group>
+        </menu>
+    </item>
+
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/grp1">
+        <item
+            android:id="@+id/nav_about_fragment"
+            android:icon="@drawable/ic_action_info"
+            android:title="About" />
+    </group>
 </menu>

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="module" type="com.blublabs.magicmirror.modules.alert.AlertMagicMirrorModule"/>
+        <variable name="module" type="com.blublabs.magicmirror.settings.mirror.modules.alert.AlertMagicMirrorModule"/>
     </data>
 
     <LinearLayout

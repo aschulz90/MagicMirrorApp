@@ -2,8 +2,11 @@ package com.blublabs.magicmirror.adapter;
 
 import android.content.Context;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 
-import com.blublabs.magicmirror.modules.MagicMirrorModule;
+import com.blublabs.magicmirror.settings.mirror.modules.MagicMirrorModule;
+import com.blublabs.magicmirror.utils.GzipUtil;
+import com.blublabs.magicmirror.settings.mirror.wifi.WifiNetwork;
 import com.idevicesinc.sweetblue.BleDevice;
 import com.idevicesinc.sweetblue.BleDeviceState;
 import com.idevicesinc.sweetblue.BleManager;
@@ -15,8 +18,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static com.idevicesinc.sweetblue.BleManager.DiscoveryListener.LifeCycle.DISCOVERED;
@@ -34,6 +40,12 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
     private static final UUID SERVICE_MAGICMIRROR_APP_INTERFACE = UUID.fromString("0000280F-0000-1000-8000-00805f9b34fb");
     private static final UUID CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE_LIST = UUID.fromString("000038cd-0000-1000-8000-00805f9b34fb");
     private static final UUID CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE = UUID.fromString("000039cd-0000-1000-8000-00805f9b34fb");
+    private static final UUID CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_DEFAULT_MODULE_LIST = UUID.fromString("000040cd-0000-1000-8000-00805f9b34fb");
+    private static final UUID CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MIRROR_CONFIG = UUID.fromString("000041cd-0000-1000-8000-00805f9b34fb");
+
+    private static final UUID SERVICE_MAGICMIRROR_APP_INTERFACE_WIFI = UUID.fromString("0000210F-0000-1000-8000-00805f9b34fb");
+    private static final UUID CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_WIFI_READ = UUID.fromString("000035cd-0000-1000-8000-00805f9b34fb");
+    private static final UUID CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_WIFI_WRITE = UUID.fromString("000036cd-0000-1000-8000-00805f9b34fb");
 
     private final BleManager bleMgrInstance;
 
@@ -58,13 +70,13 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
         }
     };
 
-    BleMagicMirrorAdapter(Context contex) {
+    BleMagicMirrorAdapter(Context context) {
 
         BleManagerConfig config = new BleManagerConfig();
         config.loggingEnabled = true;
         config.manageCpuWakeLock = false;
 
-        bleMgrInstance = BleManager.get(contex, config);
+        bleMgrInstance = BleManager.get(context, config);
     }
 
     @Override
@@ -142,6 +154,8 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
                         }
                     } catch (JSONException e1) {
                         e1.printStackTrace();
+                        callback.onGetModuleList(MagicMirrorAdapterCallback.STATUS_ERROR, null);
+                        return;
                     }
 
                     callback.onGetModuleList(MagicMirrorAdapterCallback.STATUS_SUCCESS, modules);
@@ -149,6 +163,57 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
                 else {
                     callback.onGetModuleList(MagicMirrorAdapterCallback.STATUS_ERROR, null);
                 }
+            }
+        });
+    }
+
+    @Override
+    public void getInstalledModuleList(final MagicMirrorAdapterCallback callback) {
+        connectedDevice.read(SERVICE_MAGICMIRROR_APP_INTERFACE, CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_DEFAULT_MODULE_LIST, new BleDevice.ReadWriteListener() {
+            @Override
+            public void onEvent(ReadWriteEvent e) {
+                if(e.wasSuccess()) {
+
+                    Map<String, List<String>> installedModules = new HashMap<>();
+                    List<String> defaultModules = new ArrayList<>();
+                    List<String> customModules = new ArrayList<>();
+                    installedModules.put(KEY_DEFAULT_MODULES, defaultModules);
+                    installedModules.put(KEY_CUSTOM_MODULES, customModules);
+
+                    try {
+                        JSONObject wrapper = new JSONObject(e.data_string());
+                        JSONArray defaultModulesArray = wrapper.getJSONArray(KEY_DEFAULT_MODULES);
+                        JSONArray customModulesArray = wrapper.getJSONArray(KEY_CUSTOM_MODULES);
+
+                        for(int i = 0; i < defaultModulesArray.length(); i++) {
+                            defaultModules.add(defaultModulesArray.getString(i));
+                        }
+
+                        for(int i = 0; i < customModulesArray.length(); i++) {
+                            customModules.add(customModulesArray.getString(i));
+                        }
+                    } catch (JSONException e1) {
+                        e1.printStackTrace();
+                        callback.onGetModuleList(MagicMirrorAdapterCallback.STATUS_ERROR, null);
+                        return;
+                    }
+
+                    callback.onGetInstalledModuleList(MagicMirrorAdapterCallback.STATUS_SUCCESS, installedModules);
+                }
+                else {
+                    callback.onGetModuleList(MagicMirrorAdapterCallback.STATUS_ERROR, null);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void addModule(JSONObject module, final MagicMirrorAdapterCallback callback) {
+        connectedDevice.write(SERVICE_MAGICMIRROR_APP_INTERFACE, CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_DEFAULT_MODULE_LIST, module.toString().getBytes(), new BleDevice.ReadWriteListener() {
+
+            @Override
+            public void onEvent(ReadWriteEvent e) {
+                callback.onAddModule(e.wasSuccess() ? MagicMirrorAdapterCallback.STATUS_SUCCESS : MagicMirrorAdapterCallback.STATUS_ERROR);
             }
         });
     }
@@ -169,11 +234,7 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
     }
 
     @Override
-    public void connectMirror(final BleDevice.StateListener stateListener, Object identifier) {
-        if(!(identifier instanceof String)) {
-            throw new IllegalArgumentException("The 'identifier' argument needs to be of type 'String' and contain a Mac-Address!");
-        }
-
+    public void connectMirror(final MagicMirrorAdapterCallback callback, String identifier) {
         final BleDevice deviceToConnect = bleMgrInstance.getDevice((String) identifier);
 
         if(BleDevice.NULL.equals(deviceToConnect)) {
@@ -192,13 +253,13 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
                 if(e.didEnter(BleDeviceState.DISCONNECTED)) {
                     if(connectedDevice != null && connectedDevice.equals(deviceToConnect)) {
                         connectedDevice = null;
+                        callback.onDisconnectedFromMirror();
                     }
                 }
                 else if(e.didEnter(BleDeviceState.CONNECTED)) {
                     connectedDevice = deviceToConnect;
+                    callback.onConnectedToMirror();
                 }
-
-                stateListener.onEvent(e);
             }
         });
     }
@@ -211,14 +272,14 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
     }
 
     @Override
-    public void scanForMagicMirrors(final MagicMirrorAdapterCallback callback) {
+    public void scanForMagicMirrors(final MagicMirrorAdapterCallback callback, @NonNull Context context) {
 
         bleMgrInstance.startScan(Interval.secs(SCAN_TIME), scanFilter, new BleManager.DiscoveryListener() {
             @Override
             public void onEvent(DiscoveryEvent discoveryEvent) {
                 if(discoveryEvent.was(DISCOVERED) || discoveryEvent.was(REDISCOVERED)) {
                     for(MagicMirrorAdapterCallback callback : pendingScanCallback) {
-                        callback.onMagicMirrorDiscovered(discoveryEvent.macAddress());
+                        callback.onMagicMirrorDiscovered(discoveryEvent.macAddress(), "");
                     }
                 }
             }
@@ -259,5 +320,112 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
     @Override
     public void onPause() {
         bleMgrInstance.onPause();
+    }
+
+    @Override
+    public void getMirrorConfig(final MagicMirrorAdapterCallback callback) {
+        connectedDevice.read(SERVICE_MAGICMIRROR_APP_INTERFACE, CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MIRROR_CONFIG, new BleDevice.ReadWriteListener() {
+            @Override
+            public void onEvent(ReadWriteEvent e) {
+                if(e.wasSuccess()) {
+                    try {
+                        JSONObject config = new JSONObject(e.data_string());
+                        callback.onGetMirrorConfig(MagicMirrorAdapterCallback.STATUS_SUCCESS, config);
+
+                    } catch (JSONException e1) {
+                        e1.printStackTrace();
+                        callback.onGetMirrorConfig(MagicMirrorAdapterCallback.STATUS_ERROR, null);
+                    }
+                }
+                else {
+                    callback.onGetMirrorConfig(MagicMirrorAdapterCallback.STATUS_ERROR, null);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void setMirrorConfig(String data, final MagicMirrorAdapterCallback callback) {
+        connectedDevice.write(SERVICE_MAGICMIRROR_APP_INTERFACE, CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MIRROR_CONFIG, data.getBytes(), new BleDevice.ReadWriteListener() {
+            @Override
+            public void onEvent(ReadWriteEvent e) {
+                callback.onSetMirrorConfig(e.wasSuccess() ? MagicMirrorAdapterCallback.STATUS_SUCCESS : MagicMirrorAdapterCallback.STATUS_ERROR);
+            }
+        });
+    }
+
+    @Override
+    public boolean isAllowWifiSetup() {
+        return true;
+    }
+
+    @Override
+    public void getWifiNetworks(final MagicMirrorAdapterCallback callback) {
+        connectedDevice.read(SERVICE_MAGICMIRROR_APP_INTERFACE_WIFI, CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_WIFI_READ, new BleDevice.ReadWriteListener() {
+            @Override
+            public void onEvent(ReadWriteEvent e) {
+                if(e.wasSuccess()) {
+
+                    List<WifiNetwork> networks = new ArrayList<>();
+
+                    try {
+                        String value = GzipUtil.decompress(e.data());
+
+                        JSONObject wrapper = new JSONObject(value);
+                        JSONArray availableNetworks = wrapper.getJSONArray(KEY_WIFI_AVAILABLE_NETWORKS);
+
+                        for(int i = 0; i < availableNetworks.length(); i++) {
+                            JSONObject network = availableNetworks.getJSONObject(i);
+                            networks.add(new WifiNetwork(network.getString(KEY_WIFI_NETWORKS_SSID), network.getString(KEY_WIFI_NETWORKS_MAC)));
+                        }
+
+                        if(wrapper.has(KEY_WIFI_STATUS)) {
+                            JSONObject status = wrapper.getJSONObject(KEY_WIFI_STATUS);
+                            WifiNetwork current = new WifiNetwork(status.getString(KEY_WIFI_SSID), status.getString(KEY_WIFI_MAC));
+
+                            if(networks.contains(current)) {
+                                networks.get(networks.indexOf(current)).setConnected(true);
+                            }
+                        }
+
+                    } catch (JSONException | IOException e1) {
+                        e1.printStackTrace();
+                        callback.onGetWifiNetworks(MagicMirrorAdapterCallback.STATUS_ERROR, null);
+                        return;
+                    }
+
+                    callback.onGetWifiNetworks(MagicMirrorAdapterCallback.STATUS_SUCCESS, networks);
+                }
+                else {
+                    callback.onGetWifiNetworks(MagicMirrorAdapterCallback.STATUS_ERROR, null);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void connectToWifiNetwork(@NonNull String ssid, @NonNull String passphrase, final MagicMirrorAdapterCallback callback) {
+
+        JSONObject payload = new JSONObject();
+
+        try {
+            payload.put(KEY_WIFI_SSID, ssid);
+            payload.put(KEY_WIFI_PASSPHRASE, passphrase);
+
+            connectedDevice.write(SERVICE_MAGICMIRROR_APP_INTERFACE_WIFI, CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_WIFI_WRITE, payload.toString().getBytes(), new BleDevice.ReadWriteListener() {
+                @Override
+                public void onEvent(ReadWriteEvent e) {
+                    callback.onConnectToWifiNetwork(e.wasSuccess() ? MagicMirrorAdapterCallback.STATUS_SUCCESS : MagicMirrorAdapterCallback.STATUS_ERROR);
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+            callback.onConnectToWifiNetwork(MagicMirrorAdapterCallback.STATUS_ERROR);
+        }
+    }
+
+    @Override
+    public String getAdapterIdentifier() {
+        return "ble";
     }
 }

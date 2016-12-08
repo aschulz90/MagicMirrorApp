@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable name="module" type="com.blublabs.magicmirror.modules.compliments.ComplimentsMagicMirrorModule"/>
+        <variable name="module" type="com.blublabs.magicmirror.settings.mirror.modules.compliments.ComplimentsMagicMirrorModule"/>
     </data>
 
     <LinearLayout

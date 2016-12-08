@@ -4,9 +4,47 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="disconnected">Disconnected</string>
     <string name="connected">Connected</string>
-    <string name="default_device_list_entry">Connect to mirror</string>
+    <string name="connecting">Connecting…</string>
+    <string name="default_device_list_entry">Connect to new mirror</string>
     <string name="preference_file_key">preference_file</string>
     <string name="enabled">Enabled</string>
     <string name="settings_general">General Settings</string>
     <string name="settings_custom">Custom Settings</string>
+
+    <string name="key_mirror_config_port">port</string>
+    <string name="key_mirror_config_kioskmode">kioskmode</string>
+    <string name="key_mirror_config_language">language</string>
+    <string name="key_mirror_config_timeFormat">timeFormat</string>
+    <string name="key_mirror_config_units">units</string>
+
+    <string name="key_pref_mirror_config_port">mirror_port</string>
+    <string name="key_pref_mirror_config_kioskmode">mirror_kiosk</string>
+    <string name="key_pref_mirror_config_language">mirror_language</string>
+    <string name="key_pref_mirror_config_timeFormat">mirror_timeformat</string>
+    <string name="key_pref_mirror_config_units">mirror_units</string>
+
+    <string name="key_pref_app_adapter">app_adapter</string>
+    <string name="key_pref_paired_devices">pairedDevices</string>
+    <string name="key_pref_default_device">defaultDevices</string>
+
+    <string-array name="magicmirror_adapter_array">
+        <item>Bluetooth LE</item>
+        <item>Wifi</item>
+    </string-array>
+
+    <string-array name="magicmirror_adapter_value_array">
+        <item>ble</item>
+        <item>remote</item>
+    </string-array>
+
+    <string-array name="timeformat_array">
+        <item>12</item>
+        <item>24</item>
+    </string-array>
+
+    <string-array name="units_array">
+        <item>metric</item>
+        <item>imperial</item>
+    </string-array>
+
 </resources>

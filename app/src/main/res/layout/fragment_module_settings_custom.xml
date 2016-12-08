@@ -13,13 +13,13 @@
             android:id="@+id/textView3"
             style="?android:attr/listSeparatorTextViewStyle"/>
 
-        <com.blublabs.magicmirror.modules.custom.DynamicJSONObjectView
+        <com.blublabs.magicmirror.settings.mirror.modules.custom.DynamicJSONObjectView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/dynamicConfigView"
             android:orientation="vertical"
             android:animateLayoutChanges="false">
 
-        </com.blublabs.magicmirror.modules.custom.DynamicJSONObjectView>
+        </com.blublabs.magicmirror.settings.mirror.modules.custom.DynamicJSONObjectView>
     </LinearLayout>
 </layout>

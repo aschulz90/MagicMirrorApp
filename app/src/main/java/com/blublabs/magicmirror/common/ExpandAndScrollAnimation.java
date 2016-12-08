@@ -6,8 +6,6 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.ImageView;
 
-import com.blublabs.magicmirror.modules.ModuleScrollView;
-
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**

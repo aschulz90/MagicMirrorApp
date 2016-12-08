@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,13 +22,13 @@ import android.widget.TextView;
 
 import com.blublabs.magicmirror.adapter.IMagicMirrorAdapter;
 import com.blublabs.magicmirror.adapter.MagicMirrorAdapterFactory;
-import com.blublabs.magicmirror.common.MagicMirrorFragment;
-import com.blublabs.magicmirror.devices.DeviceListFragment;
-import com.blublabs.magicmirror.devices.HeaderDeviceListAdapter;
-import com.blublabs.magicmirror.devices.PairedDevicesSpinner;
-import com.blublabs.magicmirror.modules.ModulesFragment;
-import com.idevicesinc.sweetblue.BleDevice;
-import com.idevicesinc.sweetblue.BleDeviceState;
+import com.blublabs.magicmirror.settings.app.devices.DeviceListFragment;
+import com.blublabs.magicmirror.settings.app.devices.HeaderDeviceListAdapter;
+import com.blublabs.magicmirror.settings.app.devices.PairedDevicesSpinner;
+import com.blublabs.magicmirror.settings.app.general.SettingsFragmentApp;
+import com.blublabs.magicmirror.settings.mirror.general.SettingsFragmentMirror;
+import com.blublabs.magicmirror.settings.mirror.modules.ModulesFragment;
+import com.blublabs.magicmirror.settings.mirror.wifi.WifiSettingsFragment;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -37,8 +38,6 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
     private static final String KEY_LAST_SELECTED_ITEM = "lastSelectedItem";
-    private static final String KEY_PAIRED_DEVICES = "pairedDevices";
-    private static final String KEY_DEFAULT_DEVICE = "defaultDevices";
 
     private DrawerLayout drawer;
     private NavigationView navDrawer;
@@ -52,17 +51,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Set<String> pairedDevicesList = new HashSet<>();
     private String defaultPairedDevice = null;
 
-    private IMagicMirrorAdapter adapter = null;
+    public IMagicMirrorAdapter.MagicMirrorAdapterCallback deviceStateListener = new IMagicMirrorAdapter.MagicMirrorAdapterCallback() {
 
-    private BleDevice.StateListener deviceStateListener = new BleDevice.StateListener() {
         @Override
-        public void onEvent(BleDevice.StateListener.StateEvent stateEvent) {
-            if(stateEvent.didEnter(BleDeviceState.CONNECTED)) {
-                setConnectStatusText(getString(R.string.connected));
-            }
-            else if(stateEvent.didEnter(BleDeviceState.DISCONNECTED)) {
-                setConnectStatusText(getString(R.string.disconnected));
-            }
+        public void onConnectedToMirror() {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    ((TextView) devicesSpinner.findViewById(R.id.connect_status)).setText(getString(R.string.connected));
+                    navDrawer.getMenu().findItem(R.id.nav_modules_fragment).setEnabled(true);
+                    navDrawer.getMenu().findItem(R.id.nav_settings_general_fragment).setEnabled(true);
+                    if(getAdapter().isAllowWifiSetup()) {
+                        navDrawer.getMenu().findItem(R.id.nav_settings_wifi_fragment).setEnabled(true);
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onDisconnectedFromMirror() {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    ((TextView) devicesSpinner.findViewById(R.id.connect_status)).setText(getString(R.string.disconnected));
+                    navDrawer.getMenu().findItem(R.id.nav_modules_fragment).setEnabled(false);
+                    navDrawer.getMenu().findItem(R.id.nav_settings_general_fragment).setEnabled(false);
+                    navDrawer.getMenu().findItem(R.id.nav_settings_wifi_fragment).setEnabled(false);
+                }});
         }
     };
 
@@ -89,9 +102,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setupHeader();
 
-        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
-        pairedDevicesList.addAll(sharedPref.getStringSet(KEY_PAIRED_DEVICES, new HashSet<String>()));
-        defaultPairedDevice = sharedPref.getString(KEY_DEFAULT_DEVICE, null);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        pairedDevicesList.addAll(sharedPref.getStringSet(getAdapter().getAdapterIdentifier() + "_" + getString(R.string.key_pref_paired_devices), new HashSet<String>()));
+        defaultPairedDevice = sharedPref.getString(getAdapter().getAdapterIdentifier() + "_" + getString(R.string.key_pref_default_device), null);
     }
 
     @Override
@@ -113,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onPause() {
         super.onPause();
         getAdapter().onPause();
+        getAdapter().disconnectMirror();
     }
 
     @Override
@@ -194,8 +208,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_modules_fragment:
                 fragmentClass = ModulesFragment.class;
                 break;
-            case R.id.nav_settings_fragment:
+            case R.id.nav_devices_fragment:
                 fragmentClass = DeviceListFragment.class;
+                break;
+            case R.id.nav_settings_wifi_fragment:
+                fragmentClass = WifiSettingsFragment.class;
+                break;
+            case R.id.nav_settings_general_fragment:
+                fragmentClass = SettingsFragmentMirror.class;
+                break;
+            case R.id.nav_settings_App_fragment:
+                fragmentClass = SettingsFragmentApp.class;
                 break;
             default:
                 fragmentClass = MainFragment.class;
@@ -243,36 +266,53 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         if(position == spinnerDevicesList.indexOf(getString(R.string.default_device_list_entry))) {
-            onNavigationItemSelected(navDrawer.getMenu().findItem(R.id.nav_settings_fragment));
-            setDeviceSpinnerVisible(View.GONE);
+            onNavigationItemSelected(navDrawer.getMenu().findItem(R.id.nav_devices_fragment));
+            return;
         }
-        else if(!getAdapter().isConnectedToMirror()) {
 
-            setDefaultDevice((String) devicesSpinner.getSelectedItem());
+        setDefaultDevice((String) devicesSpinner.getSelectedItem());
 
-            getAdapter().scanForMagicMirrors(new IMagicMirrorAdapter.MagicMirrorAdapterCallback() {
-                @Override
-                public void onMagicMirrorDiscovered(Object identifier) {
-                    if(defaultPairedDevice.equals(identifier)) {
-                        adapter.stopScanForMagicMirrors();
-                        adapter.connectMirror(deviceStateListener, defaultPairedDevice);
-                    }
+        if(!getAdapter().isConnectedToMirror()) {
+            connectToMirror();
+        }
+    }
+
+    private void connectToMirror() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                ((TextView) devicesSpinner.findViewById(R.id.connect_status)).setText(getString(R.string.connecting));
+            }
+        });
+
+        getAdapter().scanForMagicMirrors(new IMagicMirrorAdapter.MagicMirrorAdapterCallback() {
+
+            boolean found = false;
+
+            @Override
+            public void onMagicMirrorDiscovered(String identifier, String extra) {
+                if(defaultPairedDevice.equals(identifier)) {
+                    found = true;
+                    getAdapter().stopScanForMagicMirrors();
+                    getAdapter().connectMirror(deviceStateListener, defaultPairedDevice);
                 }
-            });
-        }
+            }
+
+            @Override
+            public void onScanFinished() {
+                if(!found) {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            ((TextView) devicesSpinner.findViewById(R.id.connect_status)).setText(getString(R.string.disconnected));
+                        }
+                    });
+                }
+            }
+        }, getApplicationContext());
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
-    }
-
-    private void setConnectStatusText(final String newText) {
-        runOnUiThread(new Runnable() {
-            public void run() {
-                ((TextView) devicesSpinner.findViewById(R.id.connect_status)).setText(newText);
-            }
-        });
     }
 
     private void setDeviceSpinnerVisible(final int visible) {
@@ -286,36 +326,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void addPairedDevice(String deviceAddress) {
         pairedDevicesList.add(deviceAddress);
 
-        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sharedPref.edit()
-                .putStringSet(KEY_PAIRED_DEVICES, pairedDevicesList)
+                .putStringSet(getAdapter().getAdapterIdentifier() + "_" + getString(R.string.key_pref_paired_devices), pairedDevicesList)
                 .apply();
 
         setDefaultDevice(deviceAddress);
 
+        updateDevices();
+    }
+
+    public void updateDevices(){
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        pairedDevicesList.clear();
+        pairedDevicesList.addAll(sharedPref.getStringSet(getAdapter().getAdapterIdentifier() + "_" + getString(R.string.key_pref_paired_devices), new HashSet<String>()));
+        defaultPairedDevice = sharedPref.getString(getAdapter().getAdapterIdentifier() + "_" + getString(R.string.key_pref_default_device), null);
+
         spinnerDevicesList.clear();
         spinnerDevicesList.addAll(pairedDevicesList);
         spinnerDevicesList.add(getString(R.string.default_device_list_entry));
-        devicesSpinner.setSelection(spinnerDevicesList.indexOf(deviceAddress));
-        setDeviceSpinnerVisible(View.VISIBLE);
+        devicesSpinner.setSelection(spinnerDevicesList.indexOf(defaultPairedDevice));
+        setDeviceSpinnerVisible(pairedDevicesList.isEmpty() ? View.GONE : View.VISIBLE);
         navHeaderSpinnerDataAdapter.notifyDataSetChanged();
     }
 
     public void setDefaultDevice(String deviceAddress) {
 
         defaultPairedDevice = deviceAddress;
+        if(!devicesSpinner.getSelectedItem().equals(defaultPairedDevice)) {
+            devicesSpinner.setSelection(spinnerDevicesList.indexOf(defaultPairedDevice));
+        }
 
-        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sharedPref.edit()
-                .putString(KEY_DEFAULT_DEVICE, deviceAddress)
+                .putString(getAdapter().getAdapterIdentifier() + "_" + getString(R.string.key_pref_default_device), deviceAddress)
                 .apply();
     }
 
     private IMagicMirrorAdapter getAdapter() {
-        if(adapter == null) {
-            adapter = MagicMirrorAdapterFactory.getAdapter(MagicMirrorAdapterFactory.AdapteryType.BLE, getApplicationContext());
-        }
-
-        return adapter;
+        return MagicMirrorAdapterFactory.getAdapter(getApplicationContext());
     }
 }
