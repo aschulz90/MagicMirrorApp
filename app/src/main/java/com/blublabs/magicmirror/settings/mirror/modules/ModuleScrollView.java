@@ -1,5 +1,6 @@
 package com.blublabs.magicmirror.settings.mirror.modules;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
@@ -82,7 +83,7 @@ public class ModuleScrollView extends CoordinatorLayout {
                         @Override
                         public void run() {
                             try {
-                                moduleDataAdapter.setModuleData(index, module.toJson().toString(), new IMagicMirrorAdapter.MagicMirrorAdapterCallback() {
+                                moduleDataAdapter.setModuleData(index, module.toJson(), new IMagicMirrorAdapter.MagicMirrorAdapterCallback() {
                                     @Override
                                     public void onSetModuleData(int status) {
                                         if(status == IMagicMirrorAdapter.MagicMirrorAdapterCallback.STATUS_ERROR) {
@@ -242,14 +243,17 @@ public class ModuleScrollView extends CoordinatorLayout {
             showProgressBar(true);
             moduleDataAdapter.getModuleList(new IMagicMirrorAdapter.MagicMirrorAdapterCallback() {
                 @Override
-                public void onGetModuleList(int status, List<MagicMirrorModule> modules) {
+                public void onGetModuleList(int status, final List<MagicMirrorModule> modules) {
                 if(status == IMagicMirrorAdapter.MagicMirrorAdapterCallback.STATUS_SUCCESS) {
-                    for(final MagicMirrorModule module : modules) {
-
-                        addModule(module);
-                    }
-
-                    showProgressBar(false);
+                    ((Activity) getContext()).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                for(final MagicMirrorModule module : modules) {
+                                    addModule(module);
+                                }
+                                showProgressBar(false);
+                            }
+                    });
                 }
                 }
             });

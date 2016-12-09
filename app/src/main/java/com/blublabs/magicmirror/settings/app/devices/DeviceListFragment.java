@@ -17,6 +17,7 @@ import com.blublabs.magicmirror.adapter.IMagicMirrorAdapter;
 import com.blublabs.magicmirror.adapter.MagicMirrorAdapterFactory;
 import com.blublabs.magicmirror.R;
 import com.blublabs.magicmirror.common.DividerItemDecoration;
+import com.blublabs.magicmirror.common.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,7 +108,12 @@ public class DeviceListFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    deviceList.add(device + EXTRA_SEPARATOR + extra);
+                    if(Utils.isEmpty(extra)) {
+                        deviceList.add(device);
+                    }
+                    else {
+                        deviceList.add(device + EXTRA_SEPARATOR + extra);
+                    }
                     deviceListAdapter.notifyDataSetChanged();
                 }
             });

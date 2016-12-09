@@ -28,6 +28,8 @@ public class CustomSettingsFragment extends ModuleSettingsFragment<CustomMagicMi
         }
     };
 
+    private JSONObject initialData = null;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -36,6 +38,11 @@ public class CustomSettingsFragment extends ModuleSettingsFragment<CustomMagicMi
 
         final DynamicJSONObjectView dynamicJSONObjectView = (DynamicJSONObjectView) view.findViewById(R.id.dynamicConfigView);
         dynamicJSONObjectView.addOnPropertyChangedCallback(propertyChangedCallback);
+
+        if(initialData != null) {
+            dynamicJSONObjectView.setObjectData(initialData);
+            initialData = null;
+        }
 
         return view;
     }
@@ -47,8 +54,14 @@ public class CustomSettingsFragment extends ModuleSettingsFragment<CustomMagicMi
                 data.put(KEY_DATA_CONFIG, new JSONObject());
             }
 
-            final DynamicJSONObjectView dynamicJSONObjectView = (DynamicJSONObjectView) getView().findViewById(R.id.dynamicConfigView);
-            dynamicJSONObjectView.setObjectData(data.getJSONObject(KEY_DATA_CONFIG));
+            View view = getView();
+            if(view != null) {
+                final DynamicJSONObjectView dynamicJSONObjectView = (DynamicJSONObjectView) view.findViewById(R.id.dynamicConfigView);
+                dynamicJSONObjectView.setObjectData(data.getJSONObject(KEY_DATA_CONFIG));
+            }
+            else {
+                initialData = data.getJSONObject(KEY_DATA_CONFIG);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

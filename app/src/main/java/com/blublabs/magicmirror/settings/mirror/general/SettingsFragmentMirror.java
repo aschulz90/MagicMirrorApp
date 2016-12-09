@@ -27,12 +27,6 @@ import org.json.JSONObject;
 
 public class SettingsFragmentMirror extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    String KEY_CONFIG_PORT = "";
-    String KEY_CONFIG_KIOSKMODE = "";
-    String KEY_CONFIG_LANGUAGE = "";
-    String KEY_CONFIG_TIMEFORMAT = "";
-    String KEY_CONFIG_UNTIS = "";
-
     String KEY_PREF_CONFIG_PORT = "";
     String KEY_PREF_CONFIG_KIOSKMODE = "";
     String KEY_PREF_CONFIG_LANGUAGE = "";
@@ -40,6 +34,7 @@ public class SettingsFragmentMirror extends PreferenceFragmentCompat implements 
     String KEY_PREF_CONFIG_UNTIS = "";
 
     View progressBar = null;
+    private boolean settingsLoaded = false;
 
     private IMagicMirrorAdapter adapter = null;
 
@@ -48,22 +43,18 @@ public class SettingsFragmentMirror extends PreferenceFragmentCompat implements 
 
         LinearLayout view = (LinearLayout) super.onCreateView(inflater, container, savedInstanceState);
 
-        progressBar = inflater.inflate(R.layout.module_list_progressbar, container, false);
-        progressBar.setLayoutParams(new RelativeLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.MATCH_PARENT));
-        progressBar.setVisibility(View.VISIBLE);
-        view.addView(progressBar);
+        if(!settingsLoaded) {
+            progressBar = inflater.inflate(R.layout.module_list_progressbar, container, false);
+            progressBar.setLayoutParams(new RelativeLayout.LayoutParams(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.MATCH_PARENT));
+            progressBar.setVisibility(View.VISIBLE);
+            view.addView(progressBar);
+        }
 
         return view;
     }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-
-        KEY_CONFIG_PORT = getString(R.string.key_mirror_config_port);
-        KEY_CONFIG_KIOSKMODE = getString(R.string.key_mirror_config_kioskmode);
-        KEY_CONFIG_LANGUAGE = getString(R.string.key_mirror_config_language);
-        KEY_CONFIG_TIMEFORMAT = getString(R.string.key_mirror_config_timeFormat);
-        KEY_CONFIG_UNTIS = getString(R.string.key_mirror_config_units);
 
         KEY_PREF_CONFIG_PORT = getString(R.string.key_pref_mirror_config_port);
         KEY_PREF_CONFIG_KIOSKMODE = getString(R.string.key_pref_mirror_config_kioskmode);
@@ -81,20 +72,20 @@ public class SettingsFragmentMirror extends PreferenceFragmentCompat implements 
 
                     try {
 
-                        if(config.has(KEY_CONFIG_PORT)) {
-                            port = config.getString(KEY_CONFIG_PORT);
+                        if(config.has(IMagicMirrorAdapter.KEY_CONFIG_PORT)) {
+                            port = config.getString(IMagicMirrorAdapter.KEY_CONFIG_PORT);
                         }
-                        if(config.has(KEY_CONFIG_LANGUAGE)) {
-                            language = config.getString(KEY_CONFIG_LANGUAGE);
+                        if(config.has(IMagicMirrorAdapter.KEY_CONFIG_LANGUAGE)) {
+                            language = config.getString(IMagicMirrorAdapter.KEY_CONFIG_LANGUAGE);
                         }
-                        if(config.has(KEY_CONFIG_TIMEFORMAT)) {
-                            timeformat = config.getString(KEY_CONFIG_TIMEFORMAT);
+                        if(config.has(IMagicMirrorAdapter.KEY_CONFIG_TIMEFORMAT)) {
+                            timeformat = config.getString(IMagicMirrorAdapter.KEY_CONFIG_TIMEFORMAT);
                         }
-                        if(config.has(KEY_CONFIG_UNTIS)) {
-                            units = config.getString(KEY_CONFIG_UNTIS);
+                        if(config.has(IMagicMirrorAdapter.KEY_CONFIG_UNTIS)) {
+                            units = config.getString(IMagicMirrorAdapter.KEY_CONFIG_UNTIS);
                         }
-                        if(config.has(KEY_CONFIG_KIOSKMODE)) {
-                            kioskmode = config.getBoolean(KEY_CONFIG_KIOSKMODE);
+                        if(config.has(IMagicMirrorAdapter.KEY_CONFIG_KIOSKMODE)) {
+                            kioskmode = config.getBoolean(IMagicMirrorAdapter.KEY_CONFIG_KIOSKMODE);
                         }
 
                         getPreferenceManager().getSharedPreferences().edit()
@@ -106,7 +97,10 @@ public class SettingsFragmentMirror extends PreferenceFragmentCompat implements 
                                 .apply();
 
                         addPreferencesFromResource(R.xml.settings_mirror);
-                        progressBar.setVisibility(View.GONE);
+                        settingsLoaded = true;
+                        if(progressBar != null) {
+                            progressBar.setVisibility(View.GONE);
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -139,13 +133,13 @@ public class SettingsFragmentMirror extends PreferenceFragmentCompat implements 
         JSONObject config = new JSONObject();
 
         try {
-            config.put(KEY_CONFIG_PORT, Integer.parseInt(sharedPreferences.getString(KEY_PREF_CONFIG_PORT, "8080")));
-            config.put(KEY_CONFIG_KIOSKMODE, sharedPreferences.getBoolean(KEY_PREF_CONFIG_KIOSKMODE, false));
-            config.put(KEY_CONFIG_TIMEFORMAT, Integer.parseInt(sharedPreferences.getString(KEY_PREF_CONFIG_TIMEFORMAT, "24")));
-            config.put(KEY_CONFIG_UNTIS, sharedPreferences.getString(KEY_PREF_CONFIG_UNTIS, "metric"));
-            config.put(KEY_CONFIG_LANGUAGE, sharedPreferences.getString(KEY_PREF_CONFIG_LANGUAGE, "en"));
+            config.put(IMagicMirrorAdapter.KEY_CONFIG_PORT, Integer.parseInt(sharedPreferences.getString(KEY_PREF_CONFIG_PORT, "8080")));
+            config.put(IMagicMirrorAdapter.KEY_CONFIG_KIOSKMODE, sharedPreferences.getBoolean(KEY_PREF_CONFIG_KIOSKMODE, false));
+            config.put(IMagicMirrorAdapter.KEY_CONFIG_TIMEFORMAT, Integer.parseInt(sharedPreferences.getString(KEY_PREF_CONFIG_TIMEFORMAT, "24")));
+            config.put(IMagicMirrorAdapter.KEY_CONFIG_UNTIS, sharedPreferences.getString(KEY_PREF_CONFIG_UNTIS, "metric"));
+            config.put(IMagicMirrorAdapter.KEY_CONFIG_LANGUAGE, sharedPreferences.getString(KEY_PREF_CONFIG_LANGUAGE, "en"));
 
-            getAdapter().setMirrorConfig(config.toString(), new IMagicMirrorAdapter.MagicMirrorAdapterCallback() {
+            getAdapter().setMirrorConfig(config, new IMagicMirrorAdapter.MagicMirrorAdapterCallback() {
                 @Override
                 public void onSetMirrorConfig(int status) {
                     if(status == IMagicMirrorAdapter.MagicMirrorAdapterCallback.STATUS_ERROR) {

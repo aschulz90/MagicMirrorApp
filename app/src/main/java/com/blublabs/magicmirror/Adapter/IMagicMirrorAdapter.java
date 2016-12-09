@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 
 import com.blublabs.magicmirror.settings.mirror.modules.MagicMirrorModule;
 import com.blublabs.magicmirror.settings.mirror.wifi.WifiNetwork;
-import com.idevicesinc.sweetblue.BleDevice;
 
 import org.json.JSONObject;
 
@@ -20,18 +19,16 @@ public interface IMagicMirrorAdapter {
 
     String KEY_DEFAULT_MODULES = "default";
     String KEY_CUSTOM_MODULES = "custom";
-
-    String KEY_WIFI_STATUS = "status";
-    String KEY_WIFI_AVAILABLE_NETWORKS = "availableNetworks";
-    String KEY_WIFI_NETWORKS_SSID = "ssid";
-    String KEY_WIFI_NETWORKS_MAC = "address";
-    String KEY_WIFI_MAC = "bssid";
-    String KEY_WIFI_SSID = "ssid";
-    String KEY_WIFI_PASSPHRASE = "passphrase";
+    String KEY_CONFIG_MODULES = "modules";
+    String KEY_CONFIG_PORT = "port";
+    String KEY_CONFIG_KIOSKMODE = "kioskmode";
+    String KEY_CONFIG_LANGUAGE = "language";
+    String KEY_CONFIG_TIMEFORMAT = "timeFormat";
+    String KEY_CONFIG_UNTIS = "units";
 
     void getModuleData(int index, MagicMirrorAdapterCallback callback);
 
-    void setModuleData(int index, String data, MagicMirrorAdapterCallback callback);
+    void setModuleData(int index, JSONObject data, MagicMirrorAdapterCallback callback);
 
     void getModuleList(MagicMirrorAdapterCallback callback);
 
@@ -41,7 +38,7 @@ public interface IMagicMirrorAdapter {
 
     void removeModule(int index, MagicMirrorAdapterCallback callback);
 
-    void connectMirror(MagicMirrorAdapterCallback callback, String identifier);
+    void connectMirror(MagicMirrorAdapterCallback callback, String identifier, @NonNull Context context);
 
     void disconnectMirror();
 
@@ -57,7 +54,7 @@ public interface IMagicMirrorAdapter {
 
     void getMirrorConfig(MagicMirrorAdapterCallback callback);
 
-    void setMirrorConfig(String data, MagicMirrorAdapterCallback callback);
+    void setMirrorConfig(JSONObject data, MagicMirrorAdapterCallback callback);
 
     boolean isAllowWifiSetup();
 
@@ -97,6 +94,10 @@ public interface IMagicMirrorAdapter {
         }
 
         public void onConnectedToMirror() {
+
+        }
+
+        public void onConnectionError() {
 
         }
 

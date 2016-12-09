@@ -37,6 +37,14 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
     private static final int SCAN_TIME = 5;
     private static final String TARGET_DEVICE_NAME = "MagicMirror";
 
+    private static final String KEY_WIFI_STATUS = "status";
+    private static final String KEY_WIFI_AVAILABLE_NETWORKS = "availableNetworks";
+    private static final String KEY_WIFI_NETWORKS_SSID = "ssid";
+    private static final String KEY_WIFI_NETWORKS_MAC = "address";
+    private static final String KEY_WIFI_MAC = "bssid";
+    private static final String KEY_WIFI_SSID = "ssid";
+    private static final String KEY_WIFI_PASSPHRASE = "passphrase";
+
     private static final UUID SERVICE_MAGICMIRROR_APP_INTERFACE = UUID.fromString("0000280F-0000-1000-8000-00805f9b34fb");
     private static final UUID CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE_LIST = UUID.fromString("000038cd-0000-1000-8000-00805f9b34fb");
     private static final UUID CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE = UUID.fromString("000039cd-0000-1000-8000-00805f9b34fb");
@@ -118,13 +126,13 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
     }
 
     @Override
-    public void setModuleData(int index, String data, final MagicMirrorAdapterCallback callback) {
+    public void setModuleData(int index, JSONObject data, final MagicMirrorAdapterCallback callback) {
 
         if(index < 0) {
             callback.onSetModuleData(MagicMirrorAdapterCallback.STATUS_ERROR);
         }
 
-        connectedDevice.write(SERVICE_MAGICMIRROR_APP_INTERFACE, CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE_LIST, ("REPLACE||" + index + "||" + data).getBytes(), new BleDevice.ReadWriteListener() {
+        connectedDevice.write(SERVICE_MAGICMIRROR_APP_INTERFACE, CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE_LIST, ("REPLACE||" + index + "||" + data.toString()).getBytes(), new BleDevice.ReadWriteListener() {
             @Override
             public void onEvent(ReadWriteEvent e) {
                 callback.onSetModuleData(e.wasSuccess() ? MagicMirrorAdapterCallback.STATUS_SUCCESS : MagicMirrorAdapterCallback.STATUS_ERROR);
@@ -192,13 +200,12 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
                         for(int i = 0; i < customModulesArray.length(); i++) {
                             customModules.add(customModulesArray.getString(i));
                         }
+
+                        callback.onGetInstalledModuleList(MagicMirrorAdapterCallback.STATUS_SUCCESS, installedModules);
                     } catch (JSONException e1) {
                         e1.printStackTrace();
                         callback.onGetModuleList(MagicMirrorAdapterCallback.STATUS_ERROR, null);
-                        return;
                     }
-
-                    callback.onGetInstalledModuleList(MagicMirrorAdapterCallback.STATUS_SUCCESS, installedModules);
                 }
                 else {
                     callback.onGetModuleList(MagicMirrorAdapterCallback.STATUS_ERROR, null);
@@ -234,11 +241,32 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
     }
 
     @Override
-    public void connectMirror(final MagicMirrorAdapterCallback callback, String identifier) {
-        final BleDevice deviceToConnect = bleMgrInstance.getDevice((String) identifier);
+    public void connectMirror(final MagicMirrorAdapterCallback callback, final String identifier, @NonNull final Context context) {
+        final BleDevice deviceToConnect = bleMgrInstance.getDevice(identifier);
 
         if(BleDevice.NULL.equals(deviceToConnect)) {
-            throw new IllegalArgumentException("The device to connect to was not yet discovered, start a scan first!");
+            // not yet discovered so scan for it first
+            scanForMagicMirrors(new MagicMirrorAdapterCallback() {
+
+                boolean found = false;
+
+                @Override
+                public void onMagicMirrorDiscovered(String id, String extra) {
+                    if(identifier.equals(id)) {
+                        found = true;
+                        stopScanForMagicMirrors();
+                        connectMirror(callback, id, context);
+                    }
+                }
+
+                @Override
+                public void onScanFinished() {
+                    if(!found) {
+                        callback.onConnectionError();
+                    }
+                }
+            }, context);
+            return;
         }
 
         if(connectedDevice != null) {
@@ -345,8 +373,8 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
     }
 
     @Override
-    public void setMirrorConfig(String data, final MagicMirrorAdapterCallback callback) {
-        connectedDevice.write(SERVICE_MAGICMIRROR_APP_INTERFACE, CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MIRROR_CONFIG, data.getBytes(), new BleDevice.ReadWriteListener() {
+    public void setMirrorConfig(JSONObject data, final MagicMirrorAdapterCallback callback) {
+        connectedDevice.write(SERVICE_MAGICMIRROR_APP_INTERFACE, CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MIRROR_CONFIG, data.toString().getBytes(), new BleDevice.ReadWriteListener() {
             @Override
             public void onEvent(ReadWriteEvent e) {
                 callback.onSetMirrorConfig(e.wasSuccess() ? MagicMirrorAdapterCallback.STATUS_SUCCESS : MagicMirrorAdapterCallback.STATUS_ERROR);

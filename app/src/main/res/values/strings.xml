@@ -11,12 +11,6 @@
     <string name="settings_general">General Settings</string>
     <string name="settings_custom">Custom Settings</string>
 
-    <string name="key_mirror_config_port">port</string>
-    <string name="key_mirror_config_kioskmode">kioskmode</string>
-    <string name="key_mirror_config_language">language</string>
-    <string name="key_mirror_config_timeFormat">timeFormat</string>
-    <string name="key_mirror_config_units">units</string>
-
     <string name="key_pref_mirror_config_port">mirror_port</string>
     <string name="key_pref_mirror_config_kioskmode">mirror_kiosk</string>
     <string name="key_pref_mirror_config_language">mirror_language</string>

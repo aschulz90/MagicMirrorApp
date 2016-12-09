@@ -1,37 +1,43 @@
 package com.blublabs.magicmirror.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v7.preference.PreferenceManager;
 import android.text.format.Formatter;
-import android.widget.Toast;
+import android.util.Log;
 
-import com.blublabs.magicmirror.common.Utils;
-import com.idevicesinc.sweetblue.BleDevice;
-import com.idevicesinc.sweetblue.BleManager;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.blublabs.magicmirror.R;
+import com.blublabs.magicmirror.settings.mirror.modules.MagicMirrorModule;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import kotlin.NotImplementedError;
+import static com.android.volley.Request.Method.GET;
 
 /**
  * Created by andrs on 08.12.2016.
@@ -39,50 +45,216 @@ import kotlin.NotImplementedError;
 
 public class RemoteMagicMirrorAdapter implements IMagicMirrorAdapter {
 
+    private static final String KEY_IS_DEFAULT = "isDefaultModule";
+    private static final String KEY_NAME_LONG = "longname";
+
     private Map<MagicMirrorAdapterCallback, List<ScanIpTask>> callbacks = new HashMap<>();
     private Set<InetAddress> cachedAddresses = new HashSet<>();
 
     private String currentConnectedMirror = null;
     private MagicMirrorAdapterCallback currentConnectionCallback = null;
 
+    private final RequestQueue requestQueue;
+
+    private JSONObject config = null;
+
     RemoteMagicMirrorAdapter(Context context) {
+        requestQueue = Volley.newRequestQueue(context);
     }
 
     @Override
     public void getModuleData(int index, MagicMirrorAdapterCallback callback) {
 
+        try {
+            if(config.has(KEY_CONFIG_MODULES)) {
+
+                JSONArray moduleList = new JSONArray(config.getJSONArray(KEY_CONFIG_MODULES).toString());
+
+                JSONObject moduleJson = moduleList.getJSONObject(index);
+                callback.onGetModuleData(MagicMirrorAdapterCallback.STATUS_SUCCESS, moduleJson);
+            }
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+            callback.onGetModuleData(MagicMirrorAdapterCallback.STATUS_ERROR, null);
+        }
     }
 
     @Override
-    public void setModuleData(int index, String data, MagicMirrorAdapterCallback callback) {
+    public void setModuleData(final int index, final JSONObject data, final MagicMirrorAdapterCallback callback) {
+        try {
+            if(config.has(KEY_CONFIG_MODULES)) {
+                final JSONObject newConfig = new JSONObject(config.toString());
+                JSONArray moduleList = newConfig.getJSONArray(KEY_CONFIG_MODULES);
+                moduleList.put(index, data);
 
+                requestQueue.add(new JsonObjectRequest(getRequestUrl(currentConnectedMirror) + "post?data=config", newConfig, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        config = newConfig;
+                        callback.onSetModuleData(MagicMirrorAdapterCallback.STATUS_SUCCESS);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onSetModuleData(MagicMirrorAdapterCallback.STATUS_ERROR);
+                    }
+                }));
+            }
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+            callback.onSetModuleData(MagicMirrorAdapterCallback.STATUS_ERROR);
+        }
     }
 
     @Override
-    public void getModuleList(MagicMirrorAdapterCallback callback) {
+    public void getModuleList(final MagicMirrorAdapterCallback callback) {
 
+        // AsyncTask, because parsing a lot of JSON is quite demanding...
+        new AsyncTask<Void,Void,Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                List<MagicMirrorModule> modules = new ArrayList<>();
+
+                try {
+                    if(config.has(KEY_CONFIG_MODULES)) {
+
+                        JSONArray moduleList = config.getJSONArray(KEY_CONFIG_MODULES);
+
+                        for (int i = 0; i < moduleList.length(); i++) {
+                            JSONObject moduleJson = moduleList.getJSONObject(i);
+                            final MagicMirrorModule module = MagicMirrorModule.getModuleForName(moduleJson.getString(MagicMirrorModule.KEY_DATA_NAME));
+
+                            if (module != null) {
+                                modules.add(module);
+                                module.setData(moduleJson);
+                                module.setInitialized(true);
+                            }
+                        }
+                    }
+
+                    callback.onGetModuleList(MagicMirrorAdapterCallback.STATUS_SUCCESS, modules);
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                    callback.onGetModuleList(MagicMirrorAdapterCallback.STATUS_ERROR, null);
+                }
+
+                return null;
+            }
+        }.execute();
     }
 
     @Override
-    public void getInstalledModuleList(MagicMirrorAdapterCallback callback) {
+    public void getInstalledModuleList(final MagicMirrorAdapterCallback callback) {
+        requestQueue.add(new JsonArrayRequest(getRequestUrl(currentConnectedMirror) + "get?data=modulesInstalled", new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    Map<String, List<String>> installedModules = new HashMap<>();
+                    List<String> defaultModules = new ArrayList<>();
+                    List<String> customModules = new ArrayList<>();
+                    installedModules.put(KEY_DEFAULT_MODULES, defaultModules);
+                    installedModules.put(KEY_CUSTOM_MODULES, customModules);
 
+                    for(int i = 0; i < response.length(); i++) {
+                        JSONObject module = response.getJSONObject(i);
+                        boolean isDefault = module.getBoolean(KEY_IS_DEFAULT);
+                        String name = module.getString(KEY_NAME_LONG);
+                        if(isDefault) {
+                            defaultModules.add(name);
+                        }
+                        else {
+                            customModules.add(name);
+                        }
+                    }
+
+                    callback.onGetInstalledModuleList(MagicMirrorAdapterCallback.STATUS_SUCCESS, installedModules);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    callback.onGetInstalledModuleList(MagicMirrorAdapterCallback.STATUS_ERROR, null);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onGetInstalledModuleList(MagicMirrorAdapterCallback.STATUS_ERROR, null);
+            }
+        }));
     }
 
     @Override
-    public void addModule(JSONObject module, MagicMirrorAdapterCallback callback) {
+    public void addModule(JSONObject module, final MagicMirrorAdapterCallback callback) {
+        try {
+            if(config.has(KEY_CONFIG_MODULES)) {
+                final JSONArray moduleList = config.getJSONArray(KEY_CONFIG_MODULES);
 
+                moduleList.put(module);
+
+                requestQueue.add(new JsonObjectRequest(getRequestUrl(currentConnectedMirror) + "post?data=config", config, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onAddModule(MagicMirrorAdapterCallback.STATUS_SUCCESS);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        moduleList.remove(moduleList.length() - 1);
+                        callback.onAddModule(MagicMirrorAdapterCallback.STATUS_ERROR);
+                    }
+                }));
+            }
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+            callback.onAddModule(MagicMirrorAdapterCallback.STATUS_ERROR);
+        }
     }
 
     @Override
-    public void removeModule(int index, MagicMirrorAdapterCallback callback) {
+    public void removeModule(final int index, final MagicMirrorAdapterCallback callback) {
+        try {
+            if(config.has(KEY_CONFIG_MODULES)) {
+                final JSONObject newConfig = new JSONObject(config.toString());
+                JSONArray moduleList = newConfig.getJSONArray(KEY_CONFIG_MODULES);
+                moduleList.remove(index);
 
+                requestQueue.add(new JsonObjectRequest(getRequestUrl(currentConnectedMirror) + "post?data=config", newConfig, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        config = newConfig;
+                        callback.onRemoveModule(MagicMirrorAdapterCallback.STATUS_SUCCESS);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onRemoveModule(MagicMirrorAdapterCallback.STATUS_ERROR);
+                    }
+                }));
+            }
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+            callback.onRemoveModule(MagicMirrorAdapterCallback.STATUS_ERROR);
+        }
     }
 
     @Override
-    public void connectMirror(MagicMirrorAdapterCallback callback, String identifier) {
-        currentConnectedMirror = identifier;
-        currentConnectionCallback = callback;
-        currentConnectionCallback.onConnectedToMirror();
+    public void connectMirror(final MagicMirrorAdapterCallback callback, final String identifier, @NonNull Context context) {
+
+        requestQueue.add(new JsonObjectRequest(getRequestUrl(identifier) + "get?data=config", null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                currentConnectedMirror = identifier;
+                currentConnectionCallback = callback;
+                currentConnectionCallback.onConnectedToMirror();
+                config = response;
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(RemoteMagicMirrorAdapter.class.getSimpleName(), "Error getting config!");
+                currentConnectionCallback.onConnectionError();
+            }
+        }));
     }
 
     @Override
@@ -92,7 +264,9 @@ public class RemoteMagicMirrorAdapter implements IMagicMirrorAdapter {
         MagicMirrorAdapterCallback temp = currentConnectionCallback;
         currentConnectionCallback = null;
 
-        temp.onDisconnectedFromMirror();
+        if(temp != null) {
+            temp.onDisconnectedFromMirror();
+        }
     }
 
     @Override
@@ -117,6 +291,11 @@ public class RemoteMagicMirrorAdapter implements IMagicMirrorAdapter {
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         }
+    }
+
+    private void publish(InetAddress address, String extra, MagicMirrorAdapterCallback callback) {
+        String hostname = address.getHostName();
+        callback.onMagicMirrorDiscovered(address.getHostAddress(), hostname.substring(0, hostname.indexOf(".")) + extra);
     }
 
     @Override
@@ -146,17 +325,83 @@ public class RemoteMagicMirrorAdapter implements IMagicMirrorAdapter {
 
     @Override
     public void onPause() {
-
+        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
+            @Override
+            public boolean apply(Request<?> request) {
+                return true;
+            }
+        });
     }
 
     @Override
     public void getMirrorConfig(MagicMirrorAdapterCallback callback) {
-
+        try {
+            JSONObject configData = new JSONObject(config.toString());
+            configData.remove(KEY_CONFIG_MODULES);
+            callback.onGetMirrorConfig(MagicMirrorAdapterCallback.STATUS_SUCCESS, configData);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            callback.onGetMirrorConfig(MagicMirrorAdapterCallback.STATUS_ERROR, null);
+        }
     }
 
     @Override
-    public void setMirrorConfig(String data, MagicMirrorAdapterCallback callback) {
+    public void setMirrorConfig(JSONObject data, final MagicMirrorAdapterCallback callback) {
 
+        try {
+            final JSONObject newConfig = new JSONObject(config.toString());
+
+            if(data.has(KEY_CONFIG_PORT)) {
+                newConfig.put(KEY_CONFIG_PORT, data.getInt(KEY_CONFIG_PORT));
+            }
+            else {
+                newConfig.remove(KEY_CONFIG_PORT);
+            }
+
+            if(data.has(KEY_CONFIG_LANGUAGE)) {
+                newConfig.put(KEY_CONFIG_LANGUAGE, data.getString(KEY_CONFIG_LANGUAGE));
+            }
+            else {
+                newConfig.remove(KEY_CONFIG_LANGUAGE);
+            }
+
+            if(data.has(KEY_CONFIG_KIOSKMODE)) {
+                newConfig.put(KEY_CONFIG_KIOSKMODE, data.getBoolean(KEY_CONFIG_KIOSKMODE));
+            }
+            else {
+                newConfig.remove(KEY_CONFIG_KIOSKMODE);
+            }
+
+            if(data.has(KEY_CONFIG_TIMEFORMAT)) {
+                newConfig.put(KEY_CONFIG_TIMEFORMAT, data.getInt(KEY_CONFIG_TIMEFORMAT));
+            }
+            else {
+                newConfig.remove(KEY_CONFIG_TIMEFORMAT);
+            }
+
+            if(data.has(KEY_CONFIG_UNTIS)) {
+                newConfig.put(KEY_CONFIG_UNTIS, data.getString(KEY_CONFIG_UNTIS));
+            }
+            else {
+                newConfig.remove(KEY_CONFIG_UNTIS);
+            }
+
+            requestQueue.add(new JsonObjectRequest(getRequestUrl(currentConnectedMirror) + "post?data=config", newConfig, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    config = newConfig;
+                    callback.onSetMirrorConfig(MagicMirrorAdapterCallback.STATUS_SUCCESS);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    callback.onSetMirrorConfig(MagicMirrorAdapterCallback.STATUS_ERROR);
+                }
+            }));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            callback.onSetMirrorConfig(MagicMirrorAdapterCallback.STATUS_ERROR);
+        }
     }
 
     @Override
@@ -185,6 +430,10 @@ public class RemoteMagicMirrorAdapter implements IMagicMirrorAdapter {
 
     private synchronized Set<InetAddress> getCachedAddresses() {
         return cachedAddresses;
+    }
+
+    private String getRequestUrl(String ip) {
+        return "http://" + ip + ":8080/";
     }
 
     private class ScanIpTask extends AsyncTask<Void, String, Void> {
@@ -226,15 +475,15 @@ public class RemoteMagicMirrorAdapter implements IMagicMirrorAdapter {
 
                     try {
                         if(getCachedAddresses().contains(inetAddress)) {
-                            publish(inetAddress, "");
+                            publish(inetAddress, "", callback);
                         }
                         else if (isReachable(client, TIMEOUT, context)){
-                            publish(inetAddress, "");
+                            publish(inetAddress, "", callback);
                             getCachedAddresses().add(inetAddress);
                         }
                     }catch (IllegalStateException e) {
 
-                        publish(inetAddress, " !Connection refused!");
+                        publish(inetAddress, " !Connection refused!", callback);
                     }
 
                 } catch (IOException e) {
@@ -243,11 +492,6 @@ public class RemoteMagicMirrorAdapter implements IMagicMirrorAdapter {
             }
 
             return null;
-        }
-
-        private void publish(InetAddress address, String extra) {
-            String hostname = address.getHostName();
-            callback.onMagicMirrorDiscovered(address.getHostAddress(), hostname.substring(0, hostname.indexOf(".")) + extra);
         }
 
         @Override

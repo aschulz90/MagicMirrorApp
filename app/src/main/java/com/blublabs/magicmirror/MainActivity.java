@@ -60,15 +60,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     ((TextView) devicesSpinner.findViewById(R.id.connect_status)).setText(getString(R.string.connected));
                     navDrawer.getMenu().findItem(R.id.nav_modules_fragment).setEnabled(true);
                     navDrawer.getMenu().findItem(R.id.nav_settings_general_fragment).setEnabled(true);
-                    if(getAdapter().isAllowWifiSetup()) {
-                        navDrawer.getMenu().findItem(R.id.nav_settings_wifi_fragment).setEnabled(true);
-                    }
+                    navDrawer.getMenu().findItem(R.id.nav_settings_wifi_fragment).setEnabled(getAdapter().isAllowWifiSetup());
                 }
             });
         }
 
         @Override
         public void onDisconnectedFromMirror() {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    ((TextView) devicesSpinner.findViewById(R.id.connect_status)).setText(getString(R.string.disconnected));
+                    navDrawer.getMenu().findItem(R.id.nav_modules_fragment).setEnabled(false);
+                    navDrawer.getMenu().findItem(R.id.nav_settings_general_fragment).setEnabled(false);
+                    navDrawer.getMenu().findItem(R.id.nav_settings_wifi_fragment).setEnabled(false);
+                }});
+        }
+
+        @Override
+        public void onConnectionError() {
             runOnUiThread(new Runnable() {
                 public void run() {
                     ((TextView) devicesSpinner.findViewById(R.id.connect_status)).setText(getString(R.string.disconnected));
@@ -284,30 +293,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        getAdapter().scanForMagicMirrors(new IMagicMirrorAdapter.MagicMirrorAdapterCallback() {
-
-            boolean found = false;
-
-            @Override
-            public void onMagicMirrorDiscovered(String identifier, String extra) {
-                if(defaultPairedDevice.equals(identifier)) {
-                    found = true;
-                    getAdapter().stopScanForMagicMirrors();
-                    getAdapter().connectMirror(deviceStateListener, defaultPairedDevice);
-                }
-            }
-
-            @Override
-            public void onScanFinished() {
-                if(!found) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            ((TextView) devicesSpinner.findViewById(R.id.connect_status)).setText(getString(R.string.disconnected));
-                        }
-                    });
-                }
-            }
-        }, getApplicationContext());
+        getAdapter().connectMirror(deviceStateListener, defaultPairedDevice, getApplicationContext());
     }
 
     @Override
@@ -355,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void setDefaultDevice(String deviceAddress) {
 
         defaultPairedDevice = deviceAddress;
-        if(!devicesSpinner.getSelectedItem().equals(defaultPairedDevice)) {
+        if(devicesSpinner.getSelectedItem() == null || !devicesSpinner.getSelectedItem().equals(defaultPairedDevice)) {
             devicesSpinner.setSelection(spinnerDevicesList.indexOf(defaultPairedDevice));
         }
 

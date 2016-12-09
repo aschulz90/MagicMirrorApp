@@ -40,7 +40,7 @@ public class NewsMagicMirrorModule extends MagicMirrorModule {
                 }
             }
 
-            return null;
+            return none;
         }
     }
 

@@ -478,7 +478,7 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
         JSONObject config = new JSONObject();
 
         if(timeFormat != TimeFormat.Config) {
-            config.put(KEY_DATA_TIME_FORMAT, timeFormat);
+            config.put(KEY_DATA_TIME_FORMAT, Integer.parseInt(timeFormat.getText()));
         }
 
         if(!displaySeconds) {
