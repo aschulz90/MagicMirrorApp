@@ -13,13 +13,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blublabs.magicmirror.BR;
 import com.blublabs.magicmirror.R;
-import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.utils.Utils;
 import com.blublabs.magicmirror.databinding.DialogCalendarBinding;
 
 class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapter.MyViewHolder> {
@@ -29,7 +28,7 @@ class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapter.MyVie
     private final CalendarMagicMirrorModule module;
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView text;
+        final TextView text;
 
         MyViewHolder(View view) {
             super(view);

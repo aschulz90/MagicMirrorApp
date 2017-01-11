@@ -14,7 +14,7 @@ public class ModuleSettingsFragment<T extends MagicMirrorModule> extends Fragmen
 
     private T module;
 
-    public T getModule() {
+    protected T getModule() {
         return module;
     }
 

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 
 import com.android.databinding.library.baseAdapters.BR;
-import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.utils.Utils;
 import com.blublabs.magicmirror.settings.mirror.modules.MagicMirrorModule;
 import com.blublabs.magicmirror.settings.mirror.modules.ModuleSettingsFragment;
 
@@ -13,7 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by andrs on 03.10.2016.
+ * Created by Andreas Schulz on 03.10.2016.
  */
 
 public class AlertMagicMirrorModule extends MagicMirrorModule {

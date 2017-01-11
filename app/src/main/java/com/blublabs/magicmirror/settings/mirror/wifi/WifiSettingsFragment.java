@@ -25,9 +25,8 @@ import java.util.List;
 
 public class WifiSettingsFragment extends Fragment {
 
-    private List<WifiNetwork> wifiList = new ArrayList<>();
+    private final List<WifiNetwork> wifiList = new ArrayList<>();
     private WifiListAdapter wifiListAdapter;
-    private RecyclerView recyclerView;
 
     private IMagicMirrorAdapter adapter = null;
 
@@ -37,7 +36,7 @@ public class WifiSettingsFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_settings_wifi, container, false);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.wifi_recycler_view);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.wifi_recycler_view);
 
         wifiListAdapter = new WifiListAdapter(wifiList, getActivity(), this, recyclerView);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());

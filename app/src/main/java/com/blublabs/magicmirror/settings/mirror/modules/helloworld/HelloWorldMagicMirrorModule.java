@@ -6,7 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.blublabs.magicmirror.BR;
-import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.utils.Utils;
 import com.blublabs.magicmirror.settings.mirror.modules.MagicMirrorModule;
 import com.blublabs.magicmirror.settings.mirror.modules.ModuleSettingsFragment;
 

@@ -17,7 +17,7 @@ import java.util.List;
  * Created by andrs on 24.09.2016.
  */
 
-public class HeaderDeviceListAdapter extends ArrayAdapter {
+public class HeaderDeviceListAdapter extends ArrayAdapter<String> {
 
     public HeaderDeviceListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<String> objects) {
         super(context, resource, objects);
@@ -30,7 +30,7 @@ public class HeaderDeviceListAdapter extends ArrayAdapter {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_device_spinner, parent, false);
 
         TextView label=(TextView) view.findViewById(R.id.device_spinner_text);
-        label.setText((String) getItem(position));
+        label.setText(getItem(position));
 
         return view;
     }
@@ -41,7 +41,7 @@ public class HeaderDeviceListAdapter extends ArrayAdapter {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_device_spinner_dropdown, parent, false);
 
         TextView label=(TextView) view.findViewById(R.id.device_spinner_dropdown_text);
-        label.setText((String) getItem(position));
+        label.setText(getItem(position));
 
         return view;
     }

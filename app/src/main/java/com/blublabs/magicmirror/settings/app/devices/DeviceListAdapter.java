@@ -9,24 +9,21 @@ import android.widget.TextView;
 
 import com.blublabs.magicmirror.MainActivity;
 import com.blublabs.magicmirror.R;
-import com.blublabs.magicmirror.adapter.IMagicMirrorAdapter;
-import com.blublabs.magicmirror.adapter.MagicMirrorAdapterFactory;
 
 import java.util.List;
 
 /**
  * Created by andrs on 18.09.2016.
  */
-public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.MyViewHolder> {
+class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.MyViewHolder> {
 
-    private List<String> deviceList;
+    private final List<String> deviceList;
     private final Context mAppContext;
-    private final DeviceListFragment fragment;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView deviceAddress;
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        final TextView deviceAddress;
 
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
             deviceAddress = (TextView) view.findViewById(R.id.macAdress);
 
@@ -37,14 +34,13 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.My
         public void onClick(View view) {
             MainActivity activity = (MainActivity) mAppContext;
             String device = deviceAddress.getText().toString();
-            activity.addPairedDevice(device.substring(0, device.indexOf(DeviceListFragment.EXTRA_SEPARATOR)));
+            activity.addPairedDevice(device.contains(DeviceListFragment.EXTRA_SEPARATOR) ? device.substring(0, device.indexOf(DeviceListFragment.EXTRA_SEPARATOR)) : device);
         }
     }
 
-    public DeviceListAdapter(List<String> deviceList, Context applicationContext, DeviceListFragment fragment) {
+    DeviceListAdapter(List<String> deviceList, Context applicationContext) {
         this.deviceList = deviceList;
         this.mAppContext = applicationContext;
-        this.fragment = fragment;
     }
 
     @Override
@@ -63,10 +59,6 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.My
     @Override
     public int getItemCount() {
         return deviceList.size();
-    }
-
-    private IMagicMirrorAdapter getAdapter() {
-        return MagicMirrorAdapterFactory.getAdapter(fragment.getActivity().getApplicationContext());
     }
 
 }

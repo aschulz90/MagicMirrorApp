@@ -1,8 +1,15 @@
 package com.blublabs.magicmirror;
 
+import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +26,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blublabs.magicmirror.adapter.IMagicMirrorAdapter;
 import com.blublabs.magicmirror.adapter.MagicMirrorAdapterFactory;
@@ -35,9 +43,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static android.support.v4.content.PermissionChecker.PERMISSION_GRANTED;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
     private static final String KEY_LAST_SELECTED_ITEM = "lastSelectedItem";
+
+    private static final int PERMISSION_FINE_LOCATION = 1;
+    private static final int REQUEST_ENABLE_BT = 2;
 
     private DrawerLayout drawer;
     private NavigationView navDrawer;
@@ -45,13 +58,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int selectedMenuItem = -1;
 
     private ArrayAdapter<String> navHeaderSpinnerDataAdapter;
-    private List<String> spinnerDevicesList = new ArrayList<>();
+    private final List<String> spinnerDevicesList = new ArrayList<>();
     private PairedDevicesSpinner devicesSpinner;
 
-    private Set<String> pairedDevicesList = new HashSet<>();
+    private final Set<String> pairedDevicesList = new HashSet<>();
     private String defaultPairedDevice = null;
 
-    public IMagicMirrorAdapter.MagicMirrorAdapterCallback deviceStateListener = new IMagicMirrorAdapter.MagicMirrorAdapterCallback() {
+    private final IMagicMirrorAdapter.MagicMirrorAdapterCallback deviceStateListener = new IMagicMirrorAdapter.MagicMirrorAdapterCallback() {
 
         @Override
         public void onConnectedToMirror() {
@@ -129,6 +142,81 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navHeaderSpinnerDataAdapter.add(getString(R.string.default_device_list_entry));
             devicesSpinner.setSelection(defaultPairedDevice == null ? 0 : spinnerDevicesList.indexOf(defaultPairedDevice));
         }
+
+        enableMenu();
+    }
+
+    public void enableMenu() {
+        if(getAdapter().getAdapterIdentifier().equals("ble")) {
+            if(!checkBluetoothEnabled()) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        navDrawer.getMenu().findItem(R.id.nav_devices_fragment).setEnabled(false);
+                    }
+                });
+                return;
+            }
+        }
+
+        runOnUiThread(new Runnable() {
+            public void run() {
+                navDrawer.getMenu().findItem(R.id.nav_devices_fragment).setEnabled(true);
+            }
+        });
+    }
+
+    private boolean checkBluetoothEnabled() {
+
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(this, "BLE is not supported by this device!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        final BluetoothAdapter mBluetoothAdapter;
+        final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = bluetoothManager.getAdapter();
+        if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            return false;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_FINE_LOCATION);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_ENABLE_BT:
+                if(resultCode == RESULT_OK){
+                    enableMenu();
+                }
+                else {
+                    Toast.makeText(this, "Bluetooth needs to be enabled for the BLE-adapter to work!", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_FINE_LOCATION:
+                if(grantResults[0] == PERMISSION_GRANTED) {
+                    enableMenu();
+                }
+                else {
+                    Toast.makeText(this, "The location permission needs to be granted for the BLE-adapter to work!", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
     }
 
     @Override
@@ -144,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getAdapter().onResume();
     }
 
-    protected final void setupToolbar() {
+    private void setupToolbar() {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         if(myToolbar != null) {
             setSupportActionBar(myToolbar);

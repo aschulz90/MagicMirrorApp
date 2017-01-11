@@ -10,9 +10,7 @@ import android.util.DisplayMetrics;
 public class MyCustomLayoutManager extends LinearLayoutManager {
 
     private static final float MILLISECONDS_PER_INCH = 100f;
-    private Context mContext;
-
-    private int extraLayoutSpace = 0;
+    private final Context mContext;
 
     public MyCustomLayoutManager(Context context) {
         super(context);
@@ -46,18 +44,5 @@ public class MyCustomLayoutManager extends LinearLayoutManager {
 
         smoothScroller.setTargetPosition(position);
         startSmoothScroll(smoothScroller);
-    }
-
-    public void setExtraLayoutSpace(int extraLayoutSpace) {
-        this.extraLayoutSpace = extraLayoutSpace;
-    }
-
-    @Override
-    protected int getExtraLayoutSpace(RecyclerView.State state) {
-        if(extraLayoutSpace > 0) {
-            return extraLayoutSpace;
-        }
-
-        return super.getExtraLayoutSpace(state);
     }
 }

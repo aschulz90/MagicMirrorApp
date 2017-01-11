@@ -81,7 +81,7 @@ public class DynamicJSONArrayView extends DynamicJSONObjectView {
         }
     }
 
-    protected void addConfigValue(int index, @NonNull Object value) {
+    private void addConfigValue(int index, @NonNull Object value) {
 
         final DataType type = DataType.from(value.getClass());
 
@@ -131,7 +131,7 @@ public class DynamicJSONArrayView extends DynamicJSONObjectView {
                 .show();
     }
 
-    protected void addConfigValue(final int index, @NonNull Boolean value) {
+    private void addConfigValue(final int index, @NonNull Boolean value) {
         View rowBoolean = LayoutInflater.from(getContext()).inflate(R.layout.row_json_boolean, this, false);
 
         TextView title = (TextView) rowBoolean.findViewById(R.id.textViewBoolean);
@@ -184,7 +184,7 @@ public class DynamicJSONArrayView extends DynamicJSONObjectView {
         return editText;
     }
 
-    protected void addConfigValue(final int index, @NonNull String value) {
+    private void addConfigValue(final int index, @NonNull String value) {
         EditText editText = createTextRow(index, value);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -209,7 +209,7 @@ public class DynamicJSONArrayView extends DynamicJSONObjectView {
         });
     }
 
-    protected void addConfigValue(final int index, @NonNull Integer value) {
+    private void addConfigValue(final int index, @NonNull Integer value) {
         EditText editText = createTextRow(index, value);
         editText.setInputType(TYPE_CLASS_NUMBER);
         editText.addTextChangedListener(new TextWatcher() {
@@ -235,7 +235,7 @@ public class DynamicJSONArrayView extends DynamicJSONObjectView {
         });
     }
 
-    protected void addConfigValue(final int index, @NonNull Double value) {
+    private void addConfigValue(final int index, @NonNull Double value) {
         EditText editText = createTextRow(index, value);
         editText.setInputType(TYPE_NUMBER_FLAG_DECIMAL);
         editText.addTextChangedListener(new TextWatcher() {
@@ -261,7 +261,7 @@ public class DynamicJSONArrayView extends DynamicJSONObjectView {
         });
     }
 
-    protected void addConfigValue(final int index, @NonNull JSONArray value) {
+    private void addConfigValue(final int index, @NonNull JSONArray value) {
         View rowObject = LayoutInflater.from(getContext()).inflate(R.layout.row_json_array, this, false);
 
         TextView title = (TextView) rowObject.findViewById(R.id.textViewText);
@@ -282,7 +282,7 @@ public class DynamicJSONArrayView extends DynamicJSONObjectView {
         addView(rowObject, getChildCount() - 1);
     }
 
-    protected void addConfigValue(final int index, @NonNull JSONObject value) {
+    private void addConfigValue(final int index, @NonNull JSONObject value) {
         View rowObject = LayoutInflater.from(getContext()).inflate(R.layout.row_json_object, this, false);
 
         TextView title = (TextView) rowObject.findViewById(R.id.textViewText);

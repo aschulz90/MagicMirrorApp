@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 
 import com.blublabs.magicmirror.BR;
-import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.utils.Utils;
 import com.blublabs.magicmirror.settings.mirror.modules.MagicMirrorModule;
 import com.blublabs.magicmirror.settings.mirror.modules.ModuleSettingsFragment;
 
@@ -55,17 +55,23 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
     private static final String KEY_ANIMATION_SPEED = "animationSpeed";
     private static final String KEY_FADE = "fade";
     private static final String KEY_FADE_POINT = "fadePoint";
-    private static final String KEY_DESPLAY_REPEATING_COUNT_TITLE = "displayRepeatingCountTitle";
+    private static final String KEY_DISPLAY_REPEATING_COUNT_TITLE = "displayRepeatingCountTitle";
+    private static final String KEY_DATE_FORMAT = "dateFormat";
     private static final String KEY_TIME_FORMAT = "timeFormat";
+    private static final String KEY_GET_RELATIVE = "getRelative";
     private static final String KEY_URGENCY = "urgency";
     private static final String KEY_TITLE_REPLACE_MAP = "titleReplace";
     private static final String KEY_CALENDARS = "calendars";
+    private static final String KEY_BROADCAST_EVENTS = "broadcastEvents";
+    private static final String KEY_HIDE_PRIVATE = "hidePrivate";
 
     private Map<String, String> titleReplaceMap = new HashMap<>();
-    private ObservableArrayList<Calendar> calendars = new ObservableArrayList<>();
+    private final ObservableArrayList<Calendar> calendars = new ObservableArrayList<>();
     private Integer maximumEntries = null;
     private Integer maximumNumberOfDays = null;
     private boolean displaySymbol = true;
+    private boolean broadcastEvents = true;
+    private boolean hidePrivate = false;
     private String defaultSymbol = "";
     private Integer maxTitleLength = null;
     private Integer fetchInterval = null;
@@ -74,7 +80,9 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
     private Double fadePoint = null;
     private boolean displayRepeatingCountTitle = false;
     private TimeFormat timeFormat = TimeFormat.relative;
+    private String dateFormat = "";
     private Integer urgency = null;
+    private Integer getRelative = null;
 
     private CalendarSettingsFragment fragment;
 
@@ -124,8 +132,8 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
                 fadePoint = config.getDouble(KEY_FADE_POINT);
             }
 
-            if (config.has(KEY_DESPLAY_REPEATING_COUNT_TITLE)) {
-                displayRepeatingCountTitle = config.getBoolean(KEY_DESPLAY_REPEATING_COUNT_TITLE);
+            if (config.has(KEY_DISPLAY_REPEATING_COUNT_TITLE)) {
+                displayRepeatingCountTitle = config.getBoolean(KEY_DISPLAY_REPEATING_COUNT_TITLE);
             }
 
             if (config.has(KEY_TIME_FORMAT)) {
@@ -134,6 +142,22 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
 
             if (config.has(KEY_URGENCY)) {
                 urgency = config.getInt(KEY_URGENCY);
+            }
+
+            if (config.has(KEY_GET_RELATIVE)) {
+                getRelative = config.getInt(KEY_GET_RELATIVE);
+            }
+
+            if (config.has(KEY_BROADCAST_EVENTS)) {
+                broadcastEvents = config.getBoolean(KEY_BROADCAST_EVENTS);
+            }
+
+            if (config.has(KEY_HIDE_PRIVATE)) {
+                hidePrivate = config.getBoolean(KEY_HIDE_PRIVATE);
+            }
+
+            if (config.has(KEY_DATE_FORMAT)) {
+                dateFormat = config.getString(KEY_DATE_FORMAT);
             }
 
             if (config.has(KEY_TITLE_REPLACE_MAP)) {
@@ -166,16 +190,6 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
     @Bindable
     public List<Calendar> getCalendars() {
         return calendars;
-    }
-
-    public void setTitleReplaceMap(Map<String, String> titleReplaceMap) {
-        this.titleReplaceMap = titleReplaceMap;
-        notifyPropertyChanged(BR.titleReplaceMap);
-    }
-
-    public void setCalendars(ObservableArrayList<Calendar> calendars) {
-        this.calendars = calendars;
-        notifyPropertyChanged(BR.calendars);
     }
 
     @Bindable
@@ -358,6 +372,62 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
         notifyPropertyChanged(BR.urgency);
     }
 
+    @Bindable
+    public boolean isBroadcastEvents() {
+        return broadcastEvents;
+    }
+
+    public void setBroadcastEvents(boolean broadcastEvents) {
+        if(broadcastEvents == this.broadcastEvents) {
+            return;
+        }
+
+        this.broadcastEvents = broadcastEvents;
+        notifyPropertyChanged(BR.broadcastEvents);
+    }
+
+    @Bindable
+    public boolean isHidePrivate() {
+        return hidePrivate;
+    }
+
+    public void setHidePrivate(boolean hidePrivate) {
+        if(hidePrivate == this.hidePrivate) {
+            return;
+        }
+
+        this.hidePrivate = hidePrivate;
+        notifyPropertyChanged(BR.hidePrivate);
+    }
+
+    @Bindable
+    public String getDateFormat() {
+        return dateFormat;
+    }
+
+    public void setDateFormat(String dateFormat) {
+        if(Utils.objectsEqual(this.dateFormat, dateFormat)) {
+            return;
+        }
+
+        this.dateFormat = dateFormat;
+        notifyPropertyChanged(BR.dateFormat);
+    }
+
+    @Bindable
+    public Integer getGetRelative() {
+        return getRelative;
+    }
+
+    public void setGetRelative(Integer getRelative) {
+        if(Utils.objectsEqual(this.getRelative, getRelative)) {
+            return;
+        }
+
+        this.getRelative = getRelative;
+        notifyPropertyChanged(BR.getRelative);
+    }
+
     @Override
     public ModuleSettingsFragment getAdditionalSettingsFragment() {
 
@@ -435,7 +505,7 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
         }
 
         if(displayRepeatingCountTitle) {
-            config.put(KEY_DESPLAY_REPEATING_COUNT_TITLE, true);
+            config.put(KEY_DISPLAY_REPEATING_COUNT_TITLE, true);
         }
 
         if(timeFormat != TimeFormat.relative) {
@@ -444,6 +514,22 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
 
         if(urgency != null) {
             config.put(KEY_URGENCY, urgency);
+        }
+
+        if(Utils.isNotEmtpy(dateFormat)) {
+            config.put(KEY_DATE_FORMAT, dateFormat);
+        }
+
+        if(getRelative != null) {
+            config.put(KEY_GET_RELATIVE, getRelative);
+        }
+
+        if(!broadcastEvents) {
+            config.put(KEY_BROADCAST_EVENTS, false);
+        }
+
+        if(hidePrivate) {
+            config.put(KEY_HIDE_PRIVATE, true);
         }
 
         if(config.length() > 0) {
@@ -462,6 +548,8 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
         CalendarMagicMirrorModule that = (CalendarMagicMirrorModule) o;
 
         if (isDisplaySymbol() != that.isDisplaySymbol()) return false;
+        if (isBroadcastEvents() != that.isBroadcastEvents()) return false;
+        if (isHidePrivate() != that.isHidePrivate()) return false;
         if (isFade() != that.isFade()) return false;
         if (isDisplayRepeatingCountTitle() != that.isDisplayRepeatingCountTitle()) return false;
         if (getTitleReplaceMap() != null ? !getTitleReplaceMap().equals(that.getTitleReplaceMap()) : that.getTitleReplaceMap() != null)
@@ -483,7 +571,13 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
         if (getFadePoint() != null ? !getFadePoint().equals(that.getFadePoint()) : that.getFadePoint() != null)
             return false;
         if (getTimeFormat() != that.getTimeFormat()) return false;
-        return getUrgency() != null ? getUrgency().equals(that.getUrgency()) : that.getUrgency() == null;
+        if (getDateFormat() != null ? !getDateFormat().equals(that.getDateFormat()) : that.getDateFormat() != null)
+            return false;
+        if (getUrgency() != null ? !getUrgency().equals(that.getUrgency()) : that.getUrgency() != null)
+            return false;
+        if (getGetRelative() != null ? !getGetRelative().equals(that.getGetRelative()) : that.getGetRelative() != null)
+            return false;
+        return fragment != null ? fragment.equals(that.fragment) : that.fragment == null;
 
     }
 
@@ -495,6 +589,8 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
         result = 31 * result + (getMaximumEntries() != null ? getMaximumEntries().hashCode() : 0);
         result = 31 * result + (getMaximumNumberOfDays() != null ? getMaximumNumberOfDays().hashCode() : 0);
         result = 31 * result + (isDisplaySymbol() ? 1 : 0);
+        result = 31 * result + (isBroadcastEvents() ? 1 : 0);
+        result = 31 * result + (isHidePrivate() ? 1 : 0);
         result = 31 * result + (getDefaultSymbol() != null ? getDefaultSymbol().hashCode() : 0);
         result = 31 * result + (getMaxTitleLength() != null ? getMaxTitleLength().hashCode() : 0);
         result = 31 * result + (getFetchInterval() != null ? getFetchInterval().hashCode() : 0);
@@ -503,8 +599,17 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
         result = 31 * result + (getFadePoint() != null ? getFadePoint().hashCode() : 0);
         result = 31 * result + (isDisplayRepeatingCountTitle() ? 1 : 0);
         result = 31 * result + (getTimeFormat() != null ? getTimeFormat().hashCode() : 0);
+        result = 31 * result + (getDateFormat() != null ? getDateFormat().hashCode() : 0);
         result = 31 * result + (getUrgency() != null ? getUrgency().hashCode() : 0);
+        result = 31 * result + (getGetRelative() != null ? getGetRelative().hashCode() : 0);
+        result = 31 * result + (fragment != null ? fragment.hashCode() : 0);
         return result;
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @Override
@@ -519,6 +624,8 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
         dest.writeValue(this.maximumEntries);
         dest.writeValue(this.maximumNumberOfDays);
         dest.writeByte(this.displaySymbol ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.broadcastEvents ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.hidePrivate ? (byte) 1 : (byte) 0);
         dest.writeString(this.defaultSymbol);
         dest.writeValue(this.maxTitleLength);
         dest.writeValue(this.fetchInterval);
@@ -527,13 +634,15 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
         dest.writeValue(this.fadePoint);
         dest.writeByte(this.displayRepeatingCountTitle ? (byte) 1 : (byte) 0);
         dest.writeInt(this.timeFormat == null ? -1 : this.timeFormat.ordinal());
+        dest.writeString(this.dateFormat);
         dest.writeValue(this.urgency);
+        dest.writeValue(this.getRelative);
     }
 
-    protected CalendarMagicMirrorModule(Parcel in) {
+    private CalendarMagicMirrorModule(Parcel in) {
         super(in);
         int titleReplaceMapSize = in.readInt();
-        this.titleReplaceMap = new HashMap<String, String>(titleReplaceMapSize);
+        this.titleReplaceMap = new HashMap<>(titleReplaceMapSize);
         for (int i = 0; i < titleReplaceMapSize; i++) {
             String key = in.readString();
             String value = in.readString();
@@ -544,6 +653,8 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
         this.maximumEntries = (Integer) in.readValue(Integer.class.getClassLoader());
         this.maximumNumberOfDays = (Integer) in.readValue(Integer.class.getClassLoader());
         this.displaySymbol = in.readByte() != 0;
+        this.broadcastEvents = in.readByte() != 0;
+        this.hidePrivate = in.readByte() != 0;
         this.defaultSymbol = in.readString();
         this.maxTitleLength = (Integer) in.readValue(Integer.class.getClassLoader());
         this.fetchInterval = (Integer) in.readValue(Integer.class.getClassLoader());
@@ -553,7 +664,9 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
         this.displayRepeatingCountTitle = in.readByte() != 0;
         int tmpTimeFormat = in.readInt();
         this.timeFormat = tmpTimeFormat == -1 ? null : TimeFormat.values()[tmpTimeFormat];
+        this.dateFormat = in.readString();
         this.urgency = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.getRelative = (Integer) in.readValue(Integer.class.getClassLoader());
     }
 
     public static final Creator<CalendarMagicMirrorModule> CREATOR = new Creator<CalendarMagicMirrorModule>() {

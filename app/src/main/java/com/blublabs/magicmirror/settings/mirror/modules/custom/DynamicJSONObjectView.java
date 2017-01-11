@@ -24,7 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blublabs.magicmirror.R;
-import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.utils.Utils;
 import com.blublabs.magicmirror.databinding.DialogJsonBinding;
 
 import org.json.JSONArray;
@@ -79,7 +79,7 @@ public class DynamicJSONObjectView extends LinearLayout implements Observable {
 
     private transient PropertyChangeRegistry mCallbacks;
 
-    protected final Observable.OnPropertyChangedCallback propertyChangedCallback = new Observable.OnPropertyChangedCallback() {
+    final Observable.OnPropertyChangedCallback propertyChangedCallback = new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable observable, int i) {
             DynamicJSONObjectView.this.notifyChange();
@@ -133,7 +133,7 @@ public class DynamicJSONObjectView extends LinearLayout implements Observable {
         }
     }
 
-    protected void addConfigValue(@NonNull String name, @NonNull Object value) {
+    private void addConfigValue(@NonNull String name, @NonNull Object value) {
 
         final DataType type = DataType.from(value.getClass());
 
@@ -183,7 +183,7 @@ public class DynamicJSONObjectView extends LinearLayout implements Observable {
                 .show();
     }
 
-    protected void addConfigValue(@NonNull final String name, @NonNull Boolean value) {
+    private void addConfigValue(@NonNull final String name, @NonNull Boolean value) {
         View rowBoolean = LayoutInflater.from(getContext()).inflate(R.layout.row_json_boolean, this, false);
         rowBoolean.setTag(name);
 
@@ -238,7 +238,7 @@ public class DynamicJSONObjectView extends LinearLayout implements Observable {
         return editText;
     }
 
-    protected void addConfigValue(@NonNull final String name, @NonNull String value) {
+    private void addConfigValue(@NonNull final String name, @NonNull String value) {
         EditText editText = createTextRow(name, value);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -263,7 +263,7 @@ public class DynamicJSONObjectView extends LinearLayout implements Observable {
         });
     }
 
-    protected void addConfigValue(@NonNull final String name, @NonNull Integer value) {
+    private void addConfigValue(@NonNull final String name, @NonNull Integer value) {
         EditText editText = createTextRow(name, value);
         editText.setInputType(TYPE_CLASS_NUMBER);
         editText.addTextChangedListener(new TextWatcher() {
@@ -292,7 +292,7 @@ public class DynamicJSONObjectView extends LinearLayout implements Observable {
         });
     }
 
-    protected void addConfigValue(@NonNull final String name, @NonNull Double value) {
+    private void addConfigValue(@NonNull final String name, @NonNull Double value) {
         EditText editText = createTextRow(name, value);
         editText.setInputType(TYPE_NUMBER_FLAG_DECIMAL);
         editText.addTextChangedListener(new TextWatcher() {
@@ -321,7 +321,7 @@ public class DynamicJSONObjectView extends LinearLayout implements Observable {
         });
     }
 
-    protected void addConfigValue(@NonNull final String name, @NonNull JSONArray value) {
+    private void addConfigValue(@NonNull final String name, @NonNull JSONArray value) {
         View rowArray = LayoutInflater.from(getContext()).inflate(R.layout.row_json_array, this, false);
         rowArray.setTag(name);
 
@@ -343,7 +343,7 @@ public class DynamicJSONObjectView extends LinearLayout implements Observable {
         addView(rowArray, getChildCount() - 1);
     }
 
-    protected void addConfigValue(@NonNull final String name, @NonNull JSONObject value) {
+    private void addConfigValue(@NonNull final String name, @NonNull JSONObject value) {
         View rowObject = LayoutInflater.from(getContext()).inflate(R.layout.row_json_object, this, false);
         rowObject.setTag(name);
 
@@ -383,7 +383,7 @@ public class DynamicJSONObjectView extends LinearLayout implements Observable {
     /**
      * Notifies listeners that all properties of this instance have changed.
      */
-    public synchronized void notifyChange() {
+    synchronized void notifyChange() {
         if (mCallbacks != null) {
             mCallbacks.notifyCallbacks(this, 0, null);
         }

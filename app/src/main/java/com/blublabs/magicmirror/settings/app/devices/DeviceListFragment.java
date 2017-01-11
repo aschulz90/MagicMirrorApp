@@ -17,7 +17,7 @@ import com.blublabs.magicmirror.adapter.IMagicMirrorAdapter;
 import com.blublabs.magicmirror.adapter.MagicMirrorAdapterFactory;
 import com.blublabs.magicmirror.R;
 import com.blublabs.magicmirror.common.DividerItemDecoration;
-import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +29,8 @@ public class DeviceListFragment extends Fragment {
 
     static final String EXTRA_SEPARATOR = " - ";
 
-    private List<String> deviceList = new ArrayList<>();
+    private final List<String> deviceList = new ArrayList<>();
     private DeviceListAdapter deviceListAdapter;
-    private RecyclerView recyclerView;
     private Menu toolbarMenu;
 
     private boolean isScanning = false;
@@ -42,9 +41,9 @@ public class DeviceListFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_device_list, container, false);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.device_recycler_view);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.device_recycler_view);
 
-        deviceListAdapter = new DeviceListAdapter(deviceList, getActivity(), this);
+        deviceListAdapter = new DeviceListAdapter(deviceList, getActivity());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -104,7 +103,7 @@ public class DeviceListFragment extends Fragment {
     }
 
     private void updateDevices(final String device, final String extra) {
-        if(!deviceList.contains(device + EXTRA_SEPARATOR + extra)) {
+        if(!deviceList.contains(device + EXTRA_SEPARATOR + extra) && !deviceList.contains(device)) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

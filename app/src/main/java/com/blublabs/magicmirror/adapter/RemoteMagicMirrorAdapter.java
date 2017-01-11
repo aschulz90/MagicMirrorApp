@@ -1,13 +1,11 @@
 package com.blublabs.magicmirror.adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.support.v7.preference.PreferenceManager;
 import android.text.format.Formatter;
 import android.util.Log;
 
@@ -18,7 +16,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.blublabs.magicmirror.R;
 import com.blublabs.magicmirror.settings.mirror.modules.MagicMirrorModule;
 
 import org.json.JSONArray;
@@ -29,15 +26,12 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static com.android.volley.Request.Method.GET;
 
 /**
  * Created by andrs on 08.12.2016.
@@ -48,8 +42,8 @@ public class RemoteMagicMirrorAdapter implements IMagicMirrorAdapter {
     private static final String KEY_IS_DEFAULT = "isDefaultModule";
     private static final String KEY_NAME_LONG = "longname";
 
-    private Map<MagicMirrorAdapterCallback, List<ScanIpTask>> callbacks = new HashMap<>();
-    private Set<InetAddress> cachedAddresses = new HashSet<>();
+    private final Map<MagicMirrorAdapterCallback, List<ScanIpTask>> callbacks = new HashMap<>();
+    private final Set<InetAddress> cachedAddresses = new HashSet<>();
 
     private String currentConnectedMirror = null;
     private MagicMirrorAdapterCallback currentConnectionCallback = null;
@@ -129,7 +123,7 @@ public class RemoteMagicMirrorAdapter implements IMagicMirrorAdapter {
                             if (module != null) {
                                 modules.add(module);
                                 module.setData(moduleJson);
-                                module.setInitialized(true);
+                                module.setInitialized();
                             }
                         }
                     }
@@ -251,8 +245,8 @@ public class RemoteMagicMirrorAdapter implements IMagicMirrorAdapter {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d(RemoteMagicMirrorAdapter.class.getSimpleName(), "Error getting config!");
-                currentConnectionCallback.onConnectionError();
+                Log.d(RemoteMagicMirrorAdapter.class.getSimpleName(), "Error connecting to mirror!" + error);
+                callback.onConnectionError();
             }
         }));
     }
@@ -477,7 +471,7 @@ public class RemoteMagicMirrorAdapter implements IMagicMirrorAdapter {
                         if(getCachedAddresses().contains(inetAddress)) {
                             publish(inetAddress, "", callback);
                         }
-                        else if (isReachable(client, TIMEOUT, context)){
+                        else if (isReachable(client, context)){
                             publish(inetAddress, "", callback);
                             getCachedAddresses().add(inetAddress);
                         }
@@ -505,7 +499,7 @@ public class RemoteMagicMirrorAdapter implements IMagicMirrorAdapter {
 
         }
 
-        private boolean isReachable(String ip, int timeout, @NonNull Context context) throws IOException {
+        private boolean isReachable(String ip, @NonNull Context context) throws IOException {
             // First, check we have any sort of connectivity
             final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             final NetworkInfo netInfo = connMgr.getActiveNetworkInfo();
@@ -517,7 +511,7 @@ public class RemoteMagicMirrorAdapter implements IMagicMirrorAdapter {
                 HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
                 urlc.setRequestProperty("User-Agent", "Android Application");
                 urlc.setRequestProperty("Connection", "close");
-                urlc.setConnectTimeout(timeout);
+                urlc.setConnectTimeout(TIMEOUT);
                 urlc.connect();
 
                 if(urlc.getResponseCode() == 403){

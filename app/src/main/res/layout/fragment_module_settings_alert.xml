@@ -18,13 +18,15 @@
             android:id="@+id/textView3"
             style="?android:attr/listSeparatorTextViewStyle"/>
 
-        <TextView
-            android:text="Notification Effect"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewNotificationEffect"
+            android:labelFor="@+id/effectNotificationSpinner"
             android:paddingTop="5dp"
-            android:labelFor="@+id/effectNotificationSpinner" />
+            InfoIcon:description="@string/module_alert_effect_description"
+            InfoIcon:defaultVal="@string/module_alert_effect_default"
+            InfoIcon:title="@string/module_alert_effect_title"/>
 
         <android.support.v7.widget.AppCompatSpinner
             android:layout_width="wrap_content"
@@ -34,29 +36,32 @@
 
         </android.support.v7.widget.AppCompatSpinner>
 
-        <TextView
-            android:text="Alert Effect"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewAlertEffect"
+            android:labelFor="@+id/effectAlertSpinner"
             android:paddingTop="5dp"
-            android:labelFor="@+id/effectAlertSpinner" />
+            InfoIcon:description="@string/module_alert_alert_effect_description"
+            InfoIcon:defaultVal="@string/module_alert_alert_effect_default"
+            InfoIcon:title="@string/module_alert_alert_effect_title"/>
 
         <android.support.v7.widget.AppCompatSpinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/effectAlertSpinner"
             app:selectedItem="@={module.alertEffect}">
-
         </android.support.v7.widget.AppCompatSpinner>
 
-        <TextView
-            android:text="Display Time"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewDisplayTime"
+            android:labelFor="@+id/editTextDisplayTime"
             android:paddingTop="5dp"
-            android:labelFor="@+id/editTextDisplayTime" />
+            InfoIcon:description="@string/module_alert_display_time_description"
+            InfoIcon:defaultVal="@string/module_alert_display_time_default"
+            InfoIcon:title="@string/module_alert_display_time_title"/>
 
         <EditText
             android:text="@={module.displayTime}"
@@ -65,31 +70,33 @@
             android:inputType="numberDecimal"
             android:ems="10"
             android:id="@+id/editTextDisplayTime"
-            android:hint="Default: 3.5"/>
+            android:hint="@string/module_alert_display_time_default"/>
 
-        <TextView
-            android:text="Position"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewPosition"
+            android:labelFor="@+id/spinnerPosition"
             android:paddingTop="5dp"
-            android:labelFor="@+id/spinnerPosition" />
+            InfoIcon:description="@string/module_alert_position_description"
+            InfoIcon:defaultVal="@string/module_alert_position_default"
+            InfoIcon:title="@string/module_alert_position_title"/>
 
         <android.support.v7.widget.AppCompatSpinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/spinnerPosition"
             app:selectedItem="@={module.position}">
-
         </android.support.v7.widget.AppCompatSpinner>
 
-        <TextView
-            android:text="Welcome Message"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewWelcome"
+            android:labelFor="@+id/editTextWelcome"
             android:paddingTop="5dp"
-            android:labelFor="@+id/editTextWelcome" />
+            InfoIcon:description="@string/module_alert_welcome_message_description"
+            InfoIcon:title="@string/module_alert_welcome_message_title"/>
 
         <EditText
             android:text="@={module.welcomeMessage}"
@@ -97,7 +104,8 @@
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
-            android:id="@+id/editTextWelcome" />
+            android:id="@+id/editTextWelcome"
+            android:hint="@string/module_alert_welcome_message_default"/>
 
     </LinearLayout>
 </layout>

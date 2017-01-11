@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.blublabs.magicmirror.R;
-import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.utils.Utils;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class TagsListAdapter extends RecyclerView.Adapter<TagsListAdapter.MyView
     private final NewsMagicMirrorModule module;
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView text;
+        final TextView text;
 
         MyViewHolder(View view) {
             super(view);

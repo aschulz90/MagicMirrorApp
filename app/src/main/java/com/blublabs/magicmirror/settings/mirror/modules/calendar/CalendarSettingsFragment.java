@@ -22,15 +22,11 @@ import com.blublabs.magicmirror.settings.mirror.modules.ModuleSettingsFragment;
 
 public class CalendarSettingsFragment extends ModuleSettingsFragment<CalendarMagicMirrorModule> {
 
-    private CalendarListAdapter calendarsAdapter;
-    private CalendarTitleReplaceListAdapter titleReplaceAdapter;
-    private FragmentModuleSettingsCalendarBinding binding;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_module_settings_calendar, container, false);
+        FragmentModuleSettingsCalendarBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_module_settings_calendar, container, false);
         final View view = binding.getRoot();
         binding.setModule(getModule());
 
@@ -42,7 +38,7 @@ public class CalendarSettingsFragment extends ModuleSettingsFragment<CalendarMag
 
         // calendars list
         final RecyclerView calendarListView = (RecyclerView) view.findViewById(R.id.calendars_recycler_view);
-        calendarsAdapter = new CalendarListAdapter(getModule(), getActivity(), calendarListView);
+        CalendarListAdapter calendarsAdapter = new CalendarListAdapter(getModule(), getActivity(), calendarListView);
         calendarListView.setLayoutManager(new MyCustomLayoutManager(getActivity().getApplicationContext()));
         calendarListView.setItemAnimator(new DefaultItemAnimator());
         calendarListView.setAdapter(calendarsAdapter);
@@ -50,7 +46,7 @@ public class CalendarSettingsFragment extends ModuleSettingsFragment<CalendarMag
 
         // title replace list
         final RecyclerView titleReplaceList = (RecyclerView) view.findViewById(R.id.title_replace_recycler_view);
-        titleReplaceAdapter = new CalendarTitleReplaceListAdapter(getModule(), getActivity(), titleReplaceList);
+        CalendarTitleReplaceListAdapter titleReplaceAdapter = new CalendarTitleReplaceListAdapter(getModule(), getActivity(), titleReplaceList);
         titleReplaceList.setLayoutManager(new MyCustomLayoutManager(getActivity().getApplicationContext()));
         titleReplaceList.setItemAnimator(new DefaultItemAnimator());
         titleReplaceList.setAdapter(titleReplaceAdapter);

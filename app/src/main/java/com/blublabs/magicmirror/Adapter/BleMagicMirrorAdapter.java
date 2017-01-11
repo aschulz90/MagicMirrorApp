@@ -1,5 +1,6 @@
 package com.blublabs.magicmirror.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -59,9 +60,9 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
 
     private BleDevice connectedDevice = null;
 
-    private List<MagicMirrorAdapterCallback> pendingScanCallback = new ArrayList<>();
+    private final List<MagicMirrorAdapterCallback> pendingScanCallback = new ArrayList<>();
     private final Handler scanDelayHandler = new Handler();
-    private Runnable scanDelayThread = new Runnable() {
+    private final Runnable scanDelayThread = new Runnable() {
         @Override
         public void run() {
             for(MagicMirrorAdapterCallback callback : pendingScanCallback) {

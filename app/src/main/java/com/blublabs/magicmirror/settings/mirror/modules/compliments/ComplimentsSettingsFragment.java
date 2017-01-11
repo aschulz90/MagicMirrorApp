@@ -20,22 +20,17 @@ import com.blublabs.magicmirror.settings.mirror.modules.ModuleSettingsFragment;
 
 public class ComplimentsSettingsFragment extends ModuleSettingsFragment<ComplimentsMagicMirrorModule> {
 
-    private FragmentModuleSettingsComplimentsBinding binding;
-    private ComplimentsListAdapter morningAdapter;
-    private ComplimentsListAdapter afternoonAdapter;
-    private ComplimentsListAdapter eveningAdapter;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_module_settings_compliments, container, false);
+        FragmentModuleSettingsComplimentsBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_module_settings_compliments, container, false);
         final View view = binding.getRoot();
         binding.setModule(getModule());
 
         // morning list
         final RecyclerView morningRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewMorning);
-        morningAdapter = new ComplimentsListAdapter(getActivity(), morningRecyclerView, getModule(), getModule().getComplimentsMorning(), "Morning");
+        ComplimentsListAdapter morningAdapter = new ComplimentsListAdapter(getActivity(), morningRecyclerView, getModule(), getModule().getComplimentsMorning(), "Morning");
         morningRecyclerView.setLayoutManager(new MyCustomLayoutManager(getActivity().getApplicationContext()));
         morningRecyclerView.setItemAnimator(new DefaultItemAnimator());
         morningRecyclerView.setAdapter(morningAdapter);
@@ -43,7 +38,7 @@ public class ComplimentsSettingsFragment extends ModuleSettingsFragment<Complime
 
         // afternoon list
         final RecyclerView afternoonRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewAfternoon);
-        afternoonAdapter = new ComplimentsListAdapter(getActivity(), afternoonRecyclerView, getModule(), getModule().getComplimentsAfternoon(), "Afternoon");
+        ComplimentsListAdapter afternoonAdapter = new ComplimentsListAdapter(getActivity(), afternoonRecyclerView, getModule(), getModule().getComplimentsAfternoon(), "Afternoon");
         afternoonRecyclerView.setLayoutManager(new MyCustomLayoutManager(getActivity().getApplicationContext()));
         afternoonRecyclerView.setItemAnimator(new DefaultItemAnimator());
         afternoonRecyclerView.setAdapter(afternoonAdapter);
@@ -51,7 +46,7 @@ public class ComplimentsSettingsFragment extends ModuleSettingsFragment<Complime
 
         // evening list
         final RecyclerView eveningRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewEvening);
-        eveningAdapter = new ComplimentsListAdapter(getActivity(), eveningRecyclerView, getModule(), getModule().getComplimentsEvening(), "Evening");
+        ComplimentsListAdapter eveningAdapter = new ComplimentsListAdapter(getActivity(), eveningRecyclerView, getModule(), getModule().getComplimentsEvening(), "Evening");
         eveningRecyclerView.setLayoutManager(new MyCustomLayoutManager(getActivity().getApplicationContext()));
         eveningRecyclerView.setItemAnimator(new DefaultItemAnimator());
         eveningRecyclerView.setAdapter(eveningAdapter);

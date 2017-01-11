@@ -26,7 +26,6 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -54,15 +53,14 @@ public class ModuleScrollView extends CoordinatorLayout {
     private Fragment parentFragment = null;
     private LinearLayout linearLayout = null;
     private NestedScrollView nestedScrollView = null;
-    private FloatingActionButton fab = null;
     private View progressBar = null;
 
     private Map<String, List<String>> installedModules = null;
 
-    private Handler delayHandler = new Handler();
+    private final Handler delayHandler = new Handler();
     private static final int UPDATE_DELAY = 1000;
 
-    private Observable.OnPropertyChangedCallback moduleChangedCallback =  new Observable.OnPropertyChangedCallback() {
+    private final Observable.OnPropertyChangedCallback moduleChangedCallback =  new Observable.OnPropertyChangedCallback() {
         @Override
         public void onPropertyChanged(Observable observable, int i) {
 
@@ -129,7 +127,7 @@ public class ModuleScrollView extends CoordinatorLayout {
         nestedScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
         super.addView(nestedScrollView);
 
-        fab = new FloatingActionButton(getContext());
+        FloatingActionButton fab = new FloatingActionButton(getContext());
         CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.BOTTOM | Gravity.END;
         lp.setMargins(16,16,16,16);
@@ -165,7 +163,7 @@ public class ModuleScrollView extends CoordinatorLayout {
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         nestedScrollView.addView(linearLayout);
 
-        progressBar = LayoutInflater.from(getContext()).inflate(R.layout.module_list_progressbar, null);
+        progressBar = LayoutInflater.from(getContext()).inflate(R.layout.module_list_progressbar, this, false);
         progressBar.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT, 1));
         super.addView(progressBar);
     }
@@ -270,7 +268,7 @@ public class ModuleScrollView extends CoordinatorLayout {
         linearLayout.removeView(view);
     }
 
-    public void addModule(final MagicMirrorModule module) {
+    private void addModule(final MagicMirrorModule module) {
         if(!moduleList.contains(module)) {
             moduleList.add(module);
 
@@ -357,7 +355,7 @@ public class ModuleScrollView extends CoordinatorLayout {
                             @Override
                             public void onPropertyChanged(Observable observable, int i) {
 
-                                module.setInitialized(true);
+                                module.setInitialized();
                                 module.removeOnPropertyChangedCallback(this);
 
                                 parentFragment.getActivity().runOnUiThread(new Runnable() {
@@ -416,14 +414,14 @@ public class ModuleScrollView extends CoordinatorLayout {
         }
     }
 
-    public void removeModule(final MagicMirrorModule module) {
+    private void removeModule(final MagicMirrorModule module) {
         if(moduleList.contains(module)) {
             moduleList.remove(module);
             removeView(findViewWithTag(module));
         }
     }
 
-    public ArrayList<MagicMirrorModule> getModuleList() {
+    private ArrayList<MagicMirrorModule> getModuleList() {
         return moduleList;
     }
 

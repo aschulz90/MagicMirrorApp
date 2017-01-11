@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.blublabs.magicmirror.BR;
 import com.blublabs.magicmirror.R;
-import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -31,7 +31,7 @@ class CalendarTitleReplaceListAdapter extends RecyclerView.Adapter<CalendarTitle
     private final CalendarMagicMirrorModule module;
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView text;
+        final TextView text;
 
         MyViewHolder(View view) {
             super(view);

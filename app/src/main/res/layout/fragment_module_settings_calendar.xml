@@ -18,47 +18,54 @@
             android:id="@+id/textView3"
             style="?android:attr/listSeparatorTextViewStyle"/>
 
-        <TextView
-            android:text="Maximum Entries"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewMaxEntries"
+            android:labelFor="@+id/editTextMaxEntries"
             android:paddingTop="5dp"
-            android:labelFor="@+id/editTextMaxEntries" />
+            InfoIcon:description="@string/module_calendar_maximum_entries_description"
+            InfoIcon:defaultVal="@string/module_calendar_maximum_entries_default"
+            InfoIcon:possibleValues="@array/module_calendar_maximum_entries_possible"
+            InfoIcon:title="@string/module_calendar_maximum_entries_title"/>
 
         <EditText
             android:text="@={module.maximumEntries}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:hint="Default: 10"
+            android:hint="@string/module_calendar_maximum_entries_default"
             android:ems="10"
             android:id="@+id/editTextMaxEntries" />
 
-        <TextView
-            android:text="Maximum Days"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewMaxDays"
+            android:labelFor="@+id/editTextMaxDays"
             android:paddingTop="5dp"
-            android:labelFor="@+id/editTextMaxDays" />
+            InfoIcon:description="@string/module_calendar_maximum_number_of_days_description"
+            InfoIcon:defaultVal="@string/module_calendar_maximum_number_of_days_default"
+            InfoIcon:title="@string/module_calendar_maximum_number_of_days_title"/>
 
         <EditText
             android:text="@={module.maximumNumberOfDays}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:hint="Default: 365"
+            android:hint="@string/module_calendar_maximum_number_of_days_default"
             android:ems="10"
             android:id="@+id/editTextMaxDays" />
 
-        <TextView
-            android:text="Display Symbol"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewDisplaySymbol"
+            android:labelFor="@+id/switchDisplaySymbol"
             android:paddingTop="5dp"
-            android:labelFor="@+id/switchDisplaySymbol" />
+            InfoIcon:description="@string/module_calendar_display_symbol_description"
+            InfoIcon:defaultVal="@string/module_calendar_display_symbol_default"
+            InfoIcon:title="@string/module_calendar_display_symbol_title"/>
 
         <android.support.v7.widget.SwitchCompat
             android:layout_width="wrap_content"
@@ -66,13 +73,16 @@
             android:id="@+id/switchDisplaySymbol"
             android:checked="@={module.displaySymbol}"/>
 
-        <TextView
-            android:text="Default Symbol"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewDefaultSymbol"
-            android:paddingTop="5dp"
             android:labelFor="@+id/editTextDefaultSymbol"
+            android:paddingTop="5dp"
+            InfoIcon:description="@string/module_calendar_default_symbol_description"
+            InfoIcon:defaultVal="@string/module_calendar_default_symbol_default"
+            InfoIcon:possibleValues="@array/module_calendar_default_symbol_possible"
+            InfoIcon:title="@string/module_calendar_default_symbol_title"
             android:enabled="@{module.displaySymbol}"/>
 
         <EditText
@@ -80,69 +90,80 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:hint="Default: calendar"
+            android:hint="@string/module_calendar_default_symbol_default"
             android:ems="10"
             android:id="@+id/editTextDefaultSymbol"
             android:enabled="@{module.displaySymbol}"/>
 
-        <TextView
-            android:text="Maximum Title Length"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewMaxTitleLength"
+            android:labelFor="@+id/editTextMaxTitleLength"
             android:paddingTop="5dp"
-            android:labelFor="@+id/editTextMaxTitleLength" />
+            InfoIcon:description="@string/module_calendar_max_title_length_description"
+            InfoIcon:defaultVal="@string/module_calendar_max_title_length_default"
+            InfoIcon:possibleValues="@array/module_calendar_max_title_length_possible"
+            InfoIcon:title="@string/module_calendar_max_title_length_title"/>
 
         <EditText
             android:text="@={module.maxTitleLength}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:hint="Default: 25"
+            android:hint="@string/module_calendar_max_title_length_default"
             android:ems="10"
             android:id="@+id/editTextMaxTitleLength" />
 
-        <TextView
-            android:text="Fetch Interval"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewFetchInterval"
+            android:labelFor="@+id/editTextFetchInterval"
             android:paddingTop="5dp"
-            android:labelFor="@+id/editTextFetchInterval" />
+            InfoIcon:description="@string/module_calendar_fetch_interval_description"
+            InfoIcon:defaultVal="@string/module_calendar_fetch_interval_default"
+            InfoIcon:possibleValues="@array/module_calendar_fetch_interval_possible"
+            InfoIcon:title="@string/module_calendar_fetch_interval_title"/>
 
         <EditText
             android:text="@={module.fetchInterval}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:hint="Default: 300000 (5 minutes)"
+            android:hint="@string/module_calendar_fetch_interval_default"
             android:ems="10"
             android:id="@+id/editTextFetchInterval" />
 
-        <TextView
-            android:text="Animation Speed"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewAnimationSpeed"
+            android:labelFor="@+id/editTextAnimationSpeed"
             android:paddingTop="5dp"
-            android:labelFor="@+id/editTextAnimationSpeed" />
+            InfoIcon:description="@string/module_calendar_animation_speed_description"
+            InfoIcon:defaultVal="@string/module_calendar_animation_speed_default"
+            InfoIcon:possibleValues="@array/module_calendar_animation_speed_possible"
+            InfoIcon:title="@string/module_calendar_animation_speed_title"/>
 
         <EditText
             android:text="@={module.animationSpeed}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:hint="Default: 2000"
+            android:hint="@string/module_calendar_animation_speed_default"
             android:ems="10"
             android:id="@+id/editTextAnimationSpeed" />
 
-        <TextView
-            android:text="Fade"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewFade"
+            android:labelFor="@+id/switchFade"
             android:paddingTop="5dp"
-            android:labelFor="@+id/switchFade" />
+            InfoIcon:description="@string/module_calendar_fade_description"
+            InfoIcon:defaultVal="@string/module_calendar_fade_default"
+            InfoIcon:title="@string/module_calendar_fade_title"/>
 
         <android.support.v7.widget.SwitchCompat
             android:layout_width="wrap_content"
@@ -150,13 +171,16 @@
             android:id="@+id/switchFade"
             android:checked="@={module.fade}"/>
 
-        <TextView
-            android:text="Fade Point"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewFadePoint"
-            android:paddingTop="5dp"
             android:labelFor="@+id/editTextFadePoint"
+            android:paddingTop="5dp"
+            InfoIcon:description="@string/module_calendar_fade_point_description"
+            InfoIcon:defaultVal="@string/module_calendar_fade_point_default"
+            InfoIcon:possibleValues="@array/module_calendar_fade_point_possible"
+            InfoIcon:title="@string/module_calendar_fade_point_title"
             android:enabled="@{module.fade}"/>
 
         <EditText
@@ -164,31 +188,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
-            android:hint="Default: 0.25"
+            android:hint="@string/module_calendar_fade_point_default"
             android:ems="10"
             android:id="@+id/editTextFadePoint"
             android:enabled="@{module.fade}"/>
 
-        <TextView
-            android:text="Calendars"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewCalendars"
+            android:labelFor="@+id/calendars_list_view"
             android:paddingTop="5dp"
-            android:labelFor="@+id/calendars_list_view" />
+            InfoIcon:description="@string/module_calendar_calendars_description"
+            InfoIcon:defaultVal="@string/module_calendar_calendars_default"
+            InfoIcon:title="@string/module_calendar_calendars_title"/>
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/calendars_recycler_view"/>
 
-        <TextView
-            android:text="Title Replace"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewTitleReplace"
+            android:labelFor="@+id/title_replace_recycler_view"
             android:paddingTop="5dp"
-            android:labelFor="@+id/title_replace_recycler_view" />
+            InfoIcon:description="@string/module_calendar_title_replace_description"
+            InfoIcon:defaultVal="@string/module_calendar_title_replace_default"
+            InfoIcon:title="@string/module_calendar_title_replace_title"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/title_replace_recycler_view"
@@ -196,13 +224,15 @@
             android:layout_height="wrap_content"
             android:scrollbars="vertical" />
 
-        <TextView
-            android:text="Display Repeating Count Title"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewDisplayRepeatingCountTitle"
+            android:labelFor="@+id/switchDisplayRepeatingCountTitle"
             android:paddingTop="5dp"
-            android:labelFor="@+id/switchDisplayRepeatingCountTitle" />
+            InfoIcon:description="@string/module_calendar_display_repeating_count_title_description"
+            InfoIcon:defaultVal="@string/module_calendar_display_repeating_count_title_default"
+            InfoIcon:title="@string/module_calendar_display_repeating_count_title_title"/>
 
         <android.support.v7.widget.SwitchCompat
             android:layout_width="wrap_content"
@@ -210,13 +240,35 @@
             android:id="@+id/switchDisplayRepeatingCountTitle"
             android:checked="@={module.displayRepeatingCountTitle}"/>
 
-        <TextView
-            android:text="Time Format"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/editTextDateFormat"
+            android:paddingTop="5dp"
+            InfoIcon:description="@string/module_calendar_date_format_description"
+            InfoIcon:defaultVal="@string/module_calendar_date_format_default"
+            InfoIcon:possibleValues="@array/module_calendar_date_format_possible"
+            InfoIcon:title="@string/module_calendar_date_format_title"/>
+
+        <EditText
+            android:text="@={module.dateFormat}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewTimeFormat"
+            android:inputType="textPersonName"
+            android:hint="@string/module_calendar_date_format_default"
+            android:ems="10"
+            android:id="@+id/editTextDateFormat" />
+
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/spinnerTimeFormat"
             android:paddingTop="5dp"
-            android:labelFor="@+id/spinnerTimeFormat" />
+            InfoIcon:description="@string/module_calendar_time_format_description"
+            InfoIcon:defaultVal="@string/module_calendar_time_format_default"
+            InfoIcon:title="@string/module_calendar_time_format_title"/>
 
         <android.support.v7.widget.AppCompatSpinner
             android:layout_width="wrap_content"
@@ -224,22 +276,77 @@
             android:id="@+id/spinnerTimeFormat"
             app:selectedItem="@={module.timeFormat}"/>
 
-        <TextView
-            android:text="Urgency"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/editTextGetRelative"
+            android:paddingTop="5dp"
+            InfoIcon:description="@string/module_calendar_get_relative_description"
+            InfoIcon:defaultVal="@string/module_calendar_get_relative_default"
+            InfoIcon:possibleValues="@array/module_calendar_get_relative_possible"
+            InfoIcon:title="@string/module_calendar_get_relative_title"/>
+
+        <EditText
+            android:text="@={module.getRelative}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewUrgency"
+            android:inputType="number"
+            android:hint="@string/module_calendar_get_relative_default"
+            android:ems="10"
+            android:id="@+id/editTextGetRelative" />
+
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/editTextUrgency"
             android:paddingTop="5dp"
-            android:labelFor="@+id/editTextUrgency" />
+            InfoIcon:description="@string/module_calendar_urgency_description"
+            InfoIcon:defaultVal="@string/module_calendar_urgency_default"
+            InfoIcon:possibleValues="@array/module_calendar_urgency_possible"
+            InfoIcon:title="@string/module_calendar_urgency_title"/>
 
         <EditText
             android:text="@={module.urgency}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:hint="Default: 0 (disabled)"
+            android:hint="@string/module_calendar_urgency_default"
             android:ems="10"
             android:id="@+id/editTextUrgency" />
+
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/switchBroadcastEvents"
+            android:paddingTop="5dp"
+            InfoIcon:description="@string/module_calendar_broadcast_events_description"
+            InfoIcon:defaultVal="@string/module_calendar_broadcast_events_default"
+            InfoIcon:title="@string/module_calendar_broadcast_events_title"/>
+
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchBroadcastEvents"
+            android:checked="@={module.broadcastEvents}"/>
+
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/switchHidePrivate"
+            android:paddingTop="5dp"
+            InfoIcon:description="@string/module_calendar_hide_private_description"
+            InfoIcon:defaultVal="@string/module_calendar_hide_private_default"
+            InfoIcon:title="@string/module_calendar_hide_private_title"/>
+
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchHidePrivate"
+            android:checked="@={module.hidePrivate}"/>
 
     </LinearLayout>
 </layout>

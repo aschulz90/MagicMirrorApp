@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.os.Parcel;
 
 import com.blublabs.magicmirror.BR;
-import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.settings.mirror.modules.calendar.CalendarMagicMirrorModule;
+import com.blublabs.magicmirror.settings.mirror.modules.clock.ClockMagicMirrorModule;
+import com.blublabs.magicmirror.utils.Utils;
 import com.blublabs.magicmirror.settings.mirror.modules.MagicMirrorModule;
 import com.blublabs.magicmirror.settings.mirror.modules.ModuleSettingsFragment;
 
@@ -59,34 +61,48 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
     private static final String KEY_DATA_LOCATION_ID = "locationID";
     private static final String KEY_DATA_APPID = "appid";
     private static final String KEY_DATA_UNITS = "units";
-    private static final String KEY_DATA_MAX_NUMBER_OF_DAYS = "maxNumberOfDays";
+    private static final String KEY_DATA_ROUND_TEMP = "roundTemp";
     private static final String KEY_DATA_UPDATE_INTERVAL = "updateInterval";
     private static final String KEY_DATA_ANIMATION_SPEED = "animationSpeed";
+    private static final String KEY_DATA_TIMEFORMAT = "timeFormat";
+    private static final String KEY_DATA_SHOW_PERIOD = "showPeriod";
+    private static final String KEY_DATA_SHOW_PERIOD_UPPER = "showPeriodUpper";
+    private static final String KEY_DATA_SHOW_HUMIDITY = "showHumidity";
+    private static final String KEY_DATA_ONLY_TEMP = "onlyTemp";
+    private static final String KEY_DATA_SHOW_WIND_DIRECTION = "showWindDirection";
+    private static final String KEY_DATA_USE_BEAUFORT = "useBeaufort";
     private static final String KEY_DATA_LANG = "lang";
-    private static final String KEY_DATA_FADE = "fade";
-    private static final String KEY_DATA_FADE_POINT = "fadePoint";
     private static final String KEY_DATA_INITIAL_LOAD_DELAY = "initialLoadDelay";
     private static final String KEY_DATA_RETRY_DELAY = "retryDelay";
     private static final String KEY_DATA_API_VERSION = "apiVersion";
     private static final String KEY_DATA_API_BASE = "apiBase";
     private static final String KEY_DATA_WEATHER_ENDPOINT = "weatherEndpoint";
+    private static final String KEY_DATA_APPEND_LOCATION_NAME_TO_HEADER = "appendLocationNameToHeader";
+    private static final String KEY_DATA_CALENDAR_CLASS = "calendarClass";
     private static final String KEY_DATA_ICON_TABLE = "iconTable";
 
     private String location = "";
     private String locationID = "";
     private String appid = "";
     private TemperatureUnit units = TemperatureUnit.Config;
-    private Integer maxNumberOfDays = null;
+    private boolean roundTemp = false;
     private Integer updateInterval = null;
     private Integer animationSpeed = null;
+    private ClockMagicMirrorModule.TimeFormat timeFormat = ClockMagicMirrorModule.TimeFormat.Config;
+    private boolean showPeriod = true;
+    private boolean showPeriodUpper = false;
+    private boolean showHumidity = false;
+    private boolean onlyTemp = false;
+    private boolean showWindDirection = true;
+    private boolean useBeaufort = true;
     private String lang = "";
-    private boolean fade = true;
-    private Double fadePoint = null;
     private Integer initialLoadDelay = null;
     private Integer retryDelay = null;
     private String apiVersion = "";
     private String apiBase = "";
     private String weatherEndpoint = "";
+    private boolean appendLocationNameToHeader = true;
+    private String calendarClass = "";
     private Map<String, String> iconTable = new TreeMap<>();
 
     private WeatherSettingsFragment fragment;
@@ -118,8 +134,36 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
                 this.units = TemperatureUnit.from(config.getString(KEY_DATA_UNITS));
             }
 
-            if(config.has(KEY_DATA_MAX_NUMBER_OF_DAYS)) {
-                this.maxNumberOfDays = config.getInt(KEY_DATA_MAX_NUMBER_OF_DAYS);
+            if(config.has(KEY_DATA_ROUND_TEMP)) {
+                this.roundTemp = config.getBoolean(KEY_DATA_ROUND_TEMP);
+            }
+
+            if(config.has(KEY_DATA_TIMEFORMAT)) {
+                this.timeFormat = ClockMagicMirrorModule.TimeFormat.from(config.getString(KEY_DATA_TIMEFORMAT));
+            }
+
+            if(config.has(KEY_DATA_SHOW_PERIOD)) {
+                this.showPeriod = config.getBoolean(KEY_DATA_SHOW_PERIOD);
+            }
+
+            if(config.has(KEY_DATA_SHOW_PERIOD_UPPER)) {
+                this.showPeriodUpper = config.getBoolean(KEY_DATA_SHOW_PERIOD_UPPER);
+            }
+
+            if(config.has(KEY_DATA_SHOW_HUMIDITY)) {
+                this.showHumidity = config.getBoolean(KEY_DATA_SHOW_HUMIDITY);
+            }
+
+            if(config.has(KEY_DATA_ONLY_TEMP)) {
+                this.onlyTemp = config.getBoolean(KEY_DATA_ONLY_TEMP);
+            }
+
+            if(config.has(KEY_DATA_SHOW_WIND_DIRECTION)) {
+                this.showWindDirection = config.getBoolean(KEY_DATA_SHOW_WIND_DIRECTION);
+            }
+
+            if(config.has(KEY_DATA_USE_BEAUFORT)) {
+                this.useBeaufort = config.getBoolean(KEY_DATA_USE_BEAUFORT);
             }
 
             if(config.has(KEY_DATA_UPDATE_INTERVAL)) {
@@ -132,14 +176,6 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
 
             if(config.has(KEY_DATA_LANG)) {
                 this.lang = config.getString(KEY_DATA_LANG);
-            }
-
-            if(config.has(KEY_DATA_FADE)) {
-                this.fade = config.getBoolean(KEY_DATA_FADE);
-            }
-
-            if(config.has(KEY_DATA_FADE_POINT)) {
-                this.fadePoint = config.getDouble(KEY_DATA_FADE_POINT);
             }
 
             if(config.has(KEY_DATA_INITIAL_LOAD_DELAY)) {
@@ -162,6 +198,14 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
                 this.weatherEndpoint = config.getString(KEY_DATA_WEATHER_ENDPOINT);
             }
 
+            if(config.has(KEY_DATA_APPEND_LOCATION_NAME_TO_HEADER)) {
+                this.appendLocationNameToHeader = config.getBoolean(KEY_DATA_APPEND_LOCATION_NAME_TO_HEADER);
+            }
+
+            if(config.has(KEY_DATA_CALENDAR_CLASS)) {
+                this.calendarClass = config.getString(KEY_DATA_CALENDAR_CLASS);
+            }
+
             if(config.has(KEY_DATA_ICON_TABLE) && config.getJSONObject(KEY_DATA_ICON_TABLE).length() > 0) {
                 JSONObject table = config.getJSONObject(KEY_DATA_ICON_TABLE);
 
@@ -179,7 +223,7 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
         super.setData(data);
     }
 
-    private void setDefaultIconTable(Map<String, String> map) {
+    public void setDefaultIconTable(Map<String, String> map) {
 
         map.clear();
 
@@ -264,18 +308,118 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
     }
 
     @Bindable
-    public Integer getMaxNumberOfDays() {
-        return maxNumberOfDays;
+    public boolean isRoundTemp() {
+        return roundTemp;
     }
 
-    public void setMaxNumberOfDays(Integer maxNumberOfDays) {
-
-        if(Utils.objectsEqual(this.maxNumberOfDays, maxNumberOfDays)) {
+    public void setRoundTemp(boolean roundTemp) {
+        if(this.roundTemp == roundTemp) {
             return;
         }
 
-        this.maxNumberOfDays = maxNumberOfDays;
-        notifyPropertyChanged(BR.maxNumberOfDays);
+        this.roundTemp = roundTemp;
+        notifyPropertyChanged(BR.units);
+    }
+
+    @Bindable
+    public ClockMagicMirrorModule.TimeFormat getTimeFormat() {
+        return timeFormat;
+    }
+
+    public void setTimeFormat(ClockMagicMirrorModule.TimeFormat timeFormat) {
+
+        if(timeFormat == this.timeFormat) {
+            return;
+        }
+
+        this.timeFormat = timeFormat;
+        notifyPropertyChanged(BR.timeFormat);
+    }
+
+    @Bindable
+    public boolean isShowPeriod() {
+        return showPeriod;
+    }
+
+    public void setShowPeriod(boolean showPeriod) {
+
+        if(showPeriod == this.showPeriod) {
+            return;
+        }
+
+        this.showPeriod = showPeriod;
+        notifyPropertyChanged(BR.showPeriod);
+    }
+
+    @Bindable
+    public boolean isShowPeriodUpper() {
+        return showPeriodUpper;
+    }
+
+    public void setShowPeriodUpper(boolean showPeriodUpper) {
+
+        if(showPeriodUpper == this.showPeriodUpper) {
+            return;
+        }
+
+        this.showPeriodUpper = showPeriodUpper;
+        notifyPropertyChanged(BR.showPeriodUpper);
+    }
+
+    @Bindable
+    public boolean isShowHumidity() {
+        return showHumidity;
+    }
+
+    public void setShowHumidity(boolean showHumidity) {
+        if(showHumidity == this.showHumidity) {
+            return;
+        }
+
+        this.showHumidity = showHumidity;
+        notifyPropertyChanged(BR.showPeriodUpper);
+    }
+
+    @Bindable
+    public boolean isOnlyTemp() {
+        return onlyTemp;
+    }
+
+    public void setOnlyTemp(boolean onlyTemp) {
+        if(onlyTemp == this.onlyTemp) {
+            return;
+        }
+
+        this.onlyTemp = onlyTemp;
+        notifyPropertyChanged(BR.showPeriodUpper);
+    }
+
+    @Bindable
+    public boolean isShowWindDirection() {
+        return showWindDirection;
+    }
+
+    public void setShowWindDirection(boolean showWindDirection) {
+        if(showWindDirection == this.showWindDirection) {
+            return;
+        }
+
+        this.showWindDirection = showWindDirection;
+        notifyPropertyChanged(BR.showPeriodUpper);
+    }
+
+    @Bindable
+    public boolean isUseBeaufort() {
+        return useBeaufort;
+    }
+
+    public void setUseBeaufort(boolean useBeaufort) {
+        if(useBeaufort == this.useBeaufort) {
+            return;
+        }
+
+        this.useBeaufort = useBeaufort;
+        notifyPropertyChanged(BR.showPeriodUpper);
     }
 
     @Bindable
@@ -314,43 +458,12 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
     }
 
     public void setLang(String lang) {
-
         if(Utils.objectsEqual(this.lang, lang)) {
             return;
         }
 
         this.lang = lang;
         notifyPropertyChanged(BR.lang);
-    }
-
-    @Bindable
-    public boolean isFade() {
-        return fade;
-    }
-
-    public void setFade(boolean fade) {
-
-        if(this.fade == fade) {
-            return;
-        }
-
-        this.fade = fade;
-        notifyPropertyChanged(BR.fade);
-    }
-
-    @Bindable
-    public Double getFadePoint() {
-        return fadePoint;
-    }
-
-    public void setFadePoint(Double fadePoint) {
-
-        if(Utils.objectsEqual(this.fadePoint, fadePoint)) {
-            return;
-        }
-
-        this.fadePoint = fadePoint;
-        notifyPropertyChanged(BR.fadePoint);
     }
 
     @Bindable
@@ -429,12 +542,36 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
     }
 
     @Bindable
-    public Map<String, String> getIconTable() {
-        return iconTable;
+    public boolean isAppendLocationNameToHeader() {
+        return appendLocationNameToHeader;
     }
 
-    public void setIconTable(Map<String, String> iconTable) {
-        this.iconTable = iconTable;
+    public void setAppendLocationNameToHeader(boolean appendLocationNameToHeader) {
+        if(this.appendLocationNameToHeader != appendLocationNameToHeader) {
+            return;
+        }
+
+        this.appendLocationNameToHeader = appendLocationNameToHeader;
+        notifyPropertyChanged(BR.weatherEndpoint);
+    }
+
+    @Bindable
+    public String getCalendarClass() {
+        return calendarClass;
+    }
+
+    public void setCalendarClass(String calendarClass) {
+        if(Utils.objectsEqual(this.calendarClass, calendarClass)) {
+            return;
+        }
+
+        this.calendarClass = calendarClass;
+        notifyPropertyChanged(BR.weatherEndpoint);
+    }
+
+    @Bindable
+    public Map<String, String> getIconTable() {
+        return iconTable;
     }
 
     @Override
@@ -472,8 +609,36 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
             config.put(KEY_DATA_UNITS, units);
         }
 
-        if(maxNumberOfDays != null) {
-            config.put(KEY_DATA_MAX_NUMBER_OF_DAYS, maxNumberOfDays);
+        if(roundTemp) {
+            config.put(KEY_DATA_ROUND_TEMP, roundTemp);
+        }
+
+        if(timeFormat != ClockMagicMirrorModule.TimeFormat.Config) {
+            config.put(KEY_DATA_TIMEFORMAT, Integer.parseInt(timeFormat.getText()));
+        }
+
+        if(!showPeriod) {
+            config.put(KEY_DATA_SHOW_PERIOD, false);
+        }
+
+        if(showPeriodUpper) {
+            config.put(KEY_DATA_SHOW_PERIOD_UPPER, true);
+        }
+
+        if(showHumidity) {
+            config.put(KEY_DATA_SHOW_HUMIDITY, true);
+        }
+
+        if(onlyTemp) {
+            config.put(KEY_DATA_ONLY_TEMP, true);
+        }
+
+        if(!showWindDirection) {
+            config.put(KEY_DATA_SHOW_WIND_DIRECTION, false);
+        }
+
+        if(!useBeaufort) {
+            config.put(KEY_DATA_USE_BEAUFORT, false);
         }
 
         if(updateInterval != null) {
@@ -486,14 +651,6 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
 
         if(!Utils.isEmpty(lang)) {
             config.put(KEY_DATA_LANG, lang);
-        }
-
-        if(!fade) {
-            config.put(KEY_DATA_FADE, false);
-        }
-
-        if(fadePoint != null) {
-            config.put(KEY_DATA_FADE_POINT, fadePoint);
         }
 
         if(initialLoadDelay != null) {
@@ -514,6 +671,14 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
 
         if(!Utils.isEmpty(weatherEndpoint) && !"forecast/daily".equals(weatherEndpoint)) {
             config.put(KEY_DATA_WEATHER_ENDPOINT, weatherEndpoint);
+        }
+
+        if(!appendLocationNameToHeader) {
+            config.put(KEY_DATA_APPEND_LOCATION_NAME_TO_HEADER, false);
+        }
+
+        if(!Utils.isEmpty(calendarClass) && !"calendar".equals(calendarClass)) {
+            config.put(KEY_DATA_CALENDAR_CLASS, calendarClass);
         }
 
         Map<String, String> defaultIconTable = new HashMap<>();
@@ -542,17 +707,24 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
         dest.writeString(this.locationID);
         dest.writeString(this.appid);
         dest.writeInt(this.units == null ? -1 : this.units.ordinal());
-        dest.writeValue(this.maxNumberOfDays);
+        dest.writeByte(this.roundTemp ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.timeFormat == null ? -1 : this.timeFormat.ordinal());
+        dest.writeByte(this.showPeriod ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.showPeriodUpper ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.showHumidity ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.onlyTemp ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.showWindDirection ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.useBeaufort ? (byte) 1 : (byte) 0);
         dest.writeValue(this.updateInterval);
         dest.writeValue(this.animationSpeed);
         dest.writeString(this.lang);
-        dest.writeByte(this.fade ? (byte) 1 : (byte) 0);
-        dest.writeValue(this.fadePoint);
         dest.writeValue(this.initialLoadDelay);
         dest.writeValue(this.retryDelay);
         dest.writeString(this.apiVersion);
         dest.writeString(this.apiBase);
         dest.writeString(this.weatherEndpoint);
+        dest.writeByte(this.appendLocationNameToHeader ? (byte) 1 : (byte) 0);
+        dest.writeString(this.calendarClass);
         dest.writeInt(this.iconTable.size());
         for (Map.Entry<String, String> entry : this.iconTable.entrySet()) {
             dest.writeString(entry.getKey());
@@ -567,17 +739,25 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
         this.appid = in.readString();
         int tmpUnits = in.readInt();
         this.units = tmpUnits == -1 ? null : TemperatureUnit.values()[tmpUnits];
-        this.maxNumberOfDays = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.roundTemp = in.readByte() != 0;
+        int tmpTimeFormat = in.readInt();
+        this.timeFormat = tmpTimeFormat == -1 ? null : ClockMagicMirrorModule.TimeFormat.values()[tmpTimeFormat];
+        this.showPeriod = in.readByte() != 0;
+        this.showPeriodUpper = in.readByte() != 0;
+        this.showHumidity = in.readByte() != 0;
+        this.onlyTemp = in.readByte() != 0;
+        this.showWindDirection = in.readByte() != 0;
+        this.useBeaufort = in.readByte() != 0;
         this.updateInterval = (Integer) in.readValue(Integer.class.getClassLoader());
         this.animationSpeed = (Integer) in.readValue(Integer.class.getClassLoader());
         this.lang = in.readString();
-        this.fade = in.readByte() != 0;
-        this.fadePoint = (Double) in.readValue(Double.class.getClassLoader());
         this.initialLoadDelay = (Integer) in.readValue(Integer.class.getClassLoader());
         this.retryDelay = (Integer) in.readValue(Integer.class.getClassLoader());
         this.apiVersion = in.readString();
         this.apiBase = in.readString();
         this.weatherEndpoint = in.readString();
+        this.appendLocationNameToHeader = in.readByte() != 0;
+        this.calendarClass = in.readString();
         int iconTableSize = in.readInt();
         this.iconTable = new HashMap<String, String>(iconTableSize);
         for (int i = 0; i < iconTableSize; i++) {
@@ -607,20 +787,15 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
 
         WeatherMagicMirrorModule that = (WeatherMagicMirrorModule) o;
 
-        if (isFade() != that.isFade()) return false;
         if (!getLocation().equals(that.getLocation())) return false;
         if (!getLocationID().equals(that.getLocationID())) return false;
         if (!getAppid().equals(that.getAppid())) return false;
         if (getUnits() != that.getUnits()) return false;
-        if (getMaxNumberOfDays() != null ? !getMaxNumberOfDays().equals(that.getMaxNumberOfDays()) : that.getMaxNumberOfDays() != null)
-            return false;
         if (getUpdateInterval() != null ? !getUpdateInterval().equals(that.getUpdateInterval()) : that.getUpdateInterval() != null)
             return false;
         if (getAnimationSpeed() != null ? !getAnimationSpeed().equals(that.getAnimationSpeed()) : that.getAnimationSpeed() != null)
             return false;
         if (!getLang().equals(that.getLang())) return false;
-        if (getFadePoint() != null ? !getFadePoint().equals(that.getFadePoint()) : that.getFadePoint() != null)
-            return false;
         if (getInitialLoadDelay() != null ? !getInitialLoadDelay().equals(that.getInitialLoadDelay()) : that.getInitialLoadDelay() != null)
             return false;
         if (getRetryDelay() != null ? !getRetryDelay().equals(that.getRetryDelay()) : that.getRetryDelay() != null)
@@ -639,12 +814,9 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
         result = 31 * result + getLocationID().hashCode();
         result = 31 * result + getAppid().hashCode();
         result = 31 * result + getUnits().hashCode();
-        result = 31 * result + (getMaxNumberOfDays() != null ? getMaxNumberOfDays().hashCode() : 0);
         result = 31 * result + (getUpdateInterval() != null ? getUpdateInterval().hashCode() : 0);
         result = 31 * result + (getAnimationSpeed() != null ? getAnimationSpeed().hashCode() : 0);
         result = 31 * result + getLang().hashCode();
-        result = 31 * result + (isFade() ? 1 : 0);
-        result = 31 * result + (getFadePoint() != null ? getFadePoint().hashCode() : 0);
         result = 31 * result + (getInitialLoadDelay() != null ? getInitialLoadDelay().hashCode() : 0);
         result = 31 * result + (getRetryDelay() != null ? getRetryDelay().hashCode() : 0);
         result = 31 * result + getApiVersion().hashCode();

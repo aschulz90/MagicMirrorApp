@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="module_general_field_optional">This field is optional.</string>
+
+    <!--General-->
+    <string name="module_general_position_title">Position</string>
+    <string name="module_general_position_description">The location of the module in which the module will be loaded.</string>
+    <string name="module_general_position_notes">This field is optional but most modules require this field to set. Check the documentation of the module for more information. Multiple modules with the same position will be ordered based on the order in the configuration file.</string>
+
+    <string name="module_general_header_title">Header</string>
+    <string name="module_general_header_description">To display a header text above the module, add the header property.</string>
+
+    <string name="module_general_disabled_title">Disabled</string>
+    <string name="module_general_disabled_description">Set disabled to true to skip creating the module.</string>
+
+    <!--Alert-->
+    <string name="module_alert_effect_title">Notification Effect</string>
+    <string name="module_alert_effect_description">The animation effect to use for notifications.</string>
+    <string name="module_alert_effect_default">slide</string>
+
+    <string name="module_alert_alert_effect_title">Alert Effect</string>
+    <string name="module_alert_alert_effect_description"> The animation effect to use for alerts.</string>
+    <string name="module_alert_alert_effect_default">jelly</string>
+
+    <string name="module_alert_display_time_title">Display Time</string>
+    <string name="module_alert_display_time_description">Time a notification is displayed in milliseconds.</string>
+    <string name="module_alert_display_time_default">3500</string>
+
+    <string name="module_alert_position_title">Alert Position</string>
+    <string name="module_alert_position_description">Position where the notifications should be displayed.</string>
+    <string name="module_alert_position_default">center</string>
+
+    <string name="module_alert_welcome_message_title">Welcome Message</string>
+    <string name="module_alert_welcome_message_description">Message shown at startup.</string>
+    <string name="module_alert_welcome_message_default">None</string>
+
+    <!--Calendar-->
+    <string name="module_calendar_maximum_entries_title">Maximum Entries</string>
+    <string name="module_calendar_maximum_entries_description">The maximum number of events shown.</string>
+    <string name="module_calendar_maximum_entries_default">10</string>
+    <string-array name="module_calendar_maximum_entries_possible"><item>0 – 100</item></string-array>
+
+    <string name="module_calendar_maximum_number_of_days_title">Maximum Days</string>
+    <string name="module_calendar_maximum_number_of_days_description">The maximum number of days in the future.</string>
+    <string name="module_calendar_maximum_number_of_days_default">365</string>
+
+    <string name="module_calendar_display_symbol_title">Display Symbol</string>
+    <string name="module_calendar_display_symbol_description">Display a symbol in front of an entry.</string>
+    <string name="module_calendar_display_symbol_default">true</string>
+
+    <string name="module_calendar_default_symbol_title">Default Symbol</string>
+    <string name="module_calendar_default_symbol_description">The default symbol.</string>
+    <string name="module_calendar_default_symbol_default">calendar</string>
+    <string-array name="module_calendar_default_symbol_possible"><item>See http://fontawesome.io/icons/</item></string-array>
+
+    <string name="module_calendar_max_title_length_title">Maximum Title Length</string>
+    <string name="module_calendar_max_title_length_description">The maximum title length.</string>
+    <string name="module_calendar_max_title_length_default">25</string>
+    <string-array name="module_calendar_max_title_length_possible"><item>10 – 50</item></string-array>
+
+    <string name="module_calendar_fetch_interval_title">Fetch Interval</string>
+    <string name="module_calendar_fetch_interval_description">How often does the content needs to be fetched? (Milliseconds)</string>
+    <string name="module_calendar_fetch_interval_default">300000 (5 minutes)</string>
+    <string-array name="module_calendar_fetch_interval_possible"><item>1000 – 86400000</item></string-array>
+
+    <string name="module_calendar_animation_speed_title">Animation Speed</string>
+    <string name="module_calendar_animation_speed_description">Speed of the update animation. (Milliseconds)</string>
+    <string name="module_calendar_animation_speed_default">2000 (2 seconds) </string>
+    <string-array name="module_calendar_animation_speed_possible"><item>0 – 5000</item></string-array>
+
+    <string name="module_calendar_fade_title">Fade</string>
+    <string name="module_calendar_fade_description">Fade the future events to black. (Gradient)</string>
+    <string name="module_calendar_fade_default">true</string>
+
+    <string name="module_calendar_fade_point_title">Fade Point</string>
+    <string name="module_calendar_fade_point_description">Where to start fade?</string>
+    <string name="module_calendar_fade_point_default">0.25</string>
+    <string-array name="module_calendar_fade_point_possible"><item>0 (top of the list) - 1 (bottom of list)</item></string-array>
+
+    <string name="module_calendar_calendars_title">Calendars</string>
+    <string name="module_calendar_calendars_description">The list of calendars.</string>
+    <string name="module_calendar_calendars_default">webcal://www.calendarlabs.com/templates/ical/US-Holidays.ics</string>
+
+    <string name="module_calendar_title_replace_title">Title Replace</string>
+    <string name="module_calendar_title_replace_description">An object of textual replacements applied to the tile of the event. This allow to remove or replace certains words in the title.</string>
+    <string name="module_calendar_title_replace_default">{ "De verjaardag van ": "", "'s birthday": "" }</string>
+
+    <string name="module_calendar_display_repeating_count_title_title">Display Repeating Count Title</string>
+    <string name="module_calendar_display_repeating_count_title_description">Show count title for yearly repeating events (e.g. "X. Birthday", "X. Anniversary")</string>
+    <string name="module_calendar_display_repeating_count_title_default">false</string>
+
+    <string name="module_calendar_date_format_title">Date Format</string>
+    <string name="module_calendar_date_format_description">Format to use for the date of events (when using absolute dates)</string>
+    <string name="module_calendar_date_format_default">MMM Do (e.g. Jan 18th)</string>
+    <string-array name="module_calendar_date_format_possible"><item>See http://momentjs.com/docs/#/parsing/string-format/</item></string-array>
+
+    <string name="module_calendar_time_format_title">Time Format</string>
+    <string name="module_calendar_time_format_description">Display event times as absolute dates, or relative time</string>
+    <string name="module_calendar_time_format_default">relative</string>
+
+    <string name="module_calendar_get_relative_title">Relative Time</string>
+    <string name="module_calendar_get_relative_description">How much time (in hours) should be left until calendar events start getting relative?</string>
+    <string name="module_calendar_get_relative_default">6</string>
+    <string-array name="module_calendar_get_relative_possible"><item>0 (events stay absolute) - 48 (48 hours before the event starts)</item></string-array>
+
+    <string name="module_calendar_urgency_title">Urgency</string>
+    <string name="module_calendar_urgency_description">When using a timeFormat of \'absolute\', the urgency setting allows you to display events within a specific time frame as \'relative\'. This allows events within a certain time frame to be displayed as relative (in xx days) while others are displayed as absolute dates.</string>
+    <string name="module_calendar_urgency_default">7 (Days)</string>
+    <string-array name="module_calendar_urgency_possible"><item>Positive Numbers</item></string-array>
+
+    <string name="module_calendar_broadcast_events_title">Broadcast Events</string>
+    <string name="module_calendar_broadcast_events_description">If this property is set to true, the calendar will broadcast all the events to all other modules with a notification.</string>
+    <string name="module_calendar_broadcast_events_default">true</string>
+
+    <string name="module_calendar_hide_private_title">Hide Private Events</string>
+    <string name="module_calendar_hide_private_description">Hides private calendar events.</string>
+    <string name="module_calendar_hide_private_default">false</string>
+
+    <!--Clock-->
+    <string name="module_clock_timeformat_title">Time Format</string>
+    <string name="module_clock_timeformat_description">Use 12 or 24 hour format.</string>
+    <string name="module_clock_timeformat_default">uses value of config.timeFormat</string>
+
+    <string name="module_clock_display_seconds_title">Display Seconds</string>
+    <string name="module_clock_display_seconds_description">Display seconds.</string>
+    <string name="module_clock_display_seconds_default">true</string>
+
+    <string name="module_clock_show_period_title">Show Period</string>
+    <string name="module_clock_show_period_description">Show the period (am/pm) with 12 hour format.</string>
+    <string name="module_clock_show_period_default">true</string>
+
+    <string name="module_clock_show_period_upper_title">Show Period Uppercase</string>
+    <string name="module_clock_show_period_upper_description">Show the period (AM/PM) with 12 hour format as uppercase.</string>
+    <string name="module_clock_show_period_upper_default">false</string>
+
+    <string name="module_clock_bold_title">Bold</string>
+    <string name="module_clock_bold_description">Remove the colon and bold the minutes to make a more modern look.</string>
+    <string name="module_clock_bold_default">false</string>
+
+    <string name="module_clock_show_date_title">Show Date</string>
+    <string name="module_clock_show_date_description">Turn off or on the Date section.</string>
+    <string name="module_clock_show_date_default">true</string>
+
+    <string name="module_clock_display_type_title">Display Type</string>
+    <string name="module_clock_display_type_description">Display a digital clock, analog clock, or both together.</string>
+    <string name="module_clock_display_type_default">digital</string>
+
+    <string name="module_clock_analog_size_title">Analog Clock Size</string>
+    <string name="module_clock_analog_size_description">Specific to the analog clock. Defines how large the analog display is.</string>
+    <string name="module_clock_analog_size_default">200</string>
+    <string-array name="module_clock_analog_size_possible"><item>A positive number of pixels</item></string-array>
+
+    <string name="module_clock_analog_face_title">Analog Clock Face</string>
+    <string name="module_clock_analog_face_description">Specific to the analog clock. Specifies which clock face to use.</string>
+    <string name="module_clock_analog_face_default">simple</string>
+
+    <string name="module_clock_seconds_color_title">Seconds Color</string>
+    <string name="module_clock_seconds_color_description">Specific to the analog clock. Specifies what color to make the \'seconds\' hand.</string>
+    <string name="module_clock_seconds_color_default">#888888</string>
+
+    <string name="module_clock_analog_placement_title">Analog Clock Placement</string>
+    <string name="module_clock_analog_placement_description">Specific to the analog clock. (requires displayType set to \'both\') Specifies where the analog clock is in relation to the digital clock</string>
+    <string name="module_clock_analog_placement_default">bottom</string>
+
+    <string name="module_clock_analog_show_date_title">Analog Clock Show Date</string>
+    <string name="module_clock_analog_show_date_description">Specific to the analog clock. If the clock is used as a separate module and set to analog only, this configures whether a date is also displayed with the clock.</string>
+    <string name="module_clock_analog_show_date_default">top</string>
+
+    <string name="module_clock_timezone_title">Timezone</string>
+    <string name="module_clock_timezone_description">Specify a timezone to show.</string>
+    <string name="module_clock_timezone_default"> </string>
+
+    <!--Compliments-->
+    <string name="module_compliments_update_interval_title">Update Interval</string>
+    <string name="module_compliments_update_interval_description">How often does the compliment have to change? (Milliseconds)</string>
+    <string name="module_compliments_update_interval_default">30000 (30 seconds) </string>
+    <string-array name="module_compliments_update_interval_possible"><item>1000 – 86400000</item></string-array>
+
+    <string name="module_compliments_fade_speed_title">Fade Speed</string>
+    <string name="module_compliments_fade_speed_description">Speed of the update animation. (Milliseconds)</string>
+    <string name="module_compliments_fade_speed_default">4000 (4 seconds)</string>
+    <string-array name="module_compliments_fade_speed_possible"><item>0 – 5000</item></string-array>
+
+    <string name="module_compliments_compliments_title">Compliments</string>
+    <string name="module_compliments_compliments_description">The list of compliments.</string>
+
+    <string name="module_compliments_remote_file_interval_title">Remote File</string>
+    <string name="module_compliments_remote_file_description"> External file from which to load the compliments</string>
+    <string name="module_compliments_remote_file_default"> </string>
+
+    <!--Current Weather-->
+    <string name="module_current_weather_location_title">Location</string>
+    <string name="module_current_weather_location_description">The location used for weather information.</string>
+    <string name="module_current_weather_location_default">false</string>
+    <string name="module_current_weather_location_note">When the location and locationID are both not set, the location will be based on the information provided by the calendar module. The first upcoming event with location data will be used. </string>
+
+    <string name="module_current_weather_location_id_title">Location ID</string>
+    <string name="module_current_weather_location_id_description">Location ID from http://openweathermap.org/help/city_list.txt . This will override anything you put in location. Leave blank if you want to use location. </string>
+    <string name="module_current_weather_location_id_default">Blank</string>
+    <string name="module_current_weather_location_id_note">When the location and locationID are both not set, the location will be based on the information provided by the calendar module. The first upcoming event with location data will be used. </string>
+
+    <string name="module_current_weather_appid_title">API Key</string>
+    <string name="module_current_weather_appid_description">The OpenWeatherMap API key, which can be obtained by creating an OpenWeatherMap account.</string>
+    <string name="module_current_weather_appid_note">This value is REQUIRED!</string>
+
+    <string name="module_current_weather_units_title">Units</string>
+    <string name="module_current_weather_units_description">What units to use.</string>
+    <string name="module_current_weather_units_default">config.units</string>
+
+    <string name="module_current_weather_round_temp_title">Round Temperature</string>
+    <string name="module_current_weather_round_temp_description">Round temperature value to nearest integer.</string>
+    <string name="module_current_weather_round_temp_default">false</string>
+    <string-array name="module_current_weather_round_temp_possible"><item>true (round to integer)</item><item>false (display exact value with decimal point)</item></string-array>
+
+    <string name="module_current_weather_update_interval_title">Update Interval</string>
+    <string name="module_current_weather_update_interval_description">How often does the content needs to be fetched? (Milliseconds)</string>
+    <string name="module_current_weather_update_interval_default">600000 (10 minutes)</string>
+    <string-array name="module_current_weather_update_interval_possible"><item>1000 – 86400000</item></string-array>
+
+    <string name="module_current_weather_animation_speed_title">Animation Speed</string>
+    <string name="module_current_weather_animation_speed_description">Speed of the update animation. (Milliseconds)</string>
+    <string name="module_current_weather_animation_speed_default">1000 (1 second)</string>
+    <string-array name="module_current_weather_animation_speed_possible"><item>0 – 5000</item></string-array>
+
+    <string name="module_current_weather_timeformat_title">Time Format</string>
+    <string name="module_current_weather_timeformat_description">Use 12 or 24 hour format.</string>
+    <string name="module_current_weather_timeformat_default">uses value of config.timeFormat</string>
+
+    <string name="module_current_weather_wind_direction_title">Show Wind Direction</string>
+    <string name="module_current_weather_wind_direction_description">Show the wind direction next to the wind speed.</string>
+    <string name="module_current_weather_wind_direction_default">true</string>
+
+    <string name="module_current_weather_show_humidity_title">Show Humidity</string>
+    <string name="module_current_weather_show_humidity_description">Show the current humidity</string>
+    <string name="module_current_weather_show_humidity_default">false</string>
+
+    <string name="module_current_weather_only_temp_title">Show Only Temperature</string>
+    <string name="module_current_weather_only_temp_description">Show only current Temperature and weather icon.</string>
+    <string name="module_current_weather_only_temp_default">false</string>
+
+    <string name="module_current_weather_use_beaufort_title">Use Beaufort</string>
+    <string name="module_current_weather_use_beaufort_description">Pick between using the Beaufort scale for wind speed or using the default units.</string>
+    <string name="module_current_weather_use_beaufort_default">true</string>
+
+    <string name="module_current_weather_lang_title">Language</string>
+    <string name="module_current_weather_lang_description">The language of the days.</string>
+    <string name="module_current_weather_lang_default">uses value of config.language</string>
+    <string-array name="module_current_weather_lang_possible"><item>en</item><item>nl</item><item>ru</item><item>etc …</item></string-array>
+
+    <string name="module_current_weather_initial_load_Delay_title">Initial Load Delay</string>
+    <string name="module_current_weather_initial_load_delay_description">The initial delay before loading. If you have multiple modules that use the same API key, you might want to delay one of the requests. (Milliseconds)</string>
+    <string name="module_current_weather_initial_load_delay_default">0</string>
+    <string-array name="module_current_weather_initial_load_delay_possible"><item>0 – 5000</item></string-array>
+
+    <string name="module_current_weather_retry_delay_title">Retry Delay</string>
+    <string name="module_current_weather_retry_delay_description">The delay before retrying after a request failure. (Milliseconds)</string>
+    <string name="module_current_weather_retry_delay_default">2500 (2.5 seconds) </string>
+    <string-array name="module_current_weather_retry_delay_possible"><item>1000 – 60000</item></string-array>
+
+    <string name="module_current_weather_api_version_title">API Version</string>
+    <string name="module_current_weather_api_version_description">The OpenWeatherMap API version to use.</string>
+    <string name="module_current_weather_api_version_default">2.5</string>
+
+    <string name="module_current_weather_api_base_title">API Base</string>
+    <string name="module_current_weather_api_base_description">The OpenWeatherMap base URL.</string>
+    <string name="module_current_weather_api_base_default">\'http://api.openweathermap.org/data/\'</string>
+
+    <string name="module_current_weather_endpoint_title">API Endpoint</string>
+    <string name="module_current_weather_endpoint_description">The OpenWeatherMap API endPoint.</string>
+    <string name="module_current_weather_endpoint_default">\'weather\'</string>
+
+    <string name="module_current_weather_location_name_header_title">Append Location To Header</string>
+    <string name="module_current_weather_location_name_header_description">If set to true, the returned location name will be appended to the header of the module, if the header is enabled. This is mainly intresting when using calender based weather.</string>
+    <string name="module_current_weather_location_name_header_default">true</string>
+
+    <string name="module_current_weather_calendar_class_title">Calendar Class</string>
+    <string name="module_current_weather_calendar_class_description">The class for the calender module to base the event based weather information on.</string>
+    <string name="module_current_weather_calendar_class_default">\'calendar\'</string>
+
+    <string name="module_current_weather_icon_table_title">Icon Table</string>
+    <string name="module_current_weather_icon_table_description">The conversion table to convert the weather conditions to weather-icons.</string>
+
+    <!--Hello World-->
+    <string name="module_hello_world_text_title">Text</string>
+    <string name="module_hello_world_text_description">The text to display.</string>
+    <string name="module_hello_world_text_default">\'Hello world!\'</string>
+
+    <!--Newsfeed-->
+    <string name="module_news_feeds_title">Feeds</string>
+    <string name="module_news_feeds_description">An array of feed urls that will be used as source.</string>
+    <string name="module_news_feeds_default">http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml</string>
+
+    <string name="module_news_show_source_title_title">Show Source Title</string>
+    <string name="module_news_show_source_title_description">Display the title of the source.</string>
+    <string name="module_news_show_source_title_default">true</string>
+
+    <string name="module_news_show_publish_date_title">Show publish Date</string>
+    <string name="module_news_show_publish_date_description">Display the publish date of an headline.</string>
+    <string name="module_news_show_publish_date_default">true</string>
+
+    <string name="module_news_show_description_title">Show Description</string>
+    <string name="module_news_show_description_description">Display the description of an item.</string>
+    <string name="module_news_show_description_default">false</string>
+
+    <string name="module_news_update_interval_title">Update Interval</string>
+    <string name="module_news_update_interval_description">How often do you want to display a new headline? (Milliseconds)</string>
+    <string name="module_news_update_interval_default">10000 (10 seconds)</string>
+    <string-array name="module_news_update_interval_possible"><item>1000 – 60000</item></string-array>
+
+    <string name="module_news_animation_speed_title">Animation Speed</string>
+    <string name="module_news_animation_speed_description">Speed of the update animation. (Milliseconds)</string>
+    <string name="module_news_animation_speed_default">2500 (2.5 seconds)</string>
+    <string-array name="module_news_animation_speed_possible"><item>0 – 5000</item></string-array>
+
+    <string name="module_news_max_news_title">Max News Items</string>
+    <string name="module_news_max_news_description">Total amount of news items to cycle through. (0 for unlimited)</string>
+    <string name="module_news_max_news_default">0</string>
+
+    <string name="module_news_remove_start_tags_title">Remove Start Tags</string>
+    <string name="module_news_remove_start_tags_description">Some newsfeeds feature tags at the beginning of their titles or descriptions, such as [VIDEO]. This setting allows for the removal of specified tags from the beginning of an item\'s description and/or title.</string>
+    <string name="module_news_remove_start_tags_default">None</string>
+
+    <string name="module_news_start_tags_title">Start Tags</string>
+    <string name="module_news_start_tags_description">List the tags you would like to have removed at the beginning of the feed item</string>
+
+    <string name="module_news_remove_end_tags_title">Remove End Tags</string>
+    <string name="module_news_remove_end_tags_description">Remove specified tags from the end of an item\'s description and/or title.</string>
+    <string name="module_news_remove_end_tags_default">None</string>
+
+    <string name="module_news_end_tags_title">End Tags</string>
+    <string name="module_news_end_tags_description">List the tags you would like to have removed at the end of the feed item</string>
+
+    <!--Update Notification-->
+    <string name="module_update_notification_interval_title">Update Interval</string>
+    <string name="module_update_notification_interval_description">How often do you want to check for a new version? This value represents the interval in milliseconds.</string>
+    <string name="module_update_notification_interval_default">600000 (10 minutes)</string>
+    <string-array name="module_update_notification_interval_possible"><item>Any value above 60000 (1 minute)</item></string-array>
+
+    <!--Weather Forecast-->
+    <string name="module_forecast_max_days_title">Max Days</string>
+    <string name="module_forecast_max_days_description">How many days of forecast to return.</string>
+    <string name="module_forecast_max_days_default">7 (7 days)</string>
+    <string-array name="module_forecast_max_days_possible"><item>1 – 16</item></string-array>
+
+    <string name="module_forecast_show_rain_title">Show Rain Amount</string>
+    <string name="module_forecast_show_rain_description">Should the predicted rain amount be displayed?</string>
+    <string name="module_forecast_show_rain_default">false</string>
+
+    <string name="module_forecast_endpoint_default">forecast/daily</string>
+
+</resources>

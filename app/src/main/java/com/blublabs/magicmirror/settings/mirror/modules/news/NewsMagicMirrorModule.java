@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 
 import com.blublabs.magicmirror.BR;
-import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.utils.Utils;
 import com.blublabs.magicmirror.settings.mirror.modules.MagicMirrorModule;
 import com.blublabs.magicmirror.settings.mirror.modules.ModuleSettingsFragment;
 
@@ -153,10 +153,6 @@ public class NewsMagicMirrorModule extends MagicMirrorModule {
         return feeds;
     }
 
-    public void setFeeds(List<Feed> feeds) {
-        this.feeds = feeds;
-    }
-
     @Bindable
     public boolean isShowSourceTitle() {
         return showSourceTitle;
@@ -276,10 +272,6 @@ public class NewsMagicMirrorModule extends MagicMirrorModule {
         return startTags;
     }
 
-    public void setStartTags(List<String> startTags) {
-        this.startTags = startTags;
-    }
-
     @Bindable
     public RemoveTags getRemoveEndTags() {
         return removeEndTags;
@@ -298,10 +290,6 @@ public class NewsMagicMirrorModule extends MagicMirrorModule {
     @Bindable
     public List<String> getEndTags() {
         return endTags;
-    }
-
-    public void setEndTags(List<String> endTags) {
-        this.endTags = endTags;
     }
 
     @Override

@@ -6,7 +6,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.blublabs.magicmirror.BR;
-import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.settings.mirror.modules.forecast.ForecastMagicMirrorModule;
+import com.blublabs.magicmirror.settings.mirror.modules.updatenotification.UpdateNotificationMagicMirrorModule;
+import com.blublabs.magicmirror.utils.Utils;
 import com.blublabs.magicmirror.settings.mirror.modules.alert.AlertMagicMirrorModule;
 import com.blublabs.magicmirror.settings.mirror.modules.calendar.CalendarMagicMirrorModule;
 import com.blublabs.magicmirror.settings.mirror.modules.clock.ClockMagicMirrorModule;
@@ -39,12 +41,14 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
         bottom_right,
         upper_third,
         middle_center,
-        lower_third;
+        lower_third,
+        fullscreen_above,
+        fullscreen_below;
 
         public static PositionRegion from(String position) {
 
             if(position == null) {
-                return null;
+                return none;
             }
 
             for(PositionRegion value : PositionRegion.values()) {
@@ -53,22 +57,24 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
                 }
             }
 
-            return null;
+            return none;
         }
     }
 
     private String name = "";
-    private boolean active;
     private PositionRegion region = PositionRegion.none;
     private String header = "";
+    private boolean disabled = false;
     private final UUID id;
 
+    private boolean active;
     private Runnable updateHandler = null;
     private boolean initialized = false;
 
     public final static String KEY_DATA_NAME = "module";
     private final static String KEY_DATA_POSITION = "position";
     private final static String KEY_DATA_HEADER = "header";
+    private final static String KEY_DATA_DISABLED = "disabled";
     public final static String KEY_DATA_CONFIG = "config";
 
     public MagicMirrorModule(String name) {
@@ -83,6 +89,7 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
         this.region = PositionRegion.values()[source.readInt()];
         this.header = source.readString();
         this.id = UUID.fromString(source.readString());
+        this.disabled = source.readByte() == 1;
     }
 
     public void setData(JSONObject data) throws JSONException {
@@ -91,6 +98,9 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
         }
         if(data.has(KEY_DATA_HEADER)) {
             header = data.getString(KEY_DATA_HEADER);
+        }
+        if(data.has(KEY_DATA_DISABLED)) {
+            disabled = data.getBoolean(KEY_DATA_DISABLED);
         }
 
         notifyChange();
@@ -108,18 +118,13 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
         return initialized;
     }
 
-    public void setInitialized(boolean initialized) {
-        this.initialized = initialized;
+    public void setInitialized() {
+        this.initialized = true;
     }
 
     @Bindable
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-        notifyPropertyChanged(BR.name);
     }
 
     public boolean isActive() {
@@ -160,6 +165,20 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
         notifyPropertyChanged(BR.header);
     }
 
+    @Bindable
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        if(this.disabled == disabled) {
+            return;
+        }
+
+        this.disabled = disabled;
+        notifyPropertyChanged(BR.disabled);
+    }
+
     public UUID getId() {
         return id;
     }
@@ -180,6 +199,10 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
             json.put(KEY_DATA_HEADER, getHeader());
         }
 
+        if(disabled) {
+            json.put(KEY_DATA_DISABLED, true);
+        }
+
         return json;
     }
 
@@ -195,6 +218,7 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
         dest.writeInt(region.ordinal());
         dest.writeString(header);
         dest.writeString(id.toString());
+        dest.writeByte((byte) (disabled ? 1 : 0));
     }
 
     @Override
@@ -238,7 +262,11 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
             case "newsfeed":
                 return new NewsMagicMirrorModule(name);
             case "weatherforecast":
+                return new ForecastMagicMirrorModule(name);
+            case "currentweather":
                 return new WeatherMagicMirrorModule(name);
+            case "updatenotification":
+                return new UpdateNotificationMagicMirrorModule(name);
             default:
                 return new CustomMagicMirrorModule(name);
         }

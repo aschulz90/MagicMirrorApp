@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="module" type="com.blublabs.magicmirror.settings.mirror.modules.weather.WeatherMagicMirrorModule"/>
+        <variable name="module" type="com.blublabs.magicmirror.settings.mirror.modules.forecast.ForecastMagicMirrorModule"/>
     </data>
 
     <LinearLayout
@@ -90,7 +90,7 @@
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_current_weather_units_description"
             InfoIcon:defaultVal="@string/module_current_weather_units_default"
-            InfoIcon:title="@string/module_current_weather_units_title"/>
+            InfoIcon:title="@string/module_current_weather_units_title" />
 
         <android.support.v7.widget.AppCompatSpinner
             android:layout_width="wrap_content"
@@ -106,7 +106,7 @@
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_current_weather_round_temp_description"
             InfoIcon:defaultVal="@string/module_current_weather_round_temp_default"
-            InfoIcon:title="@string/module_current_weather_round_temp_title"/>
+            InfoIcon:title="@string/module_current_weather_round_temp_title" />
 
         <android.support.v7.widget.SwitchCompat
             android:layout_width="wrap_content"
@@ -118,7 +118,45 @@
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextUpdateInterval"
+            android:labelFor="@+id/editTextMaxNumberOfDays"
+            android:paddingTop="5dp"
+            InfoIcon:description="@string/module_forecast_max_days_description"
+            InfoIcon:defaultVal="@string/module_forecast_max_days_default"
+            InfoIcon:title="@string/module_forecast_max_days_title"
+            InfoIcon:possibleValues="@array/module_forecast_max_days_possible"/>
+
+        <EditText
+            android:text="@={module.maxNumberOfDays}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/editTextMaxNumberOfDays"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:hint="@string/module_forecast_max_days_default"/>
+
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/switchShowRainAmountt"
+            android:paddingTop="5dp"
+            InfoIcon:description="@string/module_forecast_show_rain_description"
+            InfoIcon:defaultVal="@string/module_forecast_show_rain_default"
+            InfoIcon:title="@string/module_forecast_show_rain_title"/>
+
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchShowRainAmountt"
+            android:checked="@={module.showRainAmount}"/>
+
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/editTextMaxNumberOfDays"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_current_weather_update_interval_description"
             InfoIcon:defaultVal="@string/module_current_weather_update_interval_default"
@@ -162,118 +200,6 @@
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/spinnerTimeFormat"
-            android:paddingTop="5dp"
-            InfoIcon:description="@string/module_current_weather_timeformat_description"
-            InfoIcon:defaultVal="@string/module_current_weather_timeformat_default"
-            InfoIcon:title="@string/module_current_weather_timeformat_title"/>
-
-        <android.support.v7.widget.AppCompatSpinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinnerTimeFormat"
-            app:selectedItem="@={module.timeFormat}"/>
-
-        <com.blublabs.magicmirror.common.InfoIcon
-            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:labelFor="@+id/switchShowPeriod"
-            android:paddingTop="5dp"
-            InfoIcon:description="@string/module_clock_show_period_description"
-            InfoIcon:defaultVal="@string/module_clock_show_period_default"
-            InfoIcon:title="@string/module_clock_show_period_title"/>
-
-        <android.support.v7.widget.SwitchCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/switchShowPeriod"
-            android:checked="@={module.showPeriod}"/>
-
-        <com.blublabs.magicmirror.common.InfoIcon
-            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:labelFor="@+id/switchShowPeriodUpper"
-            android:paddingTop="5dp"
-            InfoIcon:description="@string/module_clock_show_period_upper_description"
-            InfoIcon:defaultVal="@string/module_clock_show_period_upper_default"
-            InfoIcon:title="@string/module_clock_show_period_upper_title"/>
-
-        <android.support.v7.widget.SwitchCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/switchShowPeriodUpper"
-            android:checked="@={module.showPeriodUpper}"/>
-
-        <com.blublabs.magicmirror.common.InfoIcon
-            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:labelFor="@+id/switchShowHumidity"
-            android:paddingTop="5dp"
-            InfoIcon:description="@string/module_current_weather_show_humidity_description"
-            InfoIcon:defaultVal="@string/module_current_weather_show_humidity_default"
-            InfoIcon:title="@string/module_current_weather_show_humidity_title"/>
-
-        <android.support.v7.widget.SwitchCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/switchShowHumidity"
-            android:checked="@={module.showHumidity}"/>
-
-        <com.blublabs.magicmirror.common.InfoIcon
-            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:labelFor="@+id/switchOnlyTemp"
-            android:paddingTop="5dp"
-            InfoIcon:description="@string/module_current_weather_only_temp_description"
-            InfoIcon:defaultVal="@string/module_current_weather_only_temp_default"
-            InfoIcon:title="@string/module_current_weather_only_temp_title"/>
-
-        <android.support.v7.widget.SwitchCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/switchOnlyTemp"
-            android:checked="@={module.onlyTemp}"/>
-
-        <com.blublabs.magicmirror.common.InfoIcon
-            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:labelFor="@+id/switchShowWindDirection"
-            android:paddingTop="5dp"
-            InfoIcon:description="@string/module_current_weather_wind_direction_description"
-            InfoIcon:defaultVal="@string/module_current_weather_wind_direction_default"
-            InfoIcon:title="@string/module_current_weather_wind_direction_title"/>
-
-        <android.support.v7.widget.SwitchCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/switchShowWindDirection"
-            android:checked="@={module.showWindDirection}"/>
-
-        <com.blublabs.magicmirror.common.InfoIcon
-            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:labelFor="@+id/switchUseBeaufort"
-            android:paddingTop="5dp"
-            InfoIcon:description="@string/module_current_weather_use_beaufort_description"
-            InfoIcon:defaultVal="@string/module_current_weather_use_beaufort_default"
-            InfoIcon:title="@string/module_current_weather_use_beaufort_title"/>
-
-        <android.support.v7.widget.SwitchCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/switchUseBeaufort"
-            android:checked="@={module.useBeaufort}"/>
-
-        <com.blublabs.magicmirror.common.InfoIcon
-            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:labelFor="@+id/editTextLang"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_current_weather_lang_description"
@@ -282,7 +208,7 @@
             InfoIcon:possibleValues="@array/module_current_weather_lang_possible"/>
 
         <EditText
-            android:text="@={module.locationID}"
+            android:text="@={module.lang}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
@@ -291,6 +217,44 @@
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
             android:hint="@string/module_current_weather_lang_default"/>
+
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/switchFade"
+            android:paddingTop="5dp"
+            InfoIcon:description="@string/module_calendar_fade_description"
+            InfoIcon:defaultVal="@string/module_calendar_fade_default"
+            InfoIcon:title="@string/module_calendar_fade_title"/>
+
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchFade"
+            android:checked="@={module.fade}"/>
+
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/editTextFadePoint"
+            android:paddingTop="5dp"
+            InfoIcon:description="@string/module_calendar_fade_point_description"
+            InfoIcon:defaultVal="@string/module_calendar_fade_point_default"
+            InfoIcon:title="@string/module_calendar_fade_point_title"
+            InfoIcon:possibleValues="@array/module_calendar_fade_point_possible"
+            android:enabled="@{module.fade}"/>
+
+        <EditText
+            android:text="@={module.fadePoint}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:hint="@string/module_calendar_fade_point_default"
+            android:ems="10"
+            android:id="@+id/editTextFadePoint"
+            android:enabled="@{module.fade}"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
@@ -385,11 +349,11 @@
             android:labelFor="@+id/editTextWeatherEndpoint"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_current_weather_endpoint_description"
-            InfoIcon:defaultVal="@string/module_current_weather_endpoint_default"
+            InfoIcon:defaultVal="@string/module_forecast_endpoint_default"
             InfoIcon:title="@string/module_current_weather_endpoint_title"/>
 
         <EditText
-            android:text="@={module.weatherEndpoint}"
+            android:text="@={module.forecastEndpoint}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
@@ -397,7 +361,7 @@
             android:id="@+id/editTextWeatherEndpoint"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            android:hint="@string/module_current_weather_endpoint_default"/>
+            android:hint="@string/module_forecast_endpoint_default"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"

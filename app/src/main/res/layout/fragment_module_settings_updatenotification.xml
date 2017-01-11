@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable name="module" type="com.blublabs.magicmirror.settings.mirror.modules.helloworld.HelloWorldMagicMirrorModule"/>
+        <variable name="module" type="com.blublabs.magicmirror.settings.mirror.modules.updatenotification.UpdateNotificationMagicMirrorModule"/>
     </data>
 
     <LinearLayout
@@ -23,19 +23,20 @@
             android:layout_height="wrap_content"
             android:labelFor="@+id/editText"
             android:paddingTop="5dp"
-            InfoIcon:description="@string/module_hello_world_text_description"
-            InfoIcon:defaultVal="@string/module_hello_world_text_default"
-            InfoIcon:title="@string/module_hello_world_text_title"/>
+            InfoIcon:description="@string/module_update_notification_interval_description"
+            InfoIcon:defaultVal="@string/module_update_notification_interval_default"
+            InfoIcon:possibleValues="@array/module_update_notification_interval_possible"
+            InfoIcon:title="@string/module_update_notification_interval_title"/>
 
         <EditText
-            android:text="@={module.text}"
+            android:text="@={module.updateInterval}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="number"
             android:ems="10"
             android:id="@+id/editText"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            android:hint="@string/module_hello_world_text_default"/>
+            android:hint="@string/module_update_notification_interval_default"/>
     </LinearLayout>
 </layout>

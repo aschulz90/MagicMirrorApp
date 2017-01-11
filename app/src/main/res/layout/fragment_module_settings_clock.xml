@@ -18,13 +18,15 @@
             android:id="@+id/textView3"
             style="?android:attr/listSeparatorTextViewStyle"/>
 
-        <TextView
-            android:text="Time Format"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewTimeFormat"
+            android:labelFor="@+id/spinnerTimeFormat"
             android:paddingTop="5dp"
-            android:labelFor="@+id/spinnerTimeFormat" />
+            InfoIcon:description="@string/module_clock_timeformat_description"
+            InfoIcon:defaultVal="@string/module_clock_timeformat_default"
+            InfoIcon:title="@string/module_clock_timeformat_title"/>
 
         <android.support.v7.widget.AppCompatSpinner
             android:layout_width="wrap_content"
@@ -32,13 +34,15 @@
             android:id="@+id/spinnerTimeFormat"
             app:selectedItem="@={module.timeFormat}"/>
 
-        <TextView
-            android:text="Display Seconds"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewDisplaySeconds"
+            android:labelFor="@+id/switchDisplaySecondsss"
             android:paddingTop="5dp"
-            android:labelFor="@+id/switchDisplaySecondsss" />
+            InfoIcon:description="@string/module_clock_display_seconds_description"
+            InfoIcon:defaultVal="@string/module_clock_display_seconds_default"
+            InfoIcon:title="@string/module_clock_display_seconds_title"/>
 
         <android.support.v7.widget.SwitchCompat
             android:layout_width="wrap_content"
@@ -46,13 +50,15 @@
             android:id="@+id/switchDisplaySecondsss"
             android:checked="@={module.displaySeconds}"/>
 
-        <TextView
-            android:text="Show Period"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewShowPeriod"
+            android:labelFor="@+id/switchShowPeriod"
             android:paddingTop="5dp"
-            android:labelFor="@+id/switchShowPeriod" />
+            InfoIcon:description="@string/module_clock_show_period_description"
+            InfoIcon:defaultVal="@string/module_clock_show_period_default"
+            InfoIcon:title="@string/module_clock_show_period_title"/>
 
         <android.support.v7.widget.SwitchCompat
             android:layout_width="wrap_content"
@@ -60,13 +66,15 @@
             android:id="@+id/switchShowPeriod"
             android:checked="@={module.showPeriod}"/>
 
-        <TextView
-            android:text="Show Period Upper"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewShowPeriodUpper"
+            android:labelFor="@+id/switchShowPeriodUpper"
             android:paddingTop="5dp"
-            android:labelFor="@+id/switchShowPeriodUpper" />
+            InfoIcon:description="@string/module_clock_show_period_upper_description"
+            InfoIcon:defaultVal="@string/module_clock_show_period_upper_default"
+            InfoIcon:title="@string/module_clock_show_period_upper_title"/>
 
         <android.support.v7.widget.SwitchCompat
             android:layout_width="wrap_content"
@@ -74,13 +82,15 @@
             android:id="@+id/switchShowPeriodUpper"
             android:checked="@={module.showPeriodUpper}"/>
 
-        <TextView
-            android:text="Clock Bold"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewClockBold"
+            android:labelFor="@+id/switchClockBold"
             android:paddingTop="5dp"
-            android:labelFor="@+id/switchClockBold" />
+            InfoIcon:description="@string/module_clock_bold_description"
+            InfoIcon:defaultVal="@string/module_clock_bold_default"
+            InfoIcon:title="@string/module_clock_bold_title"/>
 
         <android.support.v7.widget.SwitchCompat
             android:layout_width="wrap_content"
@@ -88,13 +98,15 @@
             android:id="@+id/switchClockBold"
             android:checked="@={module.clockBold}"/>
 
-        <TextView
-            android:text="Show Date"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewShowDate"
+            android:labelFor="@+id/switchShowDate"
             android:paddingTop="5dp"
-            android:labelFor="@+id/switchShowDate" />
+            InfoIcon:description="@string/module_clock_show_date_description"
+            InfoIcon:defaultVal="@string/module_clock_show_date_default"
+            InfoIcon:title="@string/module_clock_show_date_title"/>
 
         <android.support.v7.widget.SwitchCompat
             android:layout_width="wrap_content"
@@ -102,13 +114,15 @@
             android:id="@+id/switchShowDate"
             android:checked="@={module.showDate}"/>
 
-        <TextView
-            android:text="Display Type"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewDisplayType"
+            android:labelFor="@+id/spinnerDisplayType"
             android:paddingTop="5dp"
-            android:labelFor="@+id/spinnerDisplayType" />
+            InfoIcon:description="@string/module_clock_display_type_description"
+            InfoIcon:defaultVal="@string/module_clock_display_type_default"
+            InfoIcon:title="@string/module_clock_display_type_title"/>
 
         <android.support.v7.widget.AppCompatSpinner
             android:layout_width="wrap_content"
@@ -116,13 +130,16 @@
             android:id="@+id/spinnerDisplayType"
             app:selectedItem="@={module.displayType}"/>
 
-        <TextView
-            android:text="Analog Size"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewAnalogSie"
+            android:labelFor="@+id/editTextAnalogSize"
             android:paddingTop="5dp"
-            android:labelFor="@+id/editTextAnalogSize" />
+            InfoIcon:description="@string/module_clock_analog_size_description"
+            InfoIcon:defaultVal="@string/module_clock_analog_size_default"
+            InfoIcon:title="@string/module_clock_analog_size_title"
+            InfoIcon:possibleValues="@array/module_clock_analog_size_possible"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -131,7 +148,7 @@
 
             <EditText
                 android:text="@={module.analogSize}"
-                android:hint="Default: 200"
+                android:hint="@string/module_clock_analog_size_default"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="number"
@@ -144,13 +161,15 @@
                 android:text="px"/>
         </LinearLayout>
 
-        <TextView
-            android:text="Analog Face"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewAnalogFace"
+            android:labelFor="@+id/spinnerAnalogFace"
             android:paddingTop="5dp"
-            android:labelFor="@+id/spinnerAnalogFace" />
+            InfoIcon:description="@string/module_clock_analog_face_description"
+            InfoIcon:defaultVal="@string/module_clock_analog_face_default"
+            InfoIcon:title="@string/module_clock_analog_face_title"/>
 
         <android.support.v7.widget.AppCompatSpinner
             android:layout_width="wrap_content"
@@ -158,26 +177,30 @@
             android:id="@+id/spinnerAnalogFace"
             app:selectedItem="@={module.analogFace}"/>
 
-        <TextView
-            android:text="Seconds Color"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewSecondsColor"
+            android:labelFor="@+id/colorPickerSecondsColor"
             android:paddingTop="5dp"
-            android:labelFor="@+id/colorPickerSecondsColor" />
+            InfoIcon:description="@string/module_clock_seconds_color_description"
+            InfoIcon:defaultVal="@string/module_clock_seconds_color_default"
+            InfoIcon:title="@string/module_clock_seconds_color_title"/>
 
         <Button android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/colored_circle"
             android:id="@+id/buttonColorCircle"/>
 
-        <TextView
-            android:text="Analog Placement"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewAnalogPlacement"
+            android:labelFor="@+id/spinnerAnalogPlacement"
             android:paddingTop="5dp"
-            android:labelFor="@+id/spinnerAnalogPlacement" />
+            InfoIcon:description="@string/module_clock_analog_placement_description"
+            InfoIcon:defaultVal="@string/module_clock_analog_placement_default"
+            InfoIcon:title="@string/module_clock_analog_placement_title"/>
 
         <android.support.v7.widget.AppCompatSpinner
             android:layout_width="wrap_content"
@@ -185,13 +208,15 @@
             android:id="@+id/spinnerAnalogPlacement"
             app:selectedItem="@={module.analogPlacement}"/>
 
-        <TextView
-            android:text="Show Analog Date"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewShowAnalogDate"
+            android:labelFor="@+id/spinnerShowAnalogDate"
             android:paddingTop="5dp"
-            android:labelFor="@+id/spinnerShowAnalogDate" />
+            InfoIcon:description="@string/module_clock_analog_show_date_description"
+            InfoIcon:defaultVal="@string/module_clock_analog_show_date_default"
+            InfoIcon:title="@string/module_clock_analog_show_date_title"/>
 
         <android.support.v7.widget.SwitchCompat
             android:layout_width="wrap_content"

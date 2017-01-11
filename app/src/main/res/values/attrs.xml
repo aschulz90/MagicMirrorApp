@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="InfoIcon">
+        <attr name="description" format="string"/>
+        <attr name="possibleValues" format="reference"/>
+        <attr name="defaultVal" format="string"/>
+        <attr name="notes" format="string"/>
+        <attr name="title" format="string"/>
+    </declare-styleable>
+</resources>

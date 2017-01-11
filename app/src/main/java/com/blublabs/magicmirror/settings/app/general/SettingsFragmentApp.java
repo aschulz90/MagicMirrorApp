@@ -16,8 +16,6 @@ import com.blublabs.magicmirror.adapter.MagicMirrorAdapterFactory;
 
 public class SettingsFragmentApp extends PreferenceFragmentCompat {
 
-    private IMagicMirrorAdapter adapter = null;
-
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings_app);
@@ -59,6 +57,7 @@ public class SettingsFragmentApp extends PreferenceFragmentCompat {
                         .apply();
 
                 activity.updateDevices();
+                activity.enableMenu();
 
                 return true;
             }

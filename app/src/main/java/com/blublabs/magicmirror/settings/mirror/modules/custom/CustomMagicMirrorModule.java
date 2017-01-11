@@ -3,7 +3,7 @@ package com.blublabs.magicmirror.settings.mirror.modules.custom;
 import android.os.Bundle;
 import android.os.Parcel;
 
-import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.utils.Utils;
 import com.blublabs.magicmirror.settings.mirror.modules.MagicMirrorModule;
 import com.blublabs.magicmirror.settings.mirror.modules.ModuleSettingsFragment;
 
@@ -61,15 +61,6 @@ public class CustomMagicMirrorModule extends MagicMirrorModule {
         }
 
         this.data = savedData;
-    }
-
-    public JSONObject getData() throws JSONException {
-
-        if(data != null && data.has(KEY_DATA_CONFIG) && data.getJSONObject(KEY_DATA_CONFIG).length() == 0) {
-            data.remove(KEY_DATA_CONFIG);
-        }
-
-        return data;
     }
 
     @Override

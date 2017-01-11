@@ -18,13 +18,15 @@
             android:id="@+id/textView3"
             style="?android:attr/listSeparatorTextViewStyle"/>
 
-        <TextView
-            android:text="Feeds"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView"
+            android:labelFor="@+id/recyclerViewFeeds"
             android:paddingTop="5dp"
-            android:labelFor="@+id/editText" />
+            InfoIcon:description="@string/module_news_feeds_description"
+            InfoIcon:defaultVal="@string/module_news_feeds_default"
+            InfoIcon:title="@string/module_news_feeds_title"/>
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
@@ -33,13 +35,15 @@
 
         </android.support.v7.widget.RecyclerView>
 
-        <TextView
-            android:text="Show Source Title"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewShowSourceTitle"
+            android:labelFor="@+id/switchShowSourceTitle"
             android:paddingTop="5dp"
-            android:labelFor="@+id/switchShowSourceTitle" />
+            InfoIcon:description="@string/module_news_show_source_title_description"
+            InfoIcon:defaultVal="@string/module_news_show_source_title_default"
+            InfoIcon:title="@string/module_news_show_source_title_title"/>
 
         <android.support.v7.widget.SwitchCompat
             android:layout_width="wrap_content"
@@ -47,13 +51,15 @@
             android:id="@+id/switchShowSourceTitle"
             android:checked="@={module.showSourceTitle}"/>
 
-        <TextView
-            android:text="Show Publish Date"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewShowPublishDate"
+            android:labelFor="@+id/switchShowPublishDate"
             android:paddingTop="5dp"
-            android:labelFor="@+id/switchShowPublishDate" />
+            InfoIcon:description="@string/module_news_show_publish_date_description"
+            InfoIcon:defaultVal="@string/module_news_show_publish_date_default"
+            InfoIcon:title="@string/module_news_show_publish_date_title"/>
 
         <android.support.v7.widget.SwitchCompat
             android:layout_width="wrap_content"
@@ -61,13 +67,15 @@
             android:id="@+id/switchShowPublishDate"
             android:checked="@={module.showPublishDate}"/>
 
-        <TextView
-            android:text="Show Description"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewShowDescription"
+            android:labelFor="@+id/switchShowDescription"
             android:paddingTop="5dp"
-            android:labelFor="@+id/switchShowDescription" />
+            InfoIcon:description="@string/module_news_show_description_description"
+            InfoIcon:defaultVal="@string/module_news_show_description_default"
+            InfoIcon:title="@string/module_news_show_description_title"/>
 
         <android.support.v7.widget.SwitchCompat
             android:layout_width="wrap_content"
@@ -75,81 +83,94 @@
             android:id="@+id/switchShowDescription"
             android:checked="@={module.showDescription}"/>
 
-        <TextView
-            android:text="Reload Interval"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewReloadInterval"
+            android:labelFor="@+id/editTextReloadInterval"
             android:paddingTop="5dp"
-            android:labelFor="@+id/editTextReloadInterval"/>
+            InfoIcon:description="@string/module_calendar_fetch_interval_description"
+            InfoIcon:defaultVal="@string/module_calendar_fetch_interval_default"
+            InfoIcon:title="@string/module_calendar_fetch_interval_title"
+            InfoIcon:possibleValues="@array/module_calendar_fetch_interval_possible"/>
 
         <EditText
             android:text="@={module.reloadInterval}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
-            android:hint="Default: 300000 (5 minutes)"
+            android:hint="@string/module_calendar_fetch_interval_default"
             android:ems="10"
             android:id="@+id/editTextReloadInterval"/>
 
-        <TextView
-            android:text="Update Interval"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewUpdateInterval"
+            android:labelFor="@+id/editTextUpdateInterval"
             android:paddingTop="5dp"
-            android:labelFor="@+id/editTextUpdateInterval"/>
+            InfoIcon:description="@string/module_news_update_interval_description"
+            InfoIcon:defaultVal="@string/module_news_update_interval_default"
+            InfoIcon:title="@string/module_news_update_interval_title"
+            InfoIcon:possibleValues="@array/module_news_update_interval_possible"/>
 
         <EditText
             android:text="@={module.updateInterval}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
-            android:hint="Default: 10000 (10 seconds)"
+            android:hint="@string/module_news_update_interval_default"
             android:ems="10"
             android:id="@+id/editTextUpdateInterval"/>
 
-        <TextView
-            android:text="Animation Speed"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewAnimationSpeed"
+            android:labelFor="@+id/editTextAnimationSpeed"
             android:paddingTop="5dp"
-            android:labelFor="@+id/editTextAnimationSpeed"/>
+            InfoIcon:description="@string/module_news_animation_speed_description"
+            InfoIcon:defaultVal="@string/module_news_animation_speed_default"
+            InfoIcon:title="@string/module_news_animation_speed_title"
+            InfoIcon:possibleValues="@array/module_news_animation_speed_possible"/>
 
         <EditText
             android:text="@={module.animationSpeed}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
-            android:hint="Default: 2000 (2 seconds)"
+            android:hint="@string/module_news_animation_speed_default"
             android:ems="10"
             android:id="@+id/editTextAnimationSpeed"/>
 
-        <TextView
-            android:text="Max News Items"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewMaxNewsItems"
+            android:labelFor="@+id/editTextMaxNewsItemss"
             android:paddingTop="5dp"
-            android:labelFor="@+id/editTextMaxNewsItemss"/>
+            InfoIcon:description="@string/module_news_max_news_description"
+            InfoIcon:defaultVal="@string/module_news_max_news_default"
+            InfoIcon:title="@string/module_news_max_news_title"/>
 
         <EditText
             android:text="@={module.maxNewsItems}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
-            android:hint="Default: 0 (unlimited)"
+            android:hint="@string/module_news_max_news_default"
             android:ems="10"
             android:id="@+id/editTextMaxNewsItemss"/>
 
-        <TextView
-            android:text="Remove Start Tags"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewRemoveStartTags"
+            android:labelFor="@+id/spinnerRemoveStartTags"
             android:paddingTop="5dp"
-            android:labelFor="@+id/spinnerRemoveStartTags" />
+            InfoIcon:description="@string/module_news_remove_start_tags_description"
+            InfoIcon:defaultVal="@string/module_news_remove_start_tags_default"
+            InfoIcon:title="@string/module_news_remove_start_tags_title"/>
 
         <android.support.v7.widget.AppCompatSpinner
             android:layout_width="wrap_content"
@@ -157,28 +178,30 @@
             android:id="@+id/spinnerRemoveStartTags"
             app:selectedItem="@={module.removeStartTags}"/>
 
-        <TextView
-            android:text="Start Tags"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewStartTags"
+            android:labelFor="@+id/recyclerViewStartTags"
             android:paddingTop="5dp"
-            android:labelFor="@+id/recyclerViewStartTags" />
+            InfoIcon:description="@string/module_news_start_tags_description"
+            InfoIcon:title="@string/module_news_start_tags_title"/>
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/recyclerViewStartTags">
-
         </android.support.v7.widget.RecyclerView>
 
-        <TextView
-            android:text="Remove End Tags"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewRemoveEndTags"
+            android:labelFor="@+id/spinnerRemoveEndTagss"
             android:paddingTop="5dp"
-            android:labelFor="@+id/spinnerRemoveEndTagss" />
+            InfoIcon:description="@string/module_news_remove_end_tags_description"
+            InfoIcon:defaultVal="@string/module_news_remove_end_tags_default"
+            InfoIcon:title="@string/module_news_remove_end_tags_title"/>
 
         <android.support.v7.widget.AppCompatSpinner
             android:layout_width="wrap_content"
@@ -186,13 +209,14 @@
             android:id="@+id/spinnerRemoveEndTagss"
             app:selectedItem="@={module.removeEndTags}"/>
 
-        <TextView
-            android:text="End Tags"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewEndTags"
+            android:labelFor="@+id/recyclerViewEndTags"
             android:paddingTop="5dp"
-            android:labelFor="@+id/recyclerViewEndTags" />
+            InfoIcon:description="@string/module_news_end_tags_description"
+            InfoIcon:title="@string/module_news_end_tags_title"/>
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"

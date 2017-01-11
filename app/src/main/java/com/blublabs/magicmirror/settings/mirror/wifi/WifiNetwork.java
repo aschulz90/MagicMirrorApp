@@ -8,8 +8,8 @@ import android.support.annotation.NonNull;
 
 public class WifiNetwork {
 
-    private String ssid;
-    private String macAddress;
+    private final String ssid;
+    private final String macAddress;
     private boolean connected;
 
     public WifiNetwork(@NonNull String ssid, @NonNull String macAddress) {
@@ -21,16 +21,8 @@ public class WifiNetwork {
         return ssid;
     }
 
-    public void setSsid(String ssid) {
-        this.ssid = ssid;
-    }
-
     public String getMacAddress() {
         return macAddress;
-    }
-
-    public void setMacAddress(String macAddress) {
-        this.macAddress = macAddress;
     }
 
     public boolean isConnected() {

@@ -3,11 +3,8 @@ package com.blublabs.magicmirror.adapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.preference.PreferenceManager;
-import android.util.Log;
 
 import com.blublabs.magicmirror.R;
-
-import java.util.Map;
 
 import kotlin.NotImplementedError;
 
@@ -21,7 +18,7 @@ public class MagicMirrorAdapterFactory {
         BLE("ble"),
         REMOTE("remote");
 
-        private String text;
+        private final String text;
 
         AdapterType(String text) {
             this.text = text;

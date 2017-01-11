@@ -32,7 +32,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:preference-v7:24.2.1'
-    compile 'it.sephiroth.android.library.targettooltip:target-tooltip-library:+'
     compile 'com.github.QuadFlask:colorpicker:0.0.12'
     compile 'com.android.volley:volley:1.0.0'
 }

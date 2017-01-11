@@ -14,7 +14,7 @@
     <TextView
         android:id="@+id/macAdress"
         android:textColor="@color/title"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textStyle="bold"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"

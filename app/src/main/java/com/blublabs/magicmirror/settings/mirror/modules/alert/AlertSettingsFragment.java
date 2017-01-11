@@ -3,7 +3,6 @@ package com.blublabs.magicmirror.settings.mirror.modules.alert;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,18 +14,16 @@ import com.blublabs.magicmirror.databinding.FragmentModuleSettingsAlertBinding;
 import com.blublabs.magicmirror.settings.mirror.modules.ModuleSettingsFragment;
 
 /**
- * Created by andrs on 28.09.2016.
+ * Created by Andreas Schulz on 28.09.2016.
  */
 
 public class AlertSettingsFragment extends ModuleSettingsFragment<AlertMagicMirrorModule> {
-
-    private FragmentModuleSettingsAlertBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_module_settings_alert, container, false);
+        FragmentModuleSettingsAlertBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_module_settings_alert, container, false);
         final View view = binding.getRoot();
         binding.setModule(getModule());
 

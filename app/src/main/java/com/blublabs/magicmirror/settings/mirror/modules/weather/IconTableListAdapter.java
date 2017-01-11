@@ -18,12 +18,12 @@ import android.widget.Toast;
 
 import com.blublabs.magicmirror.BR;
 import com.blublabs.magicmirror.R;
-import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Map;
 
-class IconTableListAdapter extends RecyclerView.Adapter<IconTableListAdapter.MyViewHolder> {
+public class IconTableListAdapter extends RecyclerView.Adapter<IconTableListAdapter.MyViewHolder> {
 
     private final Context context;
 
@@ -31,7 +31,7 @@ class IconTableListAdapter extends RecyclerView.Adapter<IconTableListAdapter.MyV
     private final WeatherMagicMirrorModule module;
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView text;
+        final TextView text;
 
         MyViewHolder(View view) {
             super(view);
@@ -50,7 +50,7 @@ class IconTableListAdapter extends RecyclerView.Adapter<IconTableListAdapter.MyV
         }
     }
 
-    IconTableListAdapter(WeatherMagicMirrorModule module, Context context, RecyclerView iconTableRecyclerView) {
+    public IconTableListAdapter(WeatherMagicMirrorModule module, Context context, RecyclerView iconTableRecyclerView) {
 
         this.module = module;
         this.context = context;
@@ -77,7 +77,7 @@ class IconTableListAdapter extends RecyclerView.Adapter<IconTableListAdapter.MyV
         return module.getIconTable().size();
     }
 
-    void showIconDialog(final Map.Entry<String, String> entry) {
+    public void showIconDialog(final Map.Entry<String, String> entry) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
         View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_icontable, null);

@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.blublabs.magicmirror.R;
 import com.blublabs.magicmirror.adapter.IMagicMirrorAdapter;
-import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.utils.Utils;
 
 import java.util.List;
 
@@ -23,17 +23,17 @@ import java.util.List;
  */
 public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyViewHolder> {
 
-    private List<WifiNetwork> wifiList;
+    private final List<WifiNetwork> wifiList;
     private final Context appContext;
     private final WifiSettingsFragment fragment;
     private final RecyclerView wifiRecylcerView;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView deviceAddress;
-        public TextView ssid;
-        public TextView connectionStatus;
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        final TextView deviceAddress;
+        final TextView ssid;
+        final TextView connectionStatus;
 
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
             deviceAddress = (TextView) view.findViewById(R.id.macAdress);
             ssid = (TextView) view.findViewById(R.id.ssid);
@@ -53,7 +53,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         }
     }
 
-    public WifiListAdapter(List<WifiNetwork> wifiList, Context applicationContext, WifiSettingsFragment fragment, RecyclerView wifiRecylcerView) {
+    WifiListAdapter(List<WifiNetwork> wifiList, Context applicationContext, WifiSettingsFragment fragment, RecyclerView wifiRecylcerView) {
         this.wifiList = wifiList;
         this.appContext = applicationContext;
         this.fragment = fragment;
@@ -132,6 +132,11 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
                     public void onConnectToWifiNetwork(int status) {
                         if(status == IMagicMirrorAdapter.MagicMirrorAdapterCallback.STATUS_ERROR) {
                             Toast.makeText(appContext, "Error while connecting to wifi network", Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            for(WifiNetwork network : wifiList) {
+                                network.setConnected(ssid.equals(network.getSsid()));
+                            }
                         }
                     }
                 });

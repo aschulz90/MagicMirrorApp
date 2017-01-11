@@ -2,14 +2,11 @@ package com.blublabs.magicmirror.settings.mirror.general;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.app.Fragment;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -27,13 +24,13 @@ import org.json.JSONObject;
 
 public class SettingsFragmentMirror extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    String KEY_PREF_CONFIG_PORT = "";
-    String KEY_PREF_CONFIG_KIOSKMODE = "";
-    String KEY_PREF_CONFIG_LANGUAGE = "";
-    String KEY_PREF_CONFIG_TIMEFORMAT = "";
-    String KEY_PREF_CONFIG_UNTIS = "";
+    private String KEY_PREF_CONFIG_PORT = "";
+    private String KEY_PREF_CONFIG_KIOSKMODE = "";
+    private String KEY_PREF_CONFIG_LANGUAGE = "";
+    private String KEY_PREF_CONFIG_TIMEFORMAT = "";
+    private String KEY_PREF_CONFIG_UNTIS = "";
 
-    View progressBar = null;
+    private View progressBar = null;
     private boolean settingsLoaded = false;
 
     private IMagicMirrorAdapter adapter = null;
@@ -118,7 +115,6 @@ public class SettingsFragmentMirror extends PreferenceFragmentCompat implements 
     public void onResume() {
         super.onResume();
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-
     }
 
     @Override

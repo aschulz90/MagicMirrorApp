@@ -2,7 +2,6 @@ package com.blublabs.magicmirror.settings.mirror.modules.clock;
 
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
-import android.databinding.Observable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,9 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
-import com.android.databinding.library.baseAdapters.BR;
 import com.blublabs.magicmirror.R;
-import com.blublabs.magicmirror.common.SwitchOnCheckedChangeListener;
 import com.blublabs.magicmirror.databinding.FragmentModuleSettingsClockBinding;
 import com.blublabs.magicmirror.settings.mirror.modules.ModuleSettingsFragment;
 import com.flask.colorpicker.ColorPickerView;
@@ -29,13 +26,11 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 public class ClockSettingsFragment extends ModuleSettingsFragment<ClockMagicMirrorModule> {
 
-    private FragmentModuleSettingsClockBinding binding;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_module_settings_clock, container, false);
+        FragmentModuleSettingsClockBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_module_settings_clock, container, false);
         final View view = binding.getRoot();
         binding.setModule(getModule());
 

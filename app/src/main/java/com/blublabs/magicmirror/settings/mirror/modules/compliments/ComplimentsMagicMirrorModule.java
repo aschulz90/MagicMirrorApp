@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 
 import com.blublabs.magicmirror.BR;
-import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.utils.Utils;
 import com.blublabs.magicmirror.settings.mirror.modules.MagicMirrorModule;
 import com.blublabs.magicmirror.settings.mirror.modules.ModuleSettingsFragment;
 
@@ -29,6 +29,7 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
     private static final String KEY_DATA_COMPLIMENTS_MORNING = "morning";
     private static final String KEY_DATA_COMPLIMENTS_AFTERNOON = "afternoon";
     private static final String KEY_DATA_COMPLIMENTS_EVENING = "evening";
+    private static final String KEY_DATA_REMOTE_FILE = "remoteFile";
 
     private static final List<String> COMPLIMENTS_DEFAULT_MORNING = Arrays.asList("Good morning, handsome!", "Enjoy your day!", "How was your sleep?");
     private static final List<String> COMPLIMENTS_DEFAULT_AFTERNOON = Arrays.asList("Hello, beauty!", "You look sexy!", "Looking good today!");
@@ -36,11 +37,12 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
 
     private Integer updateInterval = null;
     private Integer fadeSpeed = null;
+    private String remoteFile = "";
     private List<String> complimentsMorning = new ArrayList<>();
     private List<String> complimentsAfternoon = new ArrayList<>();
     private List<String> complimentsEvening = new ArrayList<>();
 
-    ComplimentsSettingsFragment fragment = null;
+    private ComplimentsSettingsFragment fragment = null;
 
     public ComplimentsMagicMirrorModule(String name) {
         super(name);
@@ -58,6 +60,10 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
 
             if(config.has(KEY_DATA_FADE_SPEED)) {
                 this.fadeSpeed = config.getInt(KEY_DATA_FADE_SPEED);
+            }
+
+            if(config.has(KEY_DATA_REMOTE_FILE)) {
+                this.remoteFile = config.getString(KEY_DATA_REMOTE_FILE);
             }
 
             if(config.has(KEY_DATA_COMPLIMENTS)) {
@@ -129,12 +135,22 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
     }
 
     @Bindable
-    public List<String> getComplimentsMorning() {
-        return complimentsMorning;
+    public String getRemoteFile() {
+        return remoteFile;
     }
 
-    public void setComplimentsMorning(List<String> complimentsMorning) {
-        this.complimentsMorning = complimentsMorning;
+    public void setRemoteFile(String remoteFile) {
+        if(Utils.objectsEqual(this.remoteFile, remoteFile)) {
+            return;
+        }
+
+        this.remoteFile = remoteFile;
+        notifyPropertyChanged(BR.fadeSpeed);
+    }
+
+    @Bindable
+    public List<String> getComplimentsMorning() {
+        return complimentsMorning;
     }
 
     @Bindable
@@ -142,17 +158,9 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
         return complimentsAfternoon;
     }
 
-    public void setComplimentsAfternoon(List<String> complimentsAfternoon) {
-        this.complimentsAfternoon = complimentsAfternoon;
-    }
-
     @Bindable
     public List<String> getComplimentsEvening() {
         return complimentsEvening;
-    }
-
-    public void setComplimentsEvening(List<String> complimentsEvening) {
-        this.complimentsEvening = complimentsEvening;
     }
 
     @Override
@@ -180,6 +188,10 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
 
         if(this.fadeSpeed != null) {
             config.put(KEY_DATA_FADE_SPEED, this.fadeSpeed);
+        }
+
+        if(Utils.isNotEmtpy(this.remoteFile)) {
+            config.put(KEY_DATA_REMOTE_FILE, this.remoteFile);
         }
 
         JSONObject compliments = new JSONObject();
@@ -237,9 +249,15 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
             return false;
         if (getFadeSpeed() != null ? !getFadeSpeed().equals(that.getFadeSpeed()) : that.getFadeSpeed() != null)
             return false;
-        if (!getComplimentsMorning().equals(that.getComplimentsMorning())) return false;
-        if (!getComplimentsAfternoon().equals(that.getComplimentsAfternoon())) return false;
-        return getComplimentsEvening().equals(that.getComplimentsEvening());
+        if (getRemoteFile() != null ? !getRemoteFile().equals(that.getRemoteFile()) : that.getRemoteFile() != null)
+            return false;
+        if (getComplimentsMorning() != null ? !getComplimentsMorning().equals(that.getComplimentsMorning()) : that.getComplimentsMorning() != null)
+            return false;
+        if (getComplimentsAfternoon() != null ? !getComplimentsAfternoon().equals(that.getComplimentsAfternoon()) : that.getComplimentsAfternoon() != null)
+            return false;
+        if (getComplimentsEvening() != null ? !getComplimentsEvening().equals(that.getComplimentsEvening()) : that.getComplimentsEvening() != null)
+            return false;
+        return fragment != null ? fragment.equals(that.fragment) : that.fragment == null;
 
     }
 
@@ -248,9 +266,11 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
         int result = super.hashCode();
         result = 31 * result + (getUpdateInterval() != null ? getUpdateInterval().hashCode() : 0);
         result = 31 * result + (getFadeSpeed() != null ? getFadeSpeed().hashCode() : 0);
-        result = 31 * result + getComplimentsMorning().hashCode();
-        result = 31 * result + getComplimentsAfternoon().hashCode();
-        result = 31 * result + getComplimentsEvening().hashCode();
+        result = 31 * result + (getRemoteFile() != null ? getRemoteFile().hashCode() : 0);
+        result = 31 * result + (getComplimentsMorning() != null ? getComplimentsMorning().hashCode() : 0);
+        result = 31 * result + (getComplimentsAfternoon() != null ? getComplimentsAfternoon().hashCode() : 0);
+        result = 31 * result + (getComplimentsEvening() != null ? getComplimentsEvening().hashCode() : 0);
+        result = 31 * result + (fragment != null ? fragment.hashCode() : 0);
         return result;
     }
 
@@ -267,6 +287,7 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
         dest.writeStringList(this.complimentsMorning);
         dest.writeStringList(this.complimentsAfternoon);
         dest.writeStringList(this.complimentsEvening);
+        dest.writeString(remoteFile);
     }
 
     private ComplimentsMagicMirrorModule(Parcel in) {
@@ -276,6 +297,7 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
         this.complimentsMorning = in.createStringArrayList();
         this.complimentsAfternoon = in.createStringArrayList();
         this.complimentsEvening = in.createStringArrayList();
+        this.remoteFile = in.readString();
     }
 
     public static final Creator<ComplimentsMagicMirrorModule> CREATOR = new Creator<ComplimentsMagicMirrorModule>() {

@@ -17,13 +17,15 @@
             android:id="@+id/textView3"
             style="?android:attr/listSeparatorTextViewStyle"/>
 
-        <TextView
-            android:text="Update Interval"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewUpdateInterval"
+            android:labelFor="@+id/editTextUpdateInterval"
             android:paddingTop="5dp"
-            android:labelFor="@+id/editTextUpdateInterval"/>
+            InfoIcon:description="@string/module_compliments_update_interval_description"
+            InfoIcon:defaultVal="@string/module_compliments_update_interval_default"
+            InfoIcon:title="@string/module_compliments_update_interval_title"/>
 
         <EditText
             android:text="@={module.updateInterval}"
@@ -34,15 +36,17 @@
             android:id="@+id/editTextUpdateInterval"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            android:hint="Default: 30000 (30 seconds)"/>
+            android:hint="@string/module_compliments_update_interval_default"/>
 
-        <TextView
-            android:text="Fade Speed"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewFadeSpeed"
+            android:labelFor="@+id/editTextFadeSpeed"
             android:paddingTop="5dp"
-            android:labelFor="@+id/editTextFadeSpeed"/>
+            InfoIcon:description="@string/module_compliments_fade_speed_description"
+            InfoIcon:defaultVal="@string/module_compliments_fade_speed_default"
+            InfoIcon:title="@string/module_compliments_fade_speed_title"/>
 
         <EditText
             android:text="@={module.fadeSpeed}"
@@ -53,14 +57,16 @@
             android:id="@+id/editTextFadeSpeed"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            android:hint="Default: 4000 (4 seconds)"/>
+            android:hint="@string/module_compliments_fade_speed_default"/>
 
-        <TextView
-            android:text="Compliments"
-            android:layout_width="match_parent"
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewComliments"
-            android:paddingTop="5dp"/>
+            android:labelFor="@+id/textViewComliments"
+            android:paddingTop="5dp"
+            InfoIcon:description="@string/module_compliments_compliments_description"
+            InfoIcon:title="@string/module_compliments_compliments_title"/>
 
         <TextView
             android:text="Morning"
@@ -101,5 +107,26 @@
             android:layout_height="wrap_content"
             android:id="@+id/recyclerViewEvening"/>
 
+        <com.blublabs.magicmirror.common.InfoIcon
+            xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/editTextRemoteFile"
+            android:paddingTop="5dp"
+            InfoIcon:description="@string/module_compliments_remote_file_description"
+            InfoIcon:defaultVal="@string/module_compliments_remote_file_default"
+            InfoIcon:title="@string/module_compliments_remote_file_interval_title"/>
+
+        <EditText
+            android:text="@={module.remoteFile}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/editTextRemoteFile"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"/>
+
     </LinearLayout>
+
 </layout>

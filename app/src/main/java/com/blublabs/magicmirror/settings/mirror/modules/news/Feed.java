@@ -3,7 +3,7 @@ package com.blublabs.magicmirror.settings.mirror.modules.news;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,7 +59,7 @@ public class Feed implements Parcelable {
         return json;
     }
 
-    protected Feed(Parcel in) {
+    private Feed(Parcel in) {
         title = in.readString();
         url = in.readString();
         encoding = in.readString();
@@ -138,8 +138,6 @@ public class Feed implements Parcelable {
 
     @Override
     public String toString() {
-        String string = "";
-
         String value = "{";
 
         if(title != null) {

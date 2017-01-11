@@ -22,13 +22,11 @@ import com.blublabs.magicmirror.settings.mirror.modules.ModuleSettingsFragment;
 
 public class NewsSettingsFragment extends ModuleSettingsFragment<NewsMagicMirrorModule> {
 
-    private FragmentModuleSettingsNewsBinding binding;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_module_settings_news, container, false);
+        FragmentModuleSettingsNewsBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_module_settings_news, container, false);
         final View view = binding.getRoot();
         binding.setModule(getModule());
 

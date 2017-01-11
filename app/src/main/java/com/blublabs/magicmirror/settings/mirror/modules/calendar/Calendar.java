@@ -3,7 +3,7 @@ package com.blublabs.magicmirror.settings.mirror.modules.calendar;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.blublabs.magicmirror.common.Utils;
+import com.blublabs.magicmirror.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,7 +48,7 @@ public class Calendar implements Parcelable{
         }
     }
 
-    protected Calendar(Parcel in) {
+    Calendar(Parcel in) {
         url = in.readString();
         symbol = in.readString();
         repeatingCountTitle = in.readString();

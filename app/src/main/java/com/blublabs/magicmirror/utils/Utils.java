@@ -1,4 +1,4 @@
-package com.blublabs.magicmirror.common;
+package com.blublabs.magicmirror.utils;
 
 import android.databinding.BindingAdapter;
 import android.databinding.InverseBindingAdapter;
@@ -11,18 +11,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by andrs on 08.10.2016.
  */
 
 public final class Utils {
 
-    private Utils() {};
+    private Utils() {}
 
     public static boolean validateEditTextValue(String value, TextInputLayout textInputLayout, String errorMessage) {
         if (value == null || value.isEmpty()) {
@@ -36,42 +31,16 @@ public final class Utils {
         return true;
     }
 
-    public static String padLeft(String value, int count, char padding) {
-        StringBuilder sb = new StringBuilder();
-
-        for (int toPrepend = count - value.length(); toPrepend>0; toPrepend--) {
-            sb.append(padding);
-        }
-
-        sb.append(value);
-        return sb.toString();
-    }
-
     public static boolean isEmpty(String value) {
         return value == null || value.isEmpty();
     }
 
+    public static boolean isNotEmtpy(String value) {
+        return !isEmpty(value);
+    }
+
     public static boolean objectsEqual(Object a, Object b){
         return (a == b) || (a != null && a.equals(b));
-    }
-
-    public static JSONArray remove(final int idx, final JSONArray from) {
-        final List<Object> objs = asList(from);
-        objs.remove(idx);
-
-        return new JSONArray(objs);
-    }
-
-    public static List<Object> asList(final JSONArray ja) {
-        final int len = ja.length();
-        final ArrayList<Object> result = new ArrayList<Object>(len);
-        for (int i = 0; i < len; i++) {
-            final Object obj = ja.opt(i);
-            if (obj != null) {
-                result.add(obj);
-            }
-        }
-        return result;
     }
 
     public static class TextIntegerBinder {
@@ -122,11 +91,6 @@ public final class Utils {
             if (!objectsEqual(oldValue, newValue)) {
                 view.setSelection((newValue).ordinal());
             }
-        }
-
-        @InverseBindingAdapter(attribute = "app:selectedItem")
-        public static Enum getSelectedItem(AppCompatSpinner view) {
-            return (Enum) view.getSelectedItem();
         }
 
         @BindingAdapter("selectedItemAttrChanged")
