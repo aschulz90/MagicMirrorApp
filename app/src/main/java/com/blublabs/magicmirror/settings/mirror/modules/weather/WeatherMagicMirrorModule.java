@@ -609,7 +609,7 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
         }
 
         if(roundTemp) {
-            config.put(KEY_DATA_ROUND_TEMP, roundTemp);
+            config.put(KEY_DATA_ROUND_TEMP, true);
         }
 
         if(timeFormat != ClockMagicMirrorModule.TimeFormat.Config) {
@@ -769,7 +769,7 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
         this.appendLocationNameToHeader = in.readByte() != 0;
         this.calendarClass = in.readString();
         int iconTableSize = in.readInt();
-        this.iconTable = new HashMap<String, String>(iconTableSize);
+        this.iconTable = new HashMap<>(iconTableSize);
         for (int i = 0; i < iconTableSize; i++) {
             String key = in.readString();
             String value = in.readString();

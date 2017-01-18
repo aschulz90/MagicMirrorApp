@@ -33,7 +33,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:src="@drawable/ic_delete"
-            android:contentDescription="Delete Icon" />
+            android:contentDescription="@string/delete_icon" />
     </RelativeLayout>
 
 </LinearLayout>

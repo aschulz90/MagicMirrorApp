@@ -8,10 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.blublabs.magicmirror.R;
-import com.blublabs.magicmirror.databinding.FragmentModuleSettingsHelloworldBinding;
 import com.blublabs.magicmirror.databinding.FragmentModuleSettingsUpdatenotificationBinding;
 import com.blublabs.magicmirror.settings.mirror.modules.ModuleSettingsFragment;
-import com.blublabs.magicmirror.settings.mirror.modules.helloworld.HelloWorldMagicMirrorModule;
 
 /**
  * Created by andrs on 28.09.2016.

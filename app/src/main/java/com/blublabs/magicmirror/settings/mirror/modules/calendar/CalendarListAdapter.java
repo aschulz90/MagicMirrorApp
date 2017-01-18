@@ -71,7 +71,7 @@ class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapter.MyVie
             holder.text.setText(module.getCalendars().get(position).toString());
         }
         else {
-            holder.text.setText("Add calendar");
+            holder.text.setText(context.getText(R.string.add_calendar));
         }
     }
 

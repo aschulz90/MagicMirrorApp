@@ -48,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:src="@drawable/ic_delete_forever_grey_button"
-                        android:contentDescription="Delete Icon" />
+                        android:contentDescription="@string/delete_icon" />
                 </RelativeLayout>
 
                 <ProgressBar
@@ -147,7 +147,7 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_action_expand_button"
                         android:background="@drawable/ic_action_expand_button"
-                        android:contentDescription="Expand Icon" />
+                        android:contentDescription="@string/expand_icon" />
 
                 </LinearLayout>
             </RelativeLayout>

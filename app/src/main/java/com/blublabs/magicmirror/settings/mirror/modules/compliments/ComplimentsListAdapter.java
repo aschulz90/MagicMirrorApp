@@ -73,7 +73,7 @@ public class ComplimentsListAdapter extends RecyclerView.Adapter<ComplimentsList
             holder.text.setText(compliments.get(position));
         }
         else {
-            holder.text.setText("Add Compliment");
+            holder.text.setText(context.getText(R.string.add_compliment));
         }
     }
 

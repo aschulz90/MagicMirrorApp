@@ -71,7 +71,7 @@ class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.MyViewHolder>
             holder.text.setText(module.getFeeds().get(position).toString());
         }
         else {
-            holder.text.setText("Add Feed");
+            holder.text.setText(context.getText(R.string.add_feed));
         }
     }
 

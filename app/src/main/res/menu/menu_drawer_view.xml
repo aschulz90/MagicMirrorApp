@@ -5,43 +5,43 @@
         <item
             android:id="@+id/nav_main_fragment"
             android:icon="@drawable/ic_action_mirror"
-            android:title="MagicMirror"
+            android:title="@string/magicmirror"
             android:checked="true" />
     </group>
 
-    <item android:title="MagicMirror">
+    <item android:title="@string/magicmirror">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_settings_general_fragment"
                     android:icon="@drawable/ic_action_settings"
-                    android:title="MagicMirror Settings"
+                    android:title="@string/magicmirror_settings"
                     android:enabled="false"/>
                 <item
                     android:id="@+id/nav_modules_fragment"
                     android:icon="@drawable/ic_action_module"
-                    android:title="Modules"
+                    android:title="@string/modules"
                     android:enabled="false"/>
                 <item
                     android:id="@+id/nav_settings_wifi_fragment"
                     android:icon="@drawable/ic_action_wifi"
-                    android:title="Wifi"
+                    android:title="@string/wifi"
                     android:enabled="false"/>
             </group>
         </menu>
     </item>
 
-    <item android:title="App">
+    <item android:title="@string/app">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_settings_App_fragment"
                     android:icon="@drawable/ic_action_settings"
-                    android:title="App Settings" />
+                    android:title="@string/app_settings" />
                 <item
                     android:id="@+id/nav_devices_fragment"
                     android:icon="@drawable/ic_action_connect"
-                    android:title="Connect to Mirror" />
+                    android:title="@string/connect_to_mirror" />
             </group>
         </menu>
     </item>
@@ -52,6 +52,6 @@
         <item
             android:id="@+id/nav_about_fragment"
             android:icon="@drawable/ic_action_info"
-            android:title="About" />
+            android:title="@string/about" />
     </group>
 </menu>

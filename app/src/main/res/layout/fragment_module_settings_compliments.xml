@@ -25,7 +25,8 @@
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_compliments_update_interval_description"
             InfoIcon:defaultVal="@string/module_compliments_update_interval_default"
-            InfoIcon:title="@string/module_compliments_update_interval_title"/>
+            InfoIcon:title="@string/module_compliments_update_interval_title"
+            InfoIcon:possibleValues="@array/module_compliments_update_interval_possible"/>
 
         <EditText
             android:text="@={module.updateInterval}"
@@ -46,7 +47,8 @@
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_compliments_fade_speed_description"
             InfoIcon:defaultVal="@string/module_compliments_fade_speed_default"
-            InfoIcon:title="@string/module_compliments_fade_speed_title"/>
+            InfoIcon:title="@string/module_compliments_fade_speed_title"
+            InfoIcon:possibleValues="@array/module_compliments_fade_speed_possible"/>
 
         <EditText
             android:text="@={module.fadeSpeed}"
@@ -69,7 +71,7 @@
             InfoIcon:title="@string/module_compliments_compliments_title"/>
 
         <TextView
-            android:text="Morning"
+            android:text="@string/morning"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textViewComplimentsMorning"
@@ -82,7 +84,7 @@
             android:id="@+id/recyclerViewMorning"/>
 
         <TextView
-            android:text="Afternoon"
+            android:text="@string/afternoon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textViewComplimentsAfternoon"
@@ -95,7 +97,7 @@
             android:id="@+id/recyclerViewAfternoon"/>
 
         <TextView
-            android:text="Evening"
+            android:text="@string/evening"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textViewComplimentsEvening"

@@ -60,7 +60,7 @@ public class DynamicJSONArrayView extends DynamicJSONObjectView {
         removeAllViews();
 
         TextView addConfigView = (TextView) LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1, this, false);
-        addConfigView.setText("Add Value");
+        addConfigView.setText(getContext().getText(R.string.add_value));
         addView(addConfigView);
 
         addConfigView.setOnClickListener(new OnClickListener() {

@@ -18,7 +18,7 @@
                 android:id="@+id/editTextTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Title"
+                android:hint="@string/title"
                 android:inputType="textPersonName"
                 android:text="@={feed.title}"/>
 
@@ -33,7 +33,7 @@
                 android:id="@+id/editTextUrl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="URL"
+                android:hint="@string/url"
                 android:inputType="textUri"
                 android:text="@={feed.url}"/>
 
@@ -48,7 +48,7 @@
                 android:id="@+id/editTextEncoding"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Encoding"
+                android:hint="@string/encoding"
                 android:text="@={feed.encoding}"/>
 
         </android.support.design.widget.TextInputLayout>

@@ -12,7 +12,7 @@
             android:id="@+id/input_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Key" />
+            android:hint="@string/key" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -25,7 +25,7 @@
             android:id="@+id/input_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Icon" />
+            android:hint="@string/icon" />
 
     </android.support.design.widget.TextInputLayout>
 </LinearLayout>

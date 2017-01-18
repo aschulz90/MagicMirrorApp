@@ -71,7 +71,7 @@ public class TagsListAdapter extends RecyclerView.Adapter<TagsListAdapter.MyView
             holder.text.setText(tags.get(position));
         }
         else {
-            holder.text.setText("Add Tag");
+            holder.text.setText(context.getText(R.string.add_tag));
         }
     }
 

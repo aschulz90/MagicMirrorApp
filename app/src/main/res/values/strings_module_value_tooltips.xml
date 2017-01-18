@@ -170,6 +170,7 @@
     <string name="module_clock_timezone_title">Timezone</string>
     <string name="module_clock_timezone_description">Specify a timezone to show.</string>
     <string name="module_clock_timezone_default"> </string>
+    <string-array name="module_clock_timezone_possible"><item>See https://en.wikipedia.org/wiki/List_of_tz_database_time_zones</item></string-array>
 
     <!--Compliments-->
     <string name="module_compliments_update_interval_title">Update Interval</string>

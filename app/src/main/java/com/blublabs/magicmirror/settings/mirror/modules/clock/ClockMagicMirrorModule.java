@@ -177,6 +177,7 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
     private static final String KEY_DATA_SECONDS_COLOR = "secondsColor";
     private static final String KEY_DATA_ANALOG_PLACEMENT = "analogPlacement";
     private static final String KEY_DATA_ANALOG_DATE_PLACEMENT = "analogShowDate";
+    private static final String KEY_DATA_TIMEZONE = "timezone";
 
     private TimeFormat timeFormat = TimeFormat.Config;
     private boolean displaySeconds = true;
@@ -191,6 +192,7 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
     private AnalogPlacement analogPlacement = AnalogPlacement.bottom;
     private AnalogDatePlacement analogDatePlacement = AnalogDatePlacement.top;
     private boolean analogShowDate = true;
+    private String timezone = null;
 
     private ClockSettingsFragment fragment;
 
@@ -259,6 +261,10 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
                 else {
                     this.analogDatePlacement = AnalogDatePlacement.from(config.getString(KEY_DATA_ANALOG_DATE_PLACEMENT));
                 }
+            }
+
+            if(config.has(KEY_DATA_TIMEZONE)) {
+                this.timezone = config.getString(KEY_DATA_TIMEZONE);
             }
         }
     }
@@ -458,6 +464,20 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
         notifyPropertyChanged(BR.analogShowDate);
     }
 
+    @Bindable
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        if(Utils.objectsEqual(timezone, this.timezone)) {
+            return;
+        }
+
+        this.timezone = timezone;
+        notifyPropertyChanged(BR.analogShowDate);
+    }
+
     @Override
     public ModuleSettingsFragment getAdditionalSettingsFragment() {
 
@@ -528,6 +548,10 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
             config.put(KEY_DATA_ANALOG_DATE_PLACEMENT, analogDatePlacement);
         }
 
+        if(Utils.isNotEmtpy(timezone)) {
+            config.put(KEY_DATA_TIMEZONE, timezone);
+        }
+
         if(config.length() > 0) {
             json.put(KEY_DATA_CONFIG, config);
         }
@@ -557,6 +581,7 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
         if (getSecondsColor() != null ? !getSecondsColor().equals(that.getSecondsColor()) : that.getSecondsColor() != null)
             return false;
         if (getAnalogPlacement() != that.getAnalogPlacement()) return false;
+        if(!Utils.objectsEqual(timezone, that.getTimezone())) return false;
         return getAnalogDatePlacement() == that.getAnalogDatePlacement();
 
     }
@@ -577,6 +602,7 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
         result = 31 * result + getAnalogPlacement().hashCode();
         result = 31 * result + getAnalogDatePlacement().hashCode();
         result = 31 * result + (isAnalogShowDate() ? 1 : 0);
+        result = 31 * result + (getTimezone() == null ? 0 : getTimezone().hashCode());
         return result;
     }
 
@@ -596,6 +622,7 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
         dest.writeInt(this.analogPlacement == null ? -1 : this.analogPlacement.ordinal());
         dest.writeInt(this.analogDatePlacement == null ? -1 : this.analogDatePlacement.ordinal());
         dest.writeByte(this.analogShowDate ? (byte) 1 : (byte) 0);
+        dest.writeString(timezone);
     }
 
     private ClockMagicMirrorModule(Parcel in) {
@@ -618,6 +645,7 @@ public class ClockMagicMirrorModule extends MagicMirrorModule {
         int tmpAnalogDatePlacement = in.readInt();
         this.analogDatePlacement = tmpAnalogDatePlacement == -1 ? null : AnalogDatePlacement.values()[tmpAnalogDatePlacement];
         this.analogShowDate = in.readByte() != 0;
+        this.timezone = in.readString();
     }
 
     public static final Creator<ClockMagicMirrorModule> CREATOR = new Creator<ClockMagicMirrorModule>() {

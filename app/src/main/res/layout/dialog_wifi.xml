@@ -14,7 +14,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/textviewSsidTitle"
                 android:textStyle="bold"
-                android:text="SSID:"
+                android:text="@string/ssid"
                 android:layout_alignParentStart="true" />
 
             <TextView
@@ -36,7 +36,7 @@
                 android:id="@+id/editTextPassphrase"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Passphrase"
+                android:hint="@string/passphrase"
                 android:inputType="textPassword"
                 android:text=""/>
 

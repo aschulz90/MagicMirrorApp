@@ -18,7 +18,7 @@
                 android:id="@+id/editTextUrl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="URL"
+                android:hint="@string/url"
                 android:inputType="textUri"
                 android:text="@={calendar.url}"/>
 
@@ -33,7 +33,7 @@
                 android:id="@+id/editTextSymbol"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Symbol"
+                android:hint="@string/symbol"
                 android:text="@={calendar.symbol}"/>
 
         </android.support.design.widget.TextInputLayout>
@@ -47,7 +47,7 @@
                 android:id="@+id/editTextRepeatingCountTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Repeating Count Title"
+                android:hint="@string/repeating_count_title"
                 android:text="@={calendar.repeatingCountTitle}"/>
 
         </android.support.design.widget.TextInputLayout>
@@ -61,7 +61,7 @@
                 android:id="@+id/editTextUser"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Basic Authentification User"
+                android:hint="@string/basic_authentification_user"
                 android:text="@={calendar.user}"/>
 
         </android.support.design.widget.TextInputLayout>
@@ -75,7 +75,7 @@
                 android:id="@+id/editTextPass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Basic Authentification Pass"
+                android:hint="@string/basic_authentification_pass"
                 android:text="@={calendar.pass}"/>
 
         </android.support.design.widget.TextInputLayout>

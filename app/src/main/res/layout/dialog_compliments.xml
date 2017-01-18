@@ -20,7 +20,7 @@
                 android:id="@+id/editTextCompliment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Compliment"
+                android:hint="@string/compliment"
                 android:inputType="textPersonName"
                 android:text=""/>
 

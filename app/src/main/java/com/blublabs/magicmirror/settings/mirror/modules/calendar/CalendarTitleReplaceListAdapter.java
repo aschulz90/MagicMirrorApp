@@ -76,7 +76,7 @@ class CalendarTitleReplaceListAdapter extends RecyclerView.Adapter<CalendarTitle
             holder.text.setText(element.getKey() + " : " + element.getValue());
         }
         else {
-            holder.text.setText("Add Title Replacement");
+            holder.text.setText(context.getText(R.string.add_title_replacement));
         }
     }
 

@@ -12,7 +12,7 @@
             android:id="@+id/input_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Title" />
+            android:hint="@string/title" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -25,7 +25,7 @@
             android:id="@+id/input_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Replace with" />
+            android:hint="@string/replace_with" />
 
     </android.support.design.widget.TextInputLayout>
 </LinearLayout>

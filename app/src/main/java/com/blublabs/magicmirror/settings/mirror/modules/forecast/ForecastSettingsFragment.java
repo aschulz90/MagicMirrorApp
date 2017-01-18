@@ -14,7 +14,6 @@ import android.widget.Spinner;
 import com.blublabs.magicmirror.R;
 import com.blublabs.magicmirror.common.MyCustomLayoutManager;
 import com.blublabs.magicmirror.databinding.FragmentModuleSettingsForecastBinding;
-import com.blublabs.magicmirror.databinding.FragmentModuleSettingsWeatherBinding;
 import com.blublabs.magicmirror.settings.mirror.modules.ModuleSettingsFragment;
 import com.blublabs.magicmirror.settings.mirror.modules.weather.IconTableListAdapter;
 
