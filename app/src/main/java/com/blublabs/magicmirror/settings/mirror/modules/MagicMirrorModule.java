@@ -5,7 +5,7 @@ import android.databinding.Bindable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.blublabs.magicmirror.BR;
+import com.android.databinding.library.baseAdapters.BR;
 import com.blublabs.magicmirror.settings.mirror.modules.forecast.ForecastMagicMirrorModule;
 import com.blublabs.magicmirror.settings.mirror.modules.updatenotification.UpdateNotificationMagicMirrorModule;
 import com.blublabs.magicmirror.utils.Utils;
@@ -186,7 +186,12 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
     public abstract ModuleSettingsFragment getAdditionalSettingsFragment();
 
     public boolean parameterRequiresRefresh(int id) {
-        return false;
+        switch (id) {
+            case BR.disabled:
+                return true;
+            default:
+                return false;
+        }
     }
 
     public JSONObject toJson() throws JSONException {

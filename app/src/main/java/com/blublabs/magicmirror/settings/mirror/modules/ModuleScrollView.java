@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.blublabs.magicmirror.R;
 import com.blublabs.magicmirror.common.ExpandAndScrollAnimation;
 import com.blublabs.magicmirror.adapter.IMagicMirrorAdapter;
+import com.blublabs.magicmirror.common.ScrollAwareFabBehavior;
 import com.blublabs.magicmirror.databinding.CardModulesBinding;
 
 import org.json.JSONException;
@@ -137,6 +138,7 @@ public class ModuleScrollView extends CoordinatorLayout {
         CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.BOTTOM | Gravity.END;
         lp.setMargins(16,16,16,16);
+        lp.setBehavior(new ScrollAwareFabBehavior(getContext(),null));
         fab.setLayoutParams(lp);
         fab.setImageResource(R.drawable.ic_action_add_grey);
         fab.setScaleType(ImageView.ScaleType.CENTER);

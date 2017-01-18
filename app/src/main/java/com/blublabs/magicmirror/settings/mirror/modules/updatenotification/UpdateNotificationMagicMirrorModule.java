@@ -57,7 +57,7 @@ public class UpdateNotificationMagicMirrorModule extends MagicMirrorModule {
     private UpdateNotificationMagicMirrorModule(Parcel source) {
         super(source);
 
-        this.updateInterval = source.readInt();
+        this.updateInterval = (Integer) source.readValue(Integer.class.getClassLoader());
     }
 
     @Bindable
@@ -118,7 +118,7 @@ public class UpdateNotificationMagicMirrorModule extends MagicMirrorModule {
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
 
-        dest.writeInt(updateInterval);
+        dest.writeValue(updateInterval);
     }
 
     @Override
