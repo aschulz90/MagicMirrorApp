@@ -243,7 +243,7 @@
             InfoIcon:possibleValues="@array/module_clock_timezone_possible"/>
 
         <EditText
-            android:text="@={module.text}"
+            android:text="@={module.timezone}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
