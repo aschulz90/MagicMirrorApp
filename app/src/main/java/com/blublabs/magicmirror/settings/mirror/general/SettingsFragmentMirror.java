@@ -3,6 +3,8 @@ package com.blublabs.magicmirror.settings.mirror.general;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,8 @@ import android.widget.Toast;
 import com.blublabs.magicmirror.R;
 import com.blublabs.magicmirror.adapter.IMagicMirrorAdapter;
 import com.blublabs.magicmirror.adapter.MagicMirrorAdapterFactory;
+import com.blublabs.magicmirror.common.QueryDialogPreference;
+import com.blublabs.magicmirror.common.QueryPreferenceDialogFragmentCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,8 +36,6 @@ public class SettingsFragmentMirror extends PreferenceFragmentCompat implements 
 
     private View progressBar = null;
     private boolean settingsLoaded = false;
-
-    private IMagicMirrorAdapter adapter = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,8 +83,8 @@ public class SettingsFragmentMirror extends PreferenceFragmentCompat implements 
                         if(config.has(IMagicMirrorAdapter.KEY_CONFIG_UNTIS)) {
                             units = config.getString(IMagicMirrorAdapter.KEY_CONFIG_UNTIS);
                         }
-                        if(config.has(IMagicMirrorAdapter.KEY_CONFIG_KIOSKMODE)) {
-                            kioskmode = config.getBoolean(IMagicMirrorAdapter.KEY_CONFIG_KIOSKMODE);
+                        if(config.has(IMagicMirrorAdapter.KEY_CONFIG_ELECTRON_OPTIONS) && config.getJSONObject(IMagicMirrorAdapter.KEY_CONFIG_ELECTRON_OPTIONS).has(IMagicMirrorAdapter.KEY_CONFIG_KIOSKMODE)) {
+                            kioskmode = config.getJSONObject(IMagicMirrorAdapter.KEY_CONFIG_ELECTRON_OPTIONS).getBoolean(IMagicMirrorAdapter.KEY_CONFIG_KIOSKMODE);
                         }
 
                         getPreferenceManager().getSharedPreferences().edit()
@@ -130,10 +132,15 @@ public class SettingsFragmentMirror extends PreferenceFragmentCompat implements 
 
         try {
             config.put(IMagicMirrorAdapter.KEY_CONFIG_PORT, Integer.parseInt(sharedPreferences.getString(KEY_PREF_CONFIG_PORT, "8080")));
-            config.put(IMagicMirrorAdapter.KEY_CONFIG_KIOSKMODE, sharedPreferences.getBoolean(KEY_PREF_CONFIG_KIOSKMODE, false));
+
             config.put(IMagicMirrorAdapter.KEY_CONFIG_TIMEFORMAT, Integer.parseInt(sharedPreferences.getString(KEY_PREF_CONFIG_TIMEFORMAT, "24")));
             config.put(IMagicMirrorAdapter.KEY_CONFIG_UNTIS, sharedPreferences.getString(KEY_PREF_CONFIG_UNTIS, "metric"));
             config.put(IMagicMirrorAdapter.KEY_CONFIG_LANGUAGE, sharedPreferences.getString(KEY_PREF_CONFIG_LANGUAGE, "en"));
+            if(sharedPreferences.getBoolean(KEY_PREF_CONFIG_KIOSKMODE, false)) {
+                JSONObject electronOptions = new JSONObject();
+                electronOptions.put(IMagicMirrorAdapter.KEY_CONFIG_KIOSKMODE, true);
+                config.put(IMagicMirrorAdapter.KEY_CONFIG_ELECTRON_OPTIONS, electronOptions);
+            }
 
             getAdapter().setMirrorConfig(config, new IMagicMirrorAdapter.MagicMirrorAdapterCallback() {
                 @Override
@@ -149,10 +156,28 @@ public class SettingsFragmentMirror extends PreferenceFragmentCompat implements 
     }
 
     private IMagicMirrorAdapter getAdapter() {
-        if(adapter == null) {
-            adapter = MagicMirrorAdapterFactory.getAdapter(getActivity().getApplicationContext());
+        return MagicMirrorAdapterFactory.getAdapter(getActivity().getApplicationContext());
+    }
+
+    @Override
+    public void onDisplayPreferenceDialog(Preference preference) {
+        DialogFragment dialogFragment = null;
+        if (preference instanceof QueryDialogPreference)
+        {
+            dialogFragment = new QueryPreferenceDialogFragmentCompat();
+            Bundle bundle = new Bundle(1);
+            bundle.putString("key", preference.getKey());
+            dialogFragment.setArguments(bundle);
         }
 
-        return adapter;
+        if (dialogFragment != null)
+        {
+            dialogFragment.setTargetFragment(this, 0);
+            dialogFragment.show(this.getFragmentManager(), "android.support.v7.preference.PreferenceFragment.DIALOG");
+        }
+        else
+        {
+            super.onDisplayPreferenceDialog(preference);
+        }
     }
 }

@@ -15,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.blublabs.magicmirror.settings.mirror.modules.MagicMirrorModule;
 
@@ -411,6 +412,21 @@ public class RemoteMagicMirrorAdapter implements IMagicMirrorAdapter {
     @Override
     public void connectToWifiNetwork(String ssid, String passphrase, MagicMirrorAdapterCallback callback) {
         throw new UnsupportedOperationException("This adapter allows no Wifi setup!");
+    }
+
+    @Override
+    public void executeQuery(String query, final MagicMirrorAdapterCallback callback) {
+        requestQueue.add(new StringRequest(getRequestUrl(currentConnectedMirror) + "remote?action=" + query, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                callback.onExecuteQuery(MagicMirrorAdapterCallback.STATUS_SUCCESS);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onExecuteQuery(MagicMirrorAdapterCallback.STATUS_ERROR);
+            }
+        }));
     }
 
     @Override

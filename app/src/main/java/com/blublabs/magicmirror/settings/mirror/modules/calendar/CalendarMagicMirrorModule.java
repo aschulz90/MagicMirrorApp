@@ -5,7 +5,7 @@ import android.databinding.ObservableArrayList;
 import android.os.Bundle;
 import android.os.Parcel;
 
-import com.blublabs.magicmirror.BR;
+import com.android.databinding.library.baseAdapters.BR;
 import com.blublabs.magicmirror.utils.Utils;
 import com.blublabs.magicmirror.settings.mirror.modules.MagicMirrorModule;
 import com.blublabs.magicmirror.settings.mirror.modules.ModuleSettingsFragment;
@@ -537,6 +537,17 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
         }
 
         return json;
+    }
+
+    @Override
+    public boolean parameterRequiresRefresh(int id) {
+        switch (id) {
+            case BR.fetchInterval:
+            case BR.calendars:
+                return true;
+            default:
+                return super.parameterRequiresRefresh(id);
+        }
     }
 
     @Override

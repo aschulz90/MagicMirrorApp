@@ -21,8 +21,12 @@ public interface IMagicMirrorAdapter {
     String KEY_DEFAULT_MODULES = "default";
     String KEY_CUSTOM_MODULES = "custom";
     String KEY_CONFIG_MODULES = "modules";
+    String KEY_CONFIG_ADDRESS = "address";
     String KEY_CONFIG_PORT = "port";
-    String KEY_CONFIG_KIOSKMODE = "kioskmode";
+    String KEY_CONFIG_ZOOM = "zoom";
+    String KEY_CONFIG_IP_WHITELIST = "ipWhitelist";
+    String KEY_CONFIG_ELECTRON_OPTIONS = "electronOptions";
+    String KEY_CONFIG_KIOSKMODE = "kiosk";
     String KEY_CONFIG_LANGUAGE = "language";
     String KEY_CONFIG_TIMEFORMAT = "timeFormat";
     String KEY_CONFIG_UNTIS = "units";
@@ -62,6 +66,8 @@ public interface IMagicMirrorAdapter {
     void getWifiNetworks(MagicMirrorAdapterCallback callback);
 
     void connectToWifiNetwork(String ssid, String passphrase, MagicMirrorAdapterCallback callback);
+
+    void executeQuery(String query, MagicMirrorAdapterCallback callback);
 
     String getAdapterIdentifier();
 
@@ -127,6 +133,10 @@ public interface IMagicMirrorAdapter {
         }
 
         public void onSetMirrorConfig(int status) {
+
+        }
+
+        public void onExecuteQuery(int status) {
 
         }
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
@@ -43,7 +44,7 @@ public class InfoIcon extends FrameLayout {
 
         ta.recycle();
 
-        init(context, attrs);
+        init(context);
     }
 
     public InfoIcon(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -59,26 +60,23 @@ public class InfoIcon extends FrameLayout {
 
         ta.recycle();
 
-        init(context, attrs);
+        init(context);
     }
 
-    private void init(final Context context, AttributeSet attrs) {
+    private void init(final Context context) {
         final LinearLayout layout = new LinearLayout(context);
         layout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         layout.setOrientation(HORIZONTAL);
         addView(layout);
-
-        final TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.InfoIcon, 0, 0);
 
         if(Utils.isNotEmtpy(title)) {
             final TextView textView = new TextView(context);
             textView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
             textView.setText(title);
             textView.setTextSize(20);
+            textView.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
             layout.addView(textView);
         }
-
-        ta.recycle();
 
         boolean showTooltip = Utils.isNotEmtpy(description) || Utils.isNotEmtpy(defaultVal) || Utils.isNotEmtpy(notes) || (possibleValues != null && possibleValues.length > 0);
 

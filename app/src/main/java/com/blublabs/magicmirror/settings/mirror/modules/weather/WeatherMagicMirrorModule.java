@@ -4,8 +4,7 @@ import android.databinding.Bindable;
 import android.os.Bundle;
 import android.os.Parcel;
 
-import com.blublabs.magicmirror.BR;
-import com.blublabs.magicmirror.settings.mirror.modules.calendar.CalendarMagicMirrorModule;
+import com.android.databinding.library.baseAdapters.BR;
 import com.blublabs.magicmirror.settings.mirror.modules.clock.ClockMagicMirrorModule;
 import com.blublabs.magicmirror.utils.Utils;
 import com.blublabs.magicmirror.settings.mirror.modules.MagicMirrorModule;
@@ -318,7 +317,7 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
         }
 
         this.roundTemp = roundTemp;
-        notifyPropertyChanged(BR.units);
+        notifyPropertyChanged(BR.roundTemp);
     }
 
     @Bindable
@@ -377,7 +376,7 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
         }
 
         this.showHumidity = showHumidity;
-        notifyPropertyChanged(BR.showPeriodUpper);
+        notifyPropertyChanged(BR.showHumidity);
     }
 
     @Bindable
@@ -391,7 +390,7 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
         }
 
         this.onlyTemp = onlyTemp;
-        notifyPropertyChanged(BR.showPeriodUpper);
+        notifyPropertyChanged(BR.onlyTemp);
     }
 
     @Bindable
@@ -405,7 +404,7 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
         }
 
         this.showWindDirection = showWindDirection;
-        notifyPropertyChanged(BR.showPeriodUpper);
+        notifyPropertyChanged(BR.showWindDirection);
     }
 
     @Bindable
@@ -419,7 +418,7 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
         }
 
         this.useBeaufort = useBeaufort;
-        notifyPropertyChanged(BR.showPeriodUpper);
+        notifyPropertyChanged(BR.useBeaufort);
     }
 
     @Bindable
@@ -552,7 +551,7 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
         }
 
         this.appendLocationNameToHeader = appendLocationNameToHeader;
-        notifyPropertyChanged(BR.weatherEndpoint);
+        notifyPropertyChanged(BR.appendLocationNameToHeader);
     }
 
     @Bindable
@@ -566,7 +565,7 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
         }
 
         this.calendarClass = calendarClass;
-        notifyPropertyChanged(BR.weatherEndpoint);
+        notifyPropertyChanged(BR.calendarClass);
     }
 
     @Bindable
@@ -698,6 +697,17 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
         }
 
         return json;
+    }
+
+    @Override
+    public boolean parameterRequiresRefresh(int id) {
+        switch (id) {
+            case BR.updateInterval:
+            case BR.weatherEndpoint:
+                return true;
+            default:
+                return super.parameterRequiresRefresh(id);
+        }
     }
 
     @Override

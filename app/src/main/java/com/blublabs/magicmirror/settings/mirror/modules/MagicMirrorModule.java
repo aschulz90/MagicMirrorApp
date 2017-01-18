@@ -185,6 +185,10 @@ public abstract class MagicMirrorModule extends BaseObservable implements Parcel
 
     public abstract ModuleSettingsFragment getAdditionalSettingsFragment();
 
+    public boolean parameterRequiresRefresh(int id) {
+        return false;
+    }
+
     public JSONObject toJson() throws JSONException {
 
         JSONObject json = new JSONObject();

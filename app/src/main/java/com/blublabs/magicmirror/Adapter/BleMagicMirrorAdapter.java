@@ -51,6 +51,7 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
     private static final UUID CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MODULE = UUID.fromString("000039cd-0000-1000-8000-00805f9b34fb");
     private static final UUID CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_DEFAULT_MODULE_LIST = UUID.fromString("000040cd-0000-1000-8000-00805f9b34fb");
     private static final UUID CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MIRROR_CONFIG = UUID.fromString("000041cd-0000-1000-8000-00805f9b34fb");
+    private static final UUID CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MIRROR_QUERY = UUID.fromString("000042cd-0000-1000-8000-00805f9b34fb");
 
     private static final UUID SERVICE_MAGICMIRROR_APP_INTERFACE_WIFI = UUID.fromString("0000210F-0000-1000-8000-00805f9b34fb");
     private static final UUID CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_WIFI_READ = UUID.fromString("000035cd-0000-1000-8000-00805f9b34fb");
@@ -451,6 +452,16 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
             e.printStackTrace();
             callback.onConnectToWifiNetwork(MagicMirrorAdapterCallback.STATUS_ERROR);
         }
+    }
+
+    @Override
+    public void executeQuery(String query, final MagicMirrorAdapterCallback callback) {
+        connectedDevice.write(SERVICE_MAGICMIRROR_APP_INTERFACE, CHARACTERISTIC_MAGICMIRROR_APP_INTERFACE_MIRROR_QUERY, query.getBytes(), new BleDevice.ReadWriteListener() {
+            @Override
+            public void onEvent(ReadWriteEvent e) {
+                callback.onExecuteQuery(e.wasSuccess() ? MagicMirrorAdapterCallback.STATUS_SUCCESS : MagicMirrorAdapterCallback.STATUS_ERROR);
+            }
+        });
     }
 
     @Override

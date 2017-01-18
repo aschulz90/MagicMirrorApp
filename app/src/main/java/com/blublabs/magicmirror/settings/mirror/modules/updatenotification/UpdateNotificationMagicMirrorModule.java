@@ -4,10 +4,9 @@ import android.databinding.Bindable;
 import android.os.Bundle;
 import android.os.Parcel;
 
-import com.blublabs.magicmirror.BR;
+import com.android.databinding.library.baseAdapters.BR;
 import com.blublabs.magicmirror.settings.mirror.modules.MagicMirrorModule;
 import com.blublabs.magicmirror.settings.mirror.modules.ModuleSettingsFragment;
-import com.blublabs.magicmirror.settings.mirror.modules.helloworld.HelloWorldSettingsFragment;
 import com.blublabs.magicmirror.utils.Utils;
 
 import org.json.JSONException;
@@ -103,6 +102,16 @@ public class UpdateNotificationMagicMirrorModule extends MagicMirrorModule {
         }
 
         return json;
+    }
+
+    @Override
+    public boolean parameterRequiresRefresh(int id) {
+        switch (id) {
+            case BR.updateInterval:
+                return true;
+            default:
+                return super.parameterRequiresRefresh(id);
+        }
     }
 
     @Override

@@ -4,8 +4,7 @@ import android.databinding.Bindable;
 import android.os.Bundle;
 import android.os.Parcel;
 
-import com.blublabs.magicmirror.BR;
-import com.blublabs.magicmirror.settings.mirror.modules.MagicMirrorModule;
+import com.android.databinding.library.baseAdapters.BR;
 import com.blublabs.magicmirror.settings.mirror.modules.ModuleSettingsFragment;
 import com.blublabs.magicmirror.settings.mirror.modules.weather.WeatherMagicMirrorModule;
 import com.blublabs.magicmirror.utils.Utils;
@@ -13,11 +12,7 @@ import com.blublabs.magicmirror.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Objects;
-import java.util.TreeMap;
 
 /**
  * Created by andrs on 03.10.2016.
@@ -144,7 +139,7 @@ public class ForecastMagicMirrorModule extends WeatherMagicMirrorModule {
         }
 
         this.showRainAmount = showRainAmount;
-        notifyPropertyChanged(BR.fade);
+        notifyPropertyChanged(BR.showRainAmount);
     }
 
     @Override
@@ -191,6 +186,17 @@ public class ForecastMagicMirrorModule extends WeatherMagicMirrorModule {
         }
 
         return json;
+    }
+
+    @Override
+    public boolean parameterRequiresRefresh(int id) {
+        switch (id) {
+            case BR.updateInterval:
+            case BR.forecastEndpoint:
+                return true;
+            default:
+                return super.parameterRequiresRefresh(id);
+        }
     }
 
     @Override

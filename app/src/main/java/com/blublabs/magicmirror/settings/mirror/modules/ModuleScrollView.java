@@ -10,6 +10,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.NestedScrollView;
@@ -62,7 +63,7 @@ public class ModuleScrollView extends CoordinatorLayout {
 
     private final Observable.OnPropertyChangedCallback moduleChangedCallback =  new Observable.OnPropertyChangedCallback() {
         @Override
-        public void onPropertyChanged(Observable observable, int i) {
+        public void onPropertyChanged(Observable observable, final int i) {
 
             if(!moduleDataAdapter.isConnectedToMirror()) {
                 return;
@@ -84,7 +85,13 @@ public class ModuleScrollView extends CoordinatorLayout {
                                 moduleDataAdapter.setModuleData(index, module.toJson(), new IMagicMirrorAdapter.MagicMirrorAdapterCallback() {
                                     @Override
                                     public void onSetModuleData(int status) {
-                                        if(status == IMagicMirrorAdapter.MagicMirrorAdapterCallback.STATUS_ERROR) {
+                                        if(status == IMagicMirrorAdapter.MagicMirrorAdapterCallback.STATUS_SUCCESS) {
+
+                                            if(module.parameterRequiresRefresh(i)) {
+                                                showRefreshMagicMirrorBar();
+                                            }
+                                        }
+                                        else {
                                             Toast.makeText(getContext(), "Error while setting module '" + module.getName() + "' data!", Toast.LENGTH_LONG).show();
                                         }
                                     }
@@ -121,7 +128,6 @@ public class ModuleScrollView extends CoordinatorLayout {
 
     @Override
     protected void onFinishInflate() {
-        super.onFinishInflate();
 
         nestedScrollView = new NestedScrollView(getContext());
         nestedScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
@@ -166,6 +172,25 @@ public class ModuleScrollView extends CoordinatorLayout {
         progressBar = LayoutInflater.from(getContext()).inflate(R.layout.module_list_progressbar, this, false);
         progressBar.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT, 1));
         super.addView(progressBar);
+    }
+
+    private void showRefreshMagicMirrorBar() {
+
+        Snackbar.make(this, "MagicMirror requires a refresh", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Refresh now", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        moduleDataAdapter.executeQuery("REFRESH", new IMagicMirrorAdapter.MagicMirrorAdapterCallback() {
+                            @Override
+                            public void onExecuteQuery(int status) {
+                                if(status == IMagicMirrorAdapter.MagicMirrorAdapterCallback.STATUS_SUCCESS) {
+                                    Snackbar.make(ModuleScrollView.this, "MagicMirror is being refreshed!!", Snackbar.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                })
+                .show();
     }
 
     private void showProgressBar(boolean show) {
@@ -260,12 +285,22 @@ public class ModuleScrollView extends CoordinatorLayout {
 
     @Override
     public void addView(View child) {
-        linearLayout.addView(child);
+        if(child instanceof Snackbar.SnackbarLayout) {
+            super.addView(child);
+        }
+        else {
+            linearLayout.addView(child);
+        }
     }
 
     @Override
     public void removeView(View view) {
-        linearLayout.removeView(view);
+        if(view instanceof Snackbar.SnackbarLayout) {
+            super.removeView(view);
+        }
+        else {
+            linearLayout.removeView(view);
+        }
     }
 
     private void addModule(final MagicMirrorModule module) {

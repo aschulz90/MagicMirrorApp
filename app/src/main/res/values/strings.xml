@@ -9,6 +9,7 @@
     <string name="settings_general">General Settings</string>
     <string name="settings_custom">Custom Settings</string>
 
+    <string name="key_pref_mirror_config_address">mirror_address</string>
     <string name="key_pref_mirror_config_port">mirror_port</string>
     <string name="key_pref_mirror_config_kioskmode">mirror_kiosk</string>
     <string name="key_pref_mirror_config_language">mirror_language</string>
@@ -37,6 +38,52 @@
     <string-array name="units_array">
         <item>metric</item>
         <item>imperial</item>
+    </string-array>
+
+    <string-array name="language_value_array">
+        <item>da</item>
+        <item>de</item>
+        <item>en</item>
+        <item>es</item>
+        <item>fi</item>
+        <item>fr</item>
+        <item>fy</item>
+        <item>gr</item>
+        <item>it</item>
+        <item>ja</item>
+        <item>nb</item>
+        <item>nl</item>
+        <item>nn</item>
+        <item>pl</item>
+        <item>pt</item>
+        <item>pt_br</item>
+        <item>sv</item>
+        <item>tr</item>
+        <item>zh_cn</item>
+        <item>zh_tw</item>
+    </string-array>
+
+    <string-array name="language_label_array">
+        <item>Danish</item>
+        <item>German</item>
+        <item>English</item>
+        <item>Spanish</item>
+        <item>Suomi</item>
+        <item>French</item>
+        <item>Frysk</item>
+        <item>Greek</item>
+        <item>Italian</item>
+        <item>Japanese</item>
+        <item>Norsk bokmål</item>
+        <item>Dutch</item>
+        <item>Norsk nynorsk</item>
+        <item>Polish</item>
+        <item>Português</item>
+        <item>Português Brasileiro</item>
+        <item>Svenska</item>
+        <item>Turkish</item>
+        <item>Simplified Chinese</item>
+        <item>Traditional Chinese</item>
     </string-array>
 
 </resources>

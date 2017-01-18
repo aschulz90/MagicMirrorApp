@@ -4,10 +4,13 @@
     <PreferenceCategory
         android:title="General">
 
-        <EditTextPreference
+        <ListPreference
             android:key="@string/key_pref_mirror_config_language"
             android:title="Language"
             android:summary="Change the preferred language for modules."
+            android:dialogTitle="Language"
+            android:entries="@array/language_label_array"
+            android:entryValues="@array/language_value_array"
             android:defaultValue="en"/>
 
         <ListPreference
@@ -34,6 +37,13 @@
         android:title="Advanced">
 
         <EditTextPreference
+            android:key="@string/key_pref_mirror_config_address"
+            android:title="Address"
+            android:summary="Change the address used by the MagicMirror application."
+            android:defaultValue=""
+            android:inputType="text"/>
+
+        <EditTextPreference
             android:key="@string/key_pref_mirror_config_port"
             android:title="Port"
             android:summary="Change the port used by the MagicMirror application."
@@ -45,6 +55,53 @@
             android:title="Kiosk Mode"
             android:summary="Change, if other applications can pop up before the MagicMirror application."
             android:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Queries">
+
+        <com.blublabs.magicmirror.common.QueryDialogPreference
+            android:key="REBOOT"
+            android:title="Reboot"
+            android:summary="Reboot the MagicMirror.">
+
+        </com.blublabs.magicmirror.common.QueryDialogPreference>
+
+        <com.blublabs.magicmirror.common.QueryDialogPreference
+            android:key="SHUTDOWN"
+            android:title="Shutdown"
+            android:summary="Shut the MagicMirror down.">
+
+        </com.blublabs.magicmirror.common.QueryDialogPreference>
+
+        <com.blublabs.magicmirror.common.QueryDialogPreference
+            android:key="RESTART"
+            android:title="Restart"
+            android:summary="Restart the MagicMirror app.">
+
+        </com.blublabs.magicmirror.common.QueryDialogPreference>
+
+        <com.blublabs.magicmirror.common.QueryDialogPreference
+            android:key="REFRESH"
+            android:title="Refresh"
+            android:summary="Refresh the MagicMirror interface.">
+
+        </com.blublabs.magicmirror.common.QueryDialogPreference>
+
+        <com.blublabs.magicmirror.common.QueryDialogPreference
+            android:key="MONITORON"
+            android:title="Monitor On"
+            android:summary="Turns the monitor of the MagicMirror on.">
+
+        </com.blublabs.magicmirror.common.QueryDialogPreference>
+
+        <com.blublabs.magicmirror.common.QueryDialogPreference
+            android:key="MONITOROFF"
+            android:title="Monitor Off"
+            android:summary="Turns the monitor of the MagicMirror off.">
+
+        </com.blublabs.magicmirror.common.QueryDialogPreference>
 
     </PreferenceCategory>
 

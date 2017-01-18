@@ -82,6 +82,11 @@ public class CustomMagicMirrorModule extends MagicMirrorModule {
     }
 
     @Override
+    public boolean parameterRequiresRefresh(int id) {
+        return true;
+    }
+
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
 
