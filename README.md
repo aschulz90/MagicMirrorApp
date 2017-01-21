@@ -15,6 +15,13 @@ This is an Android App that allows you to connect to a [MagicMirror](https://git
 - the MagicMirror and your Smartphone need to be in the same network 
 - your Smartphone needs to be whitelisted on the MagicMirror
 
+## Usage
+
+### Choose an Adapter
+
+- open the side menu and click on "App Setting"
+- select "MagicMirror Adapter" and select your desired adapter
+
 ## License
 
 Copyright (C) 2017  Andreas Schulz
