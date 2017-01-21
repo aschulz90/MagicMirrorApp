@@ -21,22 +21,24 @@
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editText"
+            android:labelFor="@+id/rangebarUpdateInterval"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_update_notification_interval_description"
             InfoIcon:defaultVal="@string/module_update_notification_interval_default"
             InfoIcon:possibleValues="@array/module_update_notification_interval_possible"
             InfoIcon:title="@string/module_update_notification_interval_title"/>
 
-        <EditText
-            android:text="@={module.updateInterval}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarUpdateInterval"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/editText"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:hint="@string/module_update_notification_interval_default"/>
+            android:layout_height="72dp"
+            app:tickStart="1"
+            app:tickInterval="1"
+            app:tickEnd="1440"
+            app:currentValue="@={module.updateInterval}"
+            app:defaultRangeValue="@string/module_update_notification_interval_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
     </LinearLayout>
 </layout>

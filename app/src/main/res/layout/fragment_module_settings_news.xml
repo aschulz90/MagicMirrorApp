@@ -87,80 +87,96 @@
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextReloadInterval"
+            android:labelFor="@+id/rangebarReloadInterval"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_calendar_fetch_interval_description"
             InfoIcon:defaultVal="@string/module_calendar_fetch_interval_default"
             InfoIcon:title="@string/module_calendar_fetch_interval_title"
             InfoIcon:possibleValues="@array/module_calendar_fetch_interval_possible"/>
 
-        <EditText
-            android:text="@={module.reloadInterval}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarReloadInterval"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:hint="@string/module_calendar_fetch_interval_default"
-            android:ems="10"
-            android:id="@+id/editTextReloadInterval"/>
+            android:layout_height="72dp"
+            app:tickStart="1"
+            app:tickInterval="1"
+            app:tickEnd="1440"
+            app:currentValue="@={module.reloadInterval}"
+            app:defaultRangeValue="@string/module_calendar_fetch_interval_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextUpdateInterval"
+            android:labelFor="@+id/rangebarUpdateInterval"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_news_update_interval_description"
             InfoIcon:defaultVal="@string/module_news_update_interval_default"
             InfoIcon:title="@string/module_news_update_interval_title"
             InfoIcon:possibleValues="@array/module_news_update_interval_possible"/>
 
-        <EditText
-            android:text="@={module.updateInterval}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarUpdateInterval"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:hint="@string/module_news_update_interval_default"
-            android:ems="10"
-            android:id="@+id/editTextUpdateInterval"/>
+            android:layout_height="72dp"
+            app:tickStart="1"
+            app:tickInterval="1"
+            app:tickEnd="60"
+            app:currentValue="@={module.updateInterval}"
+            app:defaultRangeValue="@string/module_news_update_interval_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextAnimationSpeed"
+            android:labelFor="@+id/rangebarAnimationSpeed"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_news_animation_speed_description"
             InfoIcon:defaultVal="@string/module_news_animation_speed_default"
             InfoIcon:title="@string/module_news_animation_speed_title"
             InfoIcon:possibleValues="@array/module_news_animation_speed_possible"/>
 
-        <EditText
-            android:text="@={module.animationSpeed}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarAnimationSpeed"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:hint="@string/module_news_animation_speed_default"
-            android:ems="10"
-            android:id="@+id/editTextAnimationSpeed"/>
+            android:layout_height="72dp"
+            app:tickStart="0"
+            app:tickInterval="100"
+            app:tickEnd="5000"
+            app:currentValue="@={module.animationSpeed}"
+            app:defaultRangeValue="@string/module_news_animation_speed_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextMaxNewsItemss"
+            android:labelFor="@+id/rangebarMaxItems"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_news_max_news_description"
             InfoIcon:defaultVal="@string/module_news_max_news_default"
             InfoIcon:title="@string/module_news_max_news_title"/>
 
-        <EditText
-            android:text="@={module.maxNewsItems}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarMaxItems"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:hint="@string/module_news_max_news_default"
-            android:ems="10"
-            android:id="@+id/editTextMaxNewsItemss"/>
+            android:layout_height="72dp"
+            app:tickStart="0"
+            app:tickInterval="1"
+            app:tickEnd="100"
+            app:currentValue="@={module.maxNewsItems}"
+            app:defaultRangeValue="@string/module_news_max_news_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"

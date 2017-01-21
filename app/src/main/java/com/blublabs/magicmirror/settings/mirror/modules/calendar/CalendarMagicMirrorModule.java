@@ -117,7 +117,7 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
             }
 
             if (config.has(KEY_FETCH_INTERVALL)) {
-                fetchInterval = config.getInt(KEY_FETCH_INTERVALL);
+                fetchInterval = config.getInt(KEY_FETCH_INTERVALL) / 1000 / 60;
             }
 
             if (config.has(KEY_ANIMATION_SPEED)) {
@@ -489,7 +489,7 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
         }
 
         if(fetchInterval != null) {
-            config.put(KEY_FETCH_INTERVALL, fetchInterval);
+            config.put(KEY_FETCH_INTERVALL, fetchInterval * 1000 * 60);
         }
 
         if(animationSpeed != null) {
@@ -500,7 +500,7 @@ public class CalendarMagicMirrorModule extends MagicMirrorModule {
             config.put(KEY_FADE, false);
         }
 
-        if(fadePoint != null) {
+        if(fadePoint != null && !Double.valueOf(0.25).equals(fadePoint)) {
             config.put(KEY_FADE_POINT, fadePoint);
         }
 

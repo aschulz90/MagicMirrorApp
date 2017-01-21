@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.blublabs.magicmirror.common.BindableRangeBar;
+
 /**
  * Created by andrs on 08.10.2016.
  */

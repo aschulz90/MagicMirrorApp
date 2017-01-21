@@ -166,7 +166,7 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
             }
 
             if(config.has(KEY_DATA_UPDATE_INTERVAL)) {
-                this.updateInterval = config.getInt(KEY_DATA_UPDATE_INTERVAL);
+                this.updateInterval = config.getInt(KEY_DATA_UPDATE_INTERVAL) / 1000 / 60;
             }
 
             if(config.has(KEY_DATA_ANIMATION_SPEED)) {
@@ -641,7 +641,7 @@ public class WeatherMagicMirrorModule extends MagicMirrorModule {
         }
 
         if(updateInterval != null) {
-            config.put(KEY_DATA_UPDATE_INTERVAL, updateInterval);
+            config.put(KEY_DATA_UPDATE_INTERVAL, updateInterval * 1000 * 60);
         }
 
         if(animationSpeed != null) {

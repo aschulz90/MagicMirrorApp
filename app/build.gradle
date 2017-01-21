@@ -34,4 +34,5 @@ dependencies {
     compile 'com.android.support:preference-v7:24.2.1'
     compile 'com.github.QuadFlask:colorpicker:0.0.12'
     compile 'com.android.volley:volley:1.0.0'
+    compile 'com.appyvet:materialrangebar:1.3'
 }

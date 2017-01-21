@@ -52,7 +52,7 @@
     <string name="module_calendar_default_symbol_title">Default Symbol</string>
     <string name="module_calendar_default_symbol_description">The default symbol.</string>
     <string name="module_calendar_default_symbol_default">calendar</string>
-    <string-array name="module_calendar_default_symbol_possible"><item>See http://fontawesome.io/icons/</item></string-array>
+    <string-array name="module_calendar_default_symbol_possible"><item>See <a href="http://fontawesome.io/icons/">http://fontawesome.io/icons/</a></item></string-array>
 
     <string name="module_calendar_max_title_length_title">Maximum Title Length</string>
     <string name="module_calendar_max_title_length_description">The maximum title length.</string>
@@ -60,13 +60,13 @@
     <string-array name="module_calendar_max_title_length_possible"><item>10 – 50</item></string-array>
 
     <string name="module_calendar_fetch_interval_title">Fetch Interval</string>
-    <string name="module_calendar_fetch_interval_description">How often does the content needs to be fetched? (Milliseconds)</string>
-    <string name="module_calendar_fetch_interval_default">300000 (5 minutes)</string>
-    <string-array name="module_calendar_fetch_interval_possible"><item>1000 – 86400000</item></string-array>
+    <string name="module_calendar_fetch_interval_description">How often does the content needs to be fetched? (Minutes)</string>
+    <string name="module_calendar_fetch_interval_default">5</string>
+    <string-array name="module_calendar_fetch_interval_possible"><item>1 – 1440</item></string-array>
 
     <string name="module_calendar_animation_speed_title">Animation Speed</string>
     <string name="module_calendar_animation_speed_description">Speed of the update animation. (Milliseconds)</string>
-    <string name="module_calendar_animation_speed_default">2000 (2 seconds) </string>
+    <string name="module_calendar_animation_speed_default">2000</string>
     <string-array name="module_calendar_animation_speed_possible"><item>0 – 5000</item></string-array>
 
     <string name="module_calendar_fade_title">Fade</string>
@@ -93,7 +93,7 @@
     <string name="module_calendar_date_format_title">Date Format</string>
     <string name="module_calendar_date_format_description">Format to use for the date of events (when using absolute dates)</string>
     <string name="module_calendar_date_format_default">MMM Do (e.g. Jan 18th)</string>
-    <string-array name="module_calendar_date_format_possible"><item>See http://momentjs.com/docs/#/parsing/string-format/</item></string-array>
+    <string-array name="module_calendar_date_format_possible"><item>See <a href="http://momentjs.com/docs/#/parsing/string-format/">http://momentjs.com/docs/#/parsing/string-format/</a></item></string-array>
 
     <string name="module_calendar_time_format_title">Time Format</string>
     <string name="module_calendar_time_format_description">Display event times as absolute dates, or relative time</string>
@@ -106,7 +106,7 @@
 
     <string name="module_calendar_urgency_title">Urgency</string>
     <string name="module_calendar_urgency_description">When using a timeFormat of \'absolute\', the urgency setting allows you to display events within a specific time frame as \'relative\'. This allows events within a certain time frame to be displayed as relative (in xx days) while others are displayed as absolute dates.</string>
-    <string name="module_calendar_urgency_default">7 (Days)</string>
+    <string name="module_calendar_urgency_default">7</string>
     <string-array name="module_calendar_urgency_possible"><item>Positive Numbers</item></string-array>
 
     <string name="module_calendar_broadcast_events_title">Broadcast Events</string>
@@ -149,7 +149,7 @@
     <string name="module_clock_analog_size_title">Analog Clock Size</string>
     <string name="module_clock_analog_size_description">Specific to the analog clock. Defines how large the analog display is.</string>
     <string name="module_clock_analog_size_default">200</string>
-    <string-array name="module_clock_analog_size_possible"><item>A positive number of pixels</item></string-array>
+    <string-array name="module_clock_analog_size_possible"><item>1 – 500</item></string-array>
 
     <string name="module_clock_analog_face_title">Analog Clock Face</string>
     <string name="module_clock_analog_face_description">Specific to the analog clock. Specifies which clock face to use.</string>
@@ -170,17 +170,17 @@
     <string name="module_clock_timezone_title">Timezone</string>
     <string name="module_clock_timezone_description">Specify a timezone to show.</string>
     <string name="module_clock_timezone_default"> </string>
-    <string-array name="module_clock_timezone_possible"><item>See https://en.wikipedia.org/wiki/List_of_tz_database_time_zones</item></string-array>
+    <string-array name="module_clock_timezone_possible"><item>See <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">https://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a></item></string-array>
 
     <!--Compliments-->
     <string name="module_compliments_update_interval_title">Update Interval</string>
-    <string name="module_compliments_update_interval_description">How often does the compliment have to change? (Milliseconds)</string>
-    <string name="module_compliments_update_interval_default">30000 (30 seconds) </string>
-    <string-array name="module_compliments_update_interval_possible"><item>1000 – 86400000</item></string-array>
+    <string name="module_compliments_update_interval_description">How often does the compliment have to change? (Seconds)</string>
+    <string name="module_compliments_update_interval_default">30</string>
+    <string-array name="module_compliments_update_interval_possible"><item>10 – 2880</item></string-array>
 
     <string name="module_compliments_fade_speed_title">Fade Speed</string>
     <string name="module_compliments_fade_speed_description">Speed of the update animation. (Milliseconds)</string>
-    <string name="module_compliments_fade_speed_default">4000 (4 seconds)</string>
+    <string name="module_compliments_fade_speed_default">4000</string>
     <string-array name="module_compliments_fade_speed_possible"><item>0 – 5000</item></string-array>
 
     <string name="module_compliments_compliments_title">Compliments</string>
@@ -197,7 +197,7 @@
     <string name="module_current_weather_location_note">When the location and locationID are both not set, the location will be based on the information provided by the calendar module. The first upcoming event with location data will be used. </string>
 
     <string name="module_current_weather_location_id_title">Location ID</string>
-    <string name="module_current_weather_location_id_description">Location ID from http://openweathermap.org/help/city_list.txt . This will override anything you put in location. Leave blank if you want to use location. </string>
+    <string name="module_current_weather_location_id_description">Location ID from <a href="hhttp://openweathermap.org/help/city_list.txt">http://openweathermap.org/help/city_list.txt</a>. This will override anything you put in location. Leave blank if you want to use location. </string>
     <string name="module_current_weather_location_id_default">Blank</string>
     <string name="module_current_weather_location_id_note">When the location and locationID are both not set, the location will be based on the information provided by the calendar module. The first upcoming event with location data will be used. </string>
 
@@ -215,13 +215,13 @@
     <string-array name="module_current_weather_round_temp_possible"><item>true (round to integer)</item><item>false (display exact value with decimal point)</item></string-array>
 
     <string name="module_current_weather_update_interval_title">Update Interval</string>
-    <string name="module_current_weather_update_interval_description">How often does the content needs to be fetched? (Milliseconds)</string>
-    <string name="module_current_weather_update_interval_default">600000 (10 minutes)</string>
-    <string-array name="module_current_weather_update_interval_possible"><item>1000 – 86400000</item></string-array>
+    <string name="module_current_weather_update_interval_description">How often does the content needs to be fetched? (Minutes)</string>
+    <string name="module_current_weather_update_interval_default">10</string>
+    <string-array name="module_current_weather_update_interval_possible"><item>1 – 1440</item></string-array>
 
     <string name="module_current_weather_animation_speed_title">Animation Speed</string>
     <string name="module_current_weather_animation_speed_description">Speed of the update animation. (Milliseconds)</string>
-    <string name="module_current_weather_animation_speed_default">1000 (1 second)</string>
+    <string name="module_current_weather_animation_speed_default">1000</string>
     <string-array name="module_current_weather_animation_speed_possible"><item>0 – 5000</item></string-array>
 
     <string name="module_current_weather_timeformat_title">Time Format</string>
@@ -256,7 +256,7 @@
 
     <string name="module_current_weather_retry_delay_title">Retry Delay</string>
     <string name="module_current_weather_retry_delay_description">The delay before retrying after a request failure. (Milliseconds)</string>
-    <string name="module_current_weather_retry_delay_default">2500 (2.5 seconds) </string>
+    <string name="module_current_weather_retry_delay_default">2500</string>
     <string-array name="module_current_weather_retry_delay_possible"><item>1000 – 60000</item></string-array>
 
     <string name="module_current_weather_api_version_title">API Version</string>
@@ -265,11 +265,11 @@
 
     <string name="module_current_weather_api_base_title">API Base</string>
     <string name="module_current_weather_api_base_description">The OpenWeatherMap base URL.</string>
-    <string name="module_current_weather_api_base_default">\'http://api.openweathermap.org/data/\'</string>
+    <string name="module_current_weather_api_base_default"><a href="http://api.openweathermap.org/data/">http://api.openweathermap.org/data/</a></string>
 
     <string name="module_current_weather_endpoint_title">API Endpoint</string>
     <string name="module_current_weather_endpoint_description">The OpenWeatherMap API endPoint.</string>
-    <string name="module_current_weather_endpoint_default">\'weather\'</string>
+    <string name="module_current_weather_endpoint_default">weather</string>
 
     <string name="module_current_weather_location_name_header_title">Append Location To Header</string>
     <string name="module_current_weather_location_name_header_description">If set to true, the returned location name will be appended to the header of the module, if the header is enabled. This is mainly intresting when using calender based weather.</string>
@@ -277,7 +277,7 @@
 
     <string name="module_current_weather_calendar_class_title">Calendar Class</string>
     <string name="module_current_weather_calendar_class_description">The class for the calender module to base the event based weather information on.</string>
-    <string name="module_current_weather_calendar_class_default">\'calendar\'</string>
+    <string name="module_current_weather_calendar_class_default">calendar</string>
 
     <string name="module_current_weather_icon_table_title">Icon Table</string>
     <string name="module_current_weather_icon_table_description">The conversion table to convert the weather conditions to weather-icons.</string>
@@ -290,7 +290,7 @@
     <!--Newsfeed-->
     <string name="module_news_feeds_title">Feeds</string>
     <string name="module_news_feeds_description">An array of feed urls that will be used as source.</string>
-    <string name="module_news_feeds_default">http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml</string>
+    <string name="module_news_feeds_default"><a href="http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml">http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml</a></string>
 
     <string name="module_news_show_source_title_title">Show Source Title</string>
     <string name="module_news_show_source_title_description">Display the title of the source.</string>
@@ -305,13 +305,13 @@
     <string name="module_news_show_description_default">false</string>
 
     <string name="module_news_update_interval_title">Update Interval</string>
-    <string name="module_news_update_interval_description">How often do you want to display a new headline? (Milliseconds)</string>
-    <string name="module_news_update_interval_default">10000 (10 seconds)</string>
-    <string-array name="module_news_update_interval_possible"><item>1000 – 60000</item></string-array>
+    <string name="module_news_update_interval_description">How often do you want to display a new headline? (Seconds)</string>
+    <string name="module_news_update_interval_default">10</string>
+    <string-array name="module_news_update_interval_possible"><item>1 – 60</item></string-array>
 
     <string name="module_news_animation_speed_title">Animation Speed</string>
     <string name="module_news_animation_speed_description">Speed of the update animation. (Milliseconds)</string>
-    <string name="module_news_animation_speed_default">2500 (2.5 seconds)</string>
+    <string name="module_news_animation_speed_default">2500</string>
     <string-array name="module_news_animation_speed_possible"><item>0 – 5000</item></string-array>
 
     <string name="module_news_max_news_title">Max News Items</string>
@@ -334,14 +334,14 @@
 
     <!--Update Notification-->
     <string name="module_update_notification_interval_title">Update Interval</string>
-    <string name="module_update_notification_interval_description">How often do you want to check for a new version? This value represents the interval in milliseconds.</string>
-    <string name="module_update_notification_interval_default">600000 (10 minutes)</string>
-    <string-array name="module_update_notification_interval_possible"><item>Any value above 60000 (1 minute)</item></string-array>
+    <string name="module_update_notification_interval_description">How often do you want to check for a new version? This value represents the interval in minutes.</string>
+    <string name="module_update_notification_interval_default">10</string>
+    <string-array name="module_update_notification_interval_possible"><item>1 – 1440</item></string-array>
 
     <!--Weather Forecast-->
     <string name="module_forecast_max_days_title">Max Days</string>
     <string name="module_forecast_max_days_description">How many days of forecast to return.</string>
-    <string name="module_forecast_max_days_default">7 (7 days)</string>
+    <string name="module_forecast_max_days_default">7</string>
     <string-array name="module_forecast_max_days_possible"><item>1 – 16</item></string-array>
 
     <string name="module_forecast_show_rain_title">Show Rain Amount</string>

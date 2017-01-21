@@ -118,23 +118,25 @@
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextMaxNumberOfDays"
+            android:labelFor="@+id/rangebarMaxDays"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_forecast_max_days_description"
             InfoIcon:defaultVal="@string/module_forecast_max_days_default"
             InfoIcon:title="@string/module_forecast_max_days_title"
             InfoIcon:possibleValues="@array/module_forecast_max_days_possible"/>
 
-        <EditText
-            android:text="@={module.maxNumberOfDays}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarMaxDays"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/editTextMaxNumberOfDays"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:hint="@string/module_forecast_max_days_default"/>
+            android:layout_height="72dp"
+            app:tickStart="1"
+            app:tickInterval="1"
+            app:tickEnd="16"
+            app:currentValue="@={module.maxNumberOfDays}"
+            app:defaultRangeValue="@string/module_forecast_max_days_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
@@ -156,45 +158,49 @@
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextMaxNumberOfDays"
+            android:labelFor="@+id/rangebarUpdateInterval"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_current_weather_update_interval_description"
             InfoIcon:defaultVal="@string/module_current_weather_update_interval_default"
             InfoIcon:title="@string/module_current_weather_update_interval_title"
             InfoIcon:possibleValues="@array/module_current_weather_update_interval_possible"/>
 
-        <EditText
-            android:text="@={module.updateInterval}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarUpdateInterval"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/editTextUpdateInterval"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:hint="@string/module_current_weather_update_interval_default"/>
+            android:layout_height="72dp"
+            app:tickStart="1"
+            app:tickInterval="1"
+            app:tickEnd="1440"
+            app:currentValue="@={module.updateInterval}"
+            app:defaultRangeValue="@string/module_current_weather_update_interval_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextAnimationSpeed"
+            android:labelFor="@+id/rangebarAnimationSpeed"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_current_weather_animation_speed_description"
             InfoIcon:defaultVal="@string/module_current_weather_animation_speed_default"
             InfoIcon:title="@string/module_current_weather_animation_speed_title"
             InfoIcon:possibleValues="@array/module_current_weather_animation_speed_possible"/>
 
-        <EditText
-            android:text="@={module.animationSpeed}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarAnimationSpeed"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/editTextAnimationSpeed"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:hint="@string/module_current_weather_animation_speed_default"/>
+            android:layout_height="72dp"
+            app:tickStart="0"
+            app:tickInterval="100"
+            app:tickEnd="5000"
+            app:currentValue="@={module.animationSpeed}"
+            app:defaultRangeValue="@string/module_current_weather_animation_speed_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
@@ -238,7 +244,7 @@
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextFadePoint"
+            android:labelFor="@+id/rangebarFadePoint"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_calendar_fade_point_description"
             InfoIcon:defaultVal="@string/module_calendar_fade_point_default"
@@ -246,59 +252,66 @@
             InfoIcon:possibleValues="@array/module_calendar_fade_point_possible"
             android:enabled="@{module.fade}"/>
 
-        <EditText
-            android:text="@={module.fadePoint}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarFadePoint"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:hint="@string/module_calendar_fade_point_default"
-            android:ems="10"
-            android:id="@+id/editTextFadePoint"
-            android:enabled="@{module.fade}"/>
+            android:layout_height="72dp"
+            app:tickStart="0"
+            app:tickInterval="0.01"
+            app:tickEnd="1"
+            app:currentValue="@={module.fadePoint}"
+            app:defaultRangeValue="@string/module_calendar_fade_point_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextInitialLoadDelay"
+            android:labelFor="@+id/rangebarInitialDelayy"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_current_weather_initial_load_delay_description"
             InfoIcon:defaultVal="@string/module_current_weather_initial_load_delay_default"
             InfoIcon:title="@string/module_current_weather_initial_load_Delay_title"
             InfoIcon:possibleValues="@array/module_current_weather_initial_load_delay_possible"/>
 
-        <EditText
-            android:text="@={module.initialLoadDelay}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarInitialDelayy"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/editTextInitialLoadDelay"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:hint="@string/module_current_weather_initial_load_delay_default"/>
+            android:layout_height="72dp"
+            app:tickStart="0"
+            app:tickInterval="100"
+            app:tickEnd="5000"
+            app:currentValue="@={module.initialLoadDelay}"
+            app:defaultRangeValue="@string/module_current_weather_initial_load_delay_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextRetryDelay"
+            android:labelFor="@+id/rangebarRetryDelay"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_current_weather_retry_delay_description"
             InfoIcon:defaultVal="@string/module_current_weather_retry_delay_default"
             InfoIcon:title="@string/module_current_weather_retry_delay_title"
             InfoIcon:possibleValues="@array/module_current_weather_retry_delay_possible"/>
 
-        <EditText
-            android:text="@={module.retryDelay}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarRetryDelay"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/editTextRetryDelay"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:hint="@string/module_current_weather_retry_delay_default"/>
+            android:layout_height="72dp"
+            app:tickStart="0"
+            app:tickInterval="100"
+            app:tickEnd="5000"
+            app:currentValue="@={module.retryDelay}"
+            app:defaultRangeValue="@string/module_current_weather_retry_delay_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"

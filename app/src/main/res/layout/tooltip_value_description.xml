@@ -34,6 +34,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textIsSelectable="true"
+            android:autoLink="web"
             android:id="@+id/tooltipPossibleValues"/>
 
     </LinearLayout>
@@ -54,6 +56,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textIsSelectable="true"
+            android:autoLink="web"
             android:id="@+id/tooltipDefaultValue"/>
 
     </LinearLayout>

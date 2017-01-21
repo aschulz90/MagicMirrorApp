@@ -49,7 +49,7 @@ public class UpdateNotificationMagicMirrorModule extends MagicMirrorModule {
             JSONObject config = data.getJSONObject(KEY_DATA_CONFIG);
 
             if(config.has(KEY_DATA_UPDATE_INTERVALL)) {
-                this.updateInterval = config.getInt(KEY_DATA_UPDATE_INTERVALL);
+                this.updateInterval = config.getInt(KEY_DATA_UPDATE_INTERVALL) / 1000 / 60;
             }
         }
     }
@@ -93,8 +93,8 @@ public class UpdateNotificationMagicMirrorModule extends MagicMirrorModule {
         JSONObject json = super.toJson();
         JSONObject config = new JSONObject();
 
-        if(updateInterval != null && updateInterval.compareTo(Integer.parseInt("600000")) != 0) {
-            config.put(KEY_DATA_UPDATE_INTERVALL, updateInterval);
+        if(updateInterval != null && updateInterval.compareTo(Integer.parseInt("10")) != 0) {
+            config.put(KEY_DATA_UPDATE_INTERVALL, updateInterval * 1000 * 60);
         }
 
         if(config.length() > 0) {

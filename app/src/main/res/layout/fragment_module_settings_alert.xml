@@ -57,20 +57,24 @@
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextDisplayTime"
+            android:labelFor="@+id/rangebarDisplayTime"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_alert_display_time_description"
             InfoIcon:defaultVal="@string/module_alert_display_time_default"
             InfoIcon:title="@string/module_alert_display_time_title"/>
 
-        <EditText
-            android:text="@={module.displayTime}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarDisplayTime"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:ems="10"
-            android:id="@+id/editTextDisplayTime"
-            android:hint="@string/module_alert_display_time_default"/>
+            android:layout_height="72dp"
+            app:tickStart="100"
+            app:tickInterval="100"
+            app:tickEnd="60000"
+            app:currentValue="@={module.displayTime}"
+            app:defaultRangeValue="@string/module_alert_display_time_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"

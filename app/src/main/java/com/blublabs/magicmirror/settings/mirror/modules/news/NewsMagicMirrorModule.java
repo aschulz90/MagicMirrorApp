@@ -105,11 +105,11 @@ public class NewsMagicMirrorModule extends MagicMirrorModule {
             }
 
             if(config.has(KEY_DATA_RELOAD_INTERVAL)) {
-                this.reloadInterval = config.getInt(KEY_DATA_RELOAD_INTERVAL);
+                this.reloadInterval = config.getInt(KEY_DATA_RELOAD_INTERVAL) / 1000 / 60;
             }
 
             if(config.has(KEY_DATA_UPDATE_INTERVAL)) {
-                this.updateInterval = config.getInt(KEY_DATA_UPDATE_INTERVAL);
+                this.updateInterval = config.getInt(KEY_DATA_UPDATE_INTERVAL) / 1000;
             }
 
             if(config.has(KEY_DATA_ANIMATION_SPEED)) {
@@ -334,11 +334,11 @@ public class NewsMagicMirrorModule extends MagicMirrorModule {
         }
 
         if(reloadInterval != null) {
-            config.put(KEY_DATA_RELOAD_INTERVAL, reloadInterval);
+            config.put(KEY_DATA_RELOAD_INTERVAL, reloadInterval * 1000 * 60);
         }
 
         if(updateInterval != null) {
-            config.put(KEY_DATA_RELOAD_INTERVAL, updateInterval);
+            config.put(KEY_DATA_RELOAD_INTERVAL, updateInterval * 1000);
         }
 
         if(animationSpeed != null) {

@@ -22,40 +22,48 @@
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextMaxEntries"
+            android:labelFor="@+id/rangebarMaxEntries"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_calendar_maximum_entries_description"
             InfoIcon:defaultVal="@string/module_calendar_maximum_entries_default"
             InfoIcon:possibleValues="@array/module_calendar_maximum_entries_possible"
             InfoIcon:title="@string/module_calendar_maximum_entries_title"/>
 
-        <EditText
-            android:text="@={module.maximumEntries}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarMaxEntries"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="@string/module_calendar_maximum_entries_default"
-            android:ems="10"
-            android:id="@+id/editTextMaxEntries" />
+            android:layout_height="72dp"
+            app:tickStart="0"
+            app:tickInterval="1"
+            app:tickEnd="100"
+            app:currentValue="@={module.maximumEntries}"
+            app:defaultRangeValue="@string/module_calendar_maximum_entries_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextMaxDays"
+            android:labelFor="@+id/rangebarMaxNumDays"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_calendar_maximum_number_of_days_description"
             InfoIcon:defaultVal="@string/module_calendar_maximum_number_of_days_default"
             InfoIcon:title="@string/module_calendar_maximum_number_of_days_title"/>
 
-        <EditText
-            android:text="@={module.maximumNumberOfDays}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarMaxNumDays"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="@string/module_calendar_maximum_number_of_days_default"
-            android:ems="10"
-            android:id="@+id/editTextMaxDays" />
+            android:layout_height="72dp"
+            app:tickStart="0"
+            app:tickInterval="1"
+            app:tickEnd="365"
+            app:currentValue="@={module.maximumNumberOfDays}"
+            app:defaultRangeValue="@string/module_calendar_maximum_number_of_days_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
@@ -99,61 +107,73 @@
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextMaxTitleLength"
+            android:labelFor="@+id/rangebarMaxTitleLength"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_calendar_max_title_length_description"
             InfoIcon:defaultVal="@string/module_calendar_max_title_length_default"
             InfoIcon:possibleValues="@array/module_calendar_max_title_length_possible"
             InfoIcon:title="@string/module_calendar_max_title_length_title"/>
 
-        <EditText
-            android:text="@={module.maxTitleLength}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarMaxTitleLength"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="@string/module_calendar_max_title_length_default"
-            android:ems="10"
-            android:id="@+id/editTextMaxTitleLength" />
+            android:layout_height="72dp"
+            app:tickStart="10"
+            app:tickInterval="1"
+            app:tickEnd="50"
+            app:currentValue="@={module.maxTitleLength}"
+            app:defaultRangeValue="@string/module_calendar_max_title_length_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextFetchInterval"
+            android:labelFor="@+id/rangebarFetchInterval"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_calendar_fetch_interval_description"
             InfoIcon:defaultVal="@string/module_calendar_fetch_interval_default"
             InfoIcon:possibleValues="@array/module_calendar_fetch_interval_possible"
             InfoIcon:title="@string/module_calendar_fetch_interval_title"/>
 
-        <EditText
-            android:text="@={module.fetchInterval}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarFetchInterval"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="@string/module_calendar_fetch_interval_default"
-            android:ems="10"
-            android:id="@+id/editTextFetchInterval" />
+            android:layout_height="72dp"
+            app:tickStart="1"
+            app:tickInterval="5"
+            app:tickEnd="1440"
+            app:currentValue="@={module.fetchInterval}"
+            app:defaultRangeValue="@string/module_calendar_fetch_interval_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextAnimationSpeed"
+            android:labelFor="@+id/rangebarAnimationSpeed"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_calendar_animation_speed_description"
             InfoIcon:defaultVal="@string/module_calendar_animation_speed_default"
             InfoIcon:possibleValues="@array/module_calendar_animation_speed_possible"
             InfoIcon:title="@string/module_calendar_animation_speed_title"/>
 
-        <EditText
-            android:text="@={module.animationSpeed}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarAnimationSpeed"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="@string/module_calendar_animation_speed_default"
-            android:ems="10"
-            android:id="@+id/editTextAnimationSpeed" />
+            android:layout_height="72dp"
+            app:tickStart="0"
+            app:tickInterval="10"
+            app:tickEnd="5000"
+            app:currentValue="@={module.animationSpeed}"
+            app:defaultRangeValue="@string/module_calendar_animation_speed_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
@@ -183,14 +203,18 @@
             InfoIcon:title="@string/module_calendar_fade_point_title"
             android:enabled="@{module.fade}"/>
 
-        <EditText
-            android:text="@={module.fadePoint}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:hint="@string/module_calendar_fade_point_default"
-            android:ems="10"
-            android:id="@+id/editTextFadePoint"
+            android:layout_height="72dp"
+            app:tickStart="0"
+            app:tickInterval="0.01"
+            app:tickEnd="1"
+            app:currentValue="@={module.fadePoint}"
+            app:defaultRangeValue="@string/module_calendar_fade_point_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:enabled="@{module.fade}"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
@@ -280,41 +304,49 @@
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextGetRelative"
+            android:labelFor="@+id/rangebarGetRelative"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_calendar_get_relative_description"
             InfoIcon:defaultVal="@string/module_calendar_get_relative_default"
             InfoIcon:possibleValues="@array/module_calendar_get_relative_possible"
             InfoIcon:title="@string/module_calendar_get_relative_title"/>
 
-        <EditText
-            android:text="@={module.getRelative}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarGetRelative"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="@string/module_calendar_get_relative_default"
-            android:ems="10"
-            android:id="@+id/editTextGetRelative" />
+            android:layout_height="72dp"
+            app:tickStart="0"
+            app:tickInterval="1"
+            app:tickEnd="48"
+            app:currentValue="@={module.getRelative}"
+            app:defaultRangeValue="@string/module_calendar_get_relative_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editTextUrgency"
+            android:labelFor="@+id/rangebarUrgency"
             android:paddingTop="5dp"
             InfoIcon:description="@string/module_calendar_urgency_description"
             InfoIcon:defaultVal="@string/module_calendar_urgency_default"
             InfoIcon:possibleValues="@array/module_calendar_urgency_possible"
             InfoIcon:title="@string/module_calendar_urgency_title"/>
 
-        <EditText
-            android:text="@={module.urgency}"
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarUrgency"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="@string/module_calendar_urgency_default"
-            android:ems="10"
-            android:id="@+id/editTextUrgency" />
+            android:layout_height="72dp"
+            app:tickStart="0"
+            app:tickInterval="1"
+            app:tickEnd="60"
+            app:currentValue="@={module.urgency}"
+            app:defaultRangeValue="@string/module_calendar_urgency_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"

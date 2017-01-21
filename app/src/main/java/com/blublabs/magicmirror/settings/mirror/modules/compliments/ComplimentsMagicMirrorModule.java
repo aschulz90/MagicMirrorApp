@@ -55,7 +55,7 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
             JSONObject config = data.getJSONObject(KEY_DATA_CONFIG);
 
             if(config.has(KEY_DATA_UPDATE_INTERVALL)) {
-                this.updateInterval = config.getInt(KEY_DATA_UPDATE_INTERVALL);
+                this.updateInterval = config.getInt(KEY_DATA_UPDATE_INTERVALL) / 1000 / 60;
             }
 
             if(config.has(KEY_DATA_FADE_SPEED)) {
@@ -183,7 +183,7 @@ public class ComplimentsMagicMirrorModule extends MagicMirrorModule {
         JSONObject config = new JSONObject();
 
         if(this.updateInterval != null) {
-            config.put(KEY_DATA_UPDATE_INTERVALL, this.updateInterval);
+            config.put(KEY_DATA_UPDATE_INTERVALL, this.updateInterval * 1000 * 60);
         }
 
         if(this.fadeSpeed != null) {

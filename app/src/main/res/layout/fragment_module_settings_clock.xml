@@ -141,25 +141,18 @@
             InfoIcon:title="@string/module_clock_analog_size_title"
             InfoIcon:possibleValues="@array/module_clock_analog_size_possible"/>
 
-        <LinearLayout
+        <com.blublabs.magicmirror.common.BindableRangeBar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebarAnalogClockSize"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <EditText
-                android:text="@={module.analogSize}"
-                android:hint="@string/module_clock_analog_size_default"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
-                android:id="@+id/editTextAnalogSize" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/px"/>
-        </LinearLayout>
+            android:layout_height="72dp"
+            app:tickStart="1"
+            app:tickInterval="1"
+            app:tickEnd="500"
+            app:currentValue="@={module.analogSize}"
+            app:defaultRangeValue="@string/module_clock_analog_size_default"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <com.blublabs.magicmirror.common.InfoIcon
             xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
