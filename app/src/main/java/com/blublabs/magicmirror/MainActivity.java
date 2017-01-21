@@ -37,6 +37,7 @@ import com.blublabs.magicmirror.settings.app.general.SettingsFragmentApp;
 import com.blublabs.magicmirror.settings.mirror.general.SettingsFragmentMirror;
 import com.blublabs.magicmirror.settings.mirror.modules.ModulesFragment;
 import com.blublabs.magicmirror.settings.mirror.wifi.WifiSettingsFragment;
+import com.blublabs.magicmirror.utils.ExceptionHandler;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String KEY_LAST_SELECTED_ITEM = "lastSelectedItem";
 
     private static final int PERMISSION_FINE_LOCATION = 1;
+    private static final int PERMISSION_WRITE_SD = 3;
     private static final int REQUEST_ENABLE_BT = 2;
 
     private DrawerLayout drawer;
@@ -109,6 +111,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_WRITE_SD);
+        }
+        else {
+            Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+        }
+
         setContentView(R.layout.activity_main);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -216,6 +226,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(this, "The location permission needs to be granted for the BLE-adapter to work!", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case PERMISSION_WRITE_SD:
+                if(grantResults[0] == PERMISSION_GRANTED) {
+                    Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+                }
         }
     }
 

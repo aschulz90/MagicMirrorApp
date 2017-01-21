@@ -107,8 +107,8 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
                             if(e.wasSuccess()) {
 
                                 try {
-                                    callback.onGetModuleData(MagicMirrorAdapterCallback.STATUS_SUCCESS, new JSONObject(e.data_string()));
-                                } catch (JSONException e1) {
+                                    callback.onGetModuleData(MagicMirrorAdapterCallback.STATUS_SUCCESS, new JSONObject(GzipUtil.decompress(e.data())));
+                                } catch (JSONException | IOException e1) {
                                     e1.printStackTrace();
                                     callback.onGetModuleData(MagicMirrorAdapterCallback.STATUS_ERROR, null);
                                 }
@@ -152,7 +152,7 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
                     List<MagicMirrorModule> modules = new ArrayList<>();
 
                     try {
-                        JSONArray moduleList = new JSONArray(e.data_string());
+                        JSONArray moduleList = new JSONArray(GzipUtil.decompress(e.data()));
 
                         for(int i = 0; i < moduleList.length(); i++) {
                             final MagicMirrorModule module = MagicMirrorModule.getModuleForName(moduleList.getString(i));
@@ -161,7 +161,7 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
                                 modules.add(module);
                             }
                         }
-                    } catch (JSONException e1) {
+                    } catch (JSONException | IOException e1) {
                         e1.printStackTrace();
                         callback.onGetModuleList(MagicMirrorAdapterCallback.STATUS_ERROR, null);
                         return;
@@ -190,7 +190,7 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
                     installedModules.put(KEY_CUSTOM_MODULES, customModules);
 
                     try {
-                        JSONObject wrapper = new JSONObject(e.data_string());
+                        JSONObject wrapper = new JSONObject(GzipUtil.decompress(e.data()));
                         JSONArray defaultModulesArray = wrapper.getJSONArray(KEY_DEFAULT_MODULES);
                         JSONArray customModulesArray = wrapper.getJSONArray(KEY_CUSTOM_MODULES);
 
@@ -203,7 +203,7 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
                         }
 
                         callback.onGetInstalledModuleList(MagicMirrorAdapterCallback.STATUS_SUCCESS, installedModules);
-                    } catch (JSONException e1) {
+                    } catch (JSONException | IOException e1) {
                         e1.printStackTrace();
                         callback.onGetModuleList(MagicMirrorAdapterCallback.STATUS_ERROR, null);
                     }
@@ -358,10 +358,10 @@ final class BleMagicMirrorAdapter implements IMagicMirrorAdapter {
             public void onEvent(ReadWriteEvent e) {
                 if(e.wasSuccess()) {
                     try {
-                        JSONObject config = new JSONObject(e.data_string());
+                        JSONObject config = new JSONObject(GzipUtil.decompress(e.data()));
                         callback.onGetMirrorConfig(MagicMirrorAdapterCallback.STATUS_SUCCESS, config);
 
-                    } catch (JSONException e1) {
+                    } catch (JSONException | IOException e1) {
                         e1.printStackTrace();
                         callback.onGetMirrorConfig(MagicMirrorAdapterCallback.STATUS_ERROR, null);
                     }
