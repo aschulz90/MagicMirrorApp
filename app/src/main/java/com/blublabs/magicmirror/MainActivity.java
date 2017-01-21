@@ -21,6 +21,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -44,14 +45,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.support.v4.content.PermissionChecker.PERMISSION_GRANTED;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
 
     private static final String KEY_LAST_SELECTED_ITEM = "lastSelectedItem";
 
-    private static final int PERMISSION_FINE_LOCATION = 1;
-    private static final int PERMISSION_WRITE_SD = 3;
+    private static final int PERMISSION_ALL = 1;
     private static final int REQUEST_ENABLE_BT = 2;
 
     private DrawerLayout drawer;
@@ -112,8 +113,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_WRITE_SD);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            List<String> reqPermissions = new ArrayList<>();
+
+            if (checkSelfPermission(ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                reqPermissions.add(ACCESS_COARSE_LOCATION);
+            }
+            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                reqPermissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            else {
+                Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+            }
+
+            if(!reqPermissions.isEmpty()) {
+                requestPermissions(reqPermissions.toArray(new String[0]), PERMISSION_ALL);
+            }
         }
         else {
             Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
@@ -191,13 +207,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return false;
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_FINE_LOCATION);
-                return false;
-            }
-        }
-
         return true;
     }
 
@@ -217,19 +226,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
         switch (requestCode) {
-            case PERMISSION_FINE_LOCATION:
-                if(grantResults[0] == PERMISSION_GRANTED) {
-                    enableMenu();
-                }
-                else {
-                    Toast.makeText(this, "The location permission needs to be granted for the BLE-adapter to work!", Toast.LENGTH_SHORT).show();
+            case PERMISSION_ALL:
+                for(int i = 0; i < permissions.length; i++) {
+                    switch (permissions[i]) {
+                        case Manifest.permission.ACCESS_COARSE_LOCATION:
+                            if(grantResults[i] == PERMISSION_GRANTED) {
+                                enableMenu();
+                            }
+                            else {
+                                Toast.makeText(this, "The location permission needs to be granted for the BLE-adapter to work!", Toast.LENGTH_SHORT).show();
+                            }
+                            break;
+                        case Manifest.permission.WRITE_EXTERNAL_STORAGE:
+                            if(grantResults[i] == PERMISSION_GRANTED) {
+                                Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+                            }
+                            break;
+                    }
                 }
                 break;
-            case PERMISSION_WRITE_SD:
-                if(grantResults[0] == PERMISSION_GRANTED) {
-                    Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
-                }
         }
     }
 
@@ -412,16 +429,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void addPairedDevice(String deviceAddress) {
-        pairedDevicesList.add(deviceAddress);
+        if(!pairedDevicesList.contains(deviceAddress)) {
+            pairedDevicesList.add(deviceAddress);
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        sharedPref.edit()
-                .putStringSet(getAdapter().getAdapterIdentifier() + "_" + getString(R.string.key_pref_paired_devices), pairedDevicesList)
-                .apply();
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            sharedPref.edit()
+                    .putStringSet(getAdapter().getAdapterIdentifier() + "_" + getString(R.string.key_pref_paired_devices), pairedDevicesList)
+                    .apply();
 
-        setDefaultDevice(deviceAddress);
+            setDefaultDevice(deviceAddress);
 
-        updateDevices();
+            updateDevices();
+            Toast.makeText(this, "Successfully paired MagicMirror!", Toast.LENGTH_LONG).show();
+            drawer.openDrawer(Gravity.START);
+        }
     }
 
     public void updateDevices(){

@@ -15,14 +15,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/mainText" />
-
-    <com.blublabs.magicmirror.common.InfoIcon
-        xmlns:InfoIcon="http://schemas.android.com/apk/res-auto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        InfoIcon:description="Bla bla bla"
-        InfoIcon:defaultVal="Test"
-        InfoIcon:possibleValues="@array/magicmirror_adapter_array"
-        InfoIcon:notes="Just some notes"
-        InfoIcon:title="Test"/>
 </LinearLayout>
