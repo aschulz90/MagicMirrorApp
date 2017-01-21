@@ -12,7 +12,8 @@ This is an Android App that allows you to connect to a [MagicMirror](https://git
 ### Wifi
 
 - [MMM-Remote-Control](https://github.com/Jopyth/MMM-Remote-Control) installed on your MagicMirror
-- the MagicMirror and your Smartphone need to be in the same network and your Smartphone needs to be whitelisted on the MagicMirror
+- the MagicMirror and your Smartphone need to be in the same network 
+- your Smartphone needs to be whitelisted on the MagicMirror
 
 ## License
 
