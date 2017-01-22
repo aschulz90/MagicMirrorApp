@@ -16,6 +16,8 @@ This video is relatively old and will be updated sometime.
 - [ble_app_interface](https://github.com/aschulz90/ble_app_interface) installed on your MagicMirror
 - a Bluetooth 4.0 capable Smartphone
 
+This app uses [SweetBle](idevicesinc.com/sweetblue/) for managing its BLE-functionality.
+
 ### Wifi Connectivity
 
 - [MMM-Remote-Control](https://github.com/Jopyth/MMM-Remote-Control) installed on your MagicMirror
