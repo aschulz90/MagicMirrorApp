@@ -2,6 +2,13 @@
 
 This is an Android App that allows you to connect to a [MagicMirror](https://github.com/MichMich/MagicMirror). This can either be done via BLE or Wifi (indirectly).
 
+
+## Video:
+
+This video is relatively old and will be updated sometime.
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/hUUipBgShb4/0.jpg)](https://www.youtube.com/watch?v=hUUipBgShb4)
+
 ## Requirements
 
 ### BLE
@@ -19,8 +26,29 @@ This is an Android App that allows you to connect to a [MagicMirror](https://git
 
 ### Choose an Adapter
 
+BLE is the default adapter, if you want to change it:
+
 - open the side menu and click on "App Setting"
-- select "MagicMirror Adapter" and select your desired adapter
+- click on "MagicMirror Adapter" and select your desired adapter
+
+### Connect to a MagicMirror
+
+- open the side menu
+- click on "Scan" in the top right corner to start scanning for nearby MagicMirrors
+- after a MagicMirror was detected, it will show up in the list
+- click on the MagicMirror in the list you want to connect to
+
+### Change between paired MagicMirrors
+
+- open the side menu
+- click on the spinner at the top and select another MagicMirror
+- OR got to "App Settings" and click on "Paired Mirror" and select another MagicMirror
+
+### Execute Actions
+
+- open the side menu
+- select "MagicMirror Settings"
+- scroll down to the "Queries" section and click on the action you want to execute
 
 ## License
 
