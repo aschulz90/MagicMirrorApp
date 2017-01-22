@@ -11,10 +11,6 @@ This video is relatively old and will be updated sometime.
 
 ## Requirements
 
-### General
-
-- [persistent_config_interface](https://github.com/aschulz90/persistent_config_interface) installed on your MagicMirror
-
 ### BLE Connectivity
 
 - [ble_app_interface](https://github.com/aschulz90/ble_app_interface) installed on your MagicMirror
