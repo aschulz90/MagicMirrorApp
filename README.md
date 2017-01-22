@@ -11,12 +11,12 @@ This video is relatively old and will be updated sometime.
 
 ## Requirements
 
-### BLE
+### BLE Connectivity
 
 - [ble_app_interface](https://github.com/aschulz90/ble_app_interface) installed on your MagicMirror
 - a Bluetooth 4.0 capable Smartphone
 
-### Wifi
+### Wifi Connectivity
 
 - [MMM-Remote-Control](https://github.com/Jopyth/MMM-Remote-Control) installed on your MagicMirror
 - the MagicMirror and your Smartphone need to be in the same network 
