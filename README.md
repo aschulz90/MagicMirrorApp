@@ -24,6 +24,18 @@ This app uses [SweetBle](http://idevicesinc.com/sweetblue/) for managing its BLE
 - the MagicMirror and your Smartphone need to be in the same network 
 - your Smartphone needs to be whitelisted on the MagicMirror
 
+## Permissions
+
+Permission | Used for | Required
+--- | --- | ---
+ACCESS_WIFI_STATE | checking, if Wifi is enabled | yes
+ACCESS_NETWORK_STATE | scanning for MagicMirror in the local network | yes
+INTERNET | communicating with a MagicMirror over Wifi | yes
+BLUETOOTH | connecting to the MagicMirror via BLE | yes
+BLUETOOTH_ADMIN | checking, if Bluetooth is enabled | yes
+ACCESS_COARSE_LOCATION | scanning for nearby MagicMirrors via BLE | yes
+WRITE_EXTERNAL_STORAGE | writing log files in case of an app crash | no
+
 ## Usage
 
 ### Choose an Adapter
