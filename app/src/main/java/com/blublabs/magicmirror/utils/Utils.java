@@ -1,5 +1,6 @@
 package com.blublabs.magicmirror.utils;
 
+import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.databinding.InverseBindingAdapter;
 import android.databinding.InverseBindingListener;
@@ -12,6 +13,9 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.blublabs.magicmirror.common.BindableRangeBar;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by andrs on 08.10.2016.
@@ -31,6 +35,23 @@ public final class Utils {
         }
 
         return true;
+    }
+
+    public static String loadJsonFromAsset(Context context, String file) {
+        String json = null;
+
+        try {
+            InputStream is = context.getAssets().open(file);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return json;
     }
 
     public static boolean isEmpty(String value) {

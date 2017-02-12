@@ -78,7 +78,12 @@ public class CustomMagicMirrorModule extends MagicMirrorModule {
 
     @Override
     public JSONObject toJson() throws JSONException {
-        return data;
+
+        JSONObject config = super.toJson();
+
+        config.put(KEY_DATA_CONFIG, data.getJSONObject(KEY_DATA_CONFIG));
+
+        return config;
     }
 
     @Override

@@ -57,8 +57,6 @@ public class ModuleScrollView extends CoordinatorLayout {
     private NestedScrollView nestedScrollView = null;
     private View progressBar = null;
 
-    private Map<String, List<String>> installedModules = null;
-
     private final Handler delayHandler = new Handler();
     private static final int UPDATE_DELAY = 1000;
 
@@ -147,22 +145,16 @@ public class ModuleScrollView extends CoordinatorLayout {
         fab.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(installedModules == null) {
-                    showProgressBar(true);
-                    moduleDataAdapter.getInstalledModuleList(new IMagicMirrorAdapter.MagicMirrorAdapterCallback() {
-                        @Override
-                        public void onGetInstalledModuleList(int status, Map<String, List<String>> installedModules) {
-                            if(status == IMagicMirrorAdapter.MagicMirrorAdapterCallback.STATUS_SUCCESS) {
-                                ModuleScrollView.this.installedModules = installedModules;
-                                showInstalledModuleList();
-                                showProgressBar(false);
-                            }
+                showProgressBar(true);
+                moduleDataAdapter.getInstalledModuleList(new IMagicMirrorAdapter.MagicMirrorAdapterCallback() {
+                    @Override
+                    public void onGetInstalledModuleList(int status, Map<String, List<String>> installedModules) {
+                        if(status == IMagicMirrorAdapter.MagicMirrorAdapterCallback.STATUS_SUCCESS) {
+                            showInstalledModuleList(installedModules);
+                            showProgressBar(false);
                         }
-                    });
-                }
-                else {
-                    showInstalledModuleList();
-                }
+                    }
+                });
             }
         });
 
@@ -213,7 +205,7 @@ public class ModuleScrollView extends CoordinatorLayout {
         }
     }
 
-    private void showInstalledModuleList() {
+    private void showInstalledModuleList(Map<String, List<String>> installedModules) {
 
         final List<String> modules = new ArrayList<>(installedModules.get(IMagicMirrorAdapter.KEY_DEFAULT_MODULES));
         modules.addAll(installedModules.get(IMagicMirrorAdapter.KEY_CUSTOM_MODULES));

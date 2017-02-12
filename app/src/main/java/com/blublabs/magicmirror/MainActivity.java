@@ -37,6 +37,7 @@ import com.blublabs.magicmirror.settings.app.devices.PairedDevicesSpinner;
 import com.blublabs.magicmirror.settings.app.general.SettingsFragmentApp;
 import com.blublabs.magicmirror.settings.mirror.general.SettingsFragmentMirror;
 import com.blublabs.magicmirror.settings.mirror.modules.ModulesFragment;
+import com.blublabs.magicmirror.settings.mirror.remotemodules.RemoteModulesFragment;
 import com.blublabs.magicmirror.settings.mirror.wifi.WifiSettingsFragment;
 import com.blublabs.magicmirror.utils.ExceptionHandler;
 
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     ((TextView) devicesSpinner.findViewById(R.id.connect_status)).setText(getString(R.string.connected));
                     navDrawer.getMenu().findItem(R.id.nav_modules_fragment).setEnabled(true);
                     navDrawer.getMenu().findItem(R.id.nav_settings_general_fragment).setEnabled(true);
+                    navDrawer.getMenu().findItem(R.id.nav_install_modules_fragment).setEnabled(true);
                     navDrawer.getMenu().findItem(R.id.nav_settings_wifi_fragment).setEnabled(getAdapter().isAllowWifiSetup());
                 }
             });
@@ -88,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     ((TextView) devicesSpinner.findViewById(R.id.connect_status)).setText(getString(R.string.disconnected));
                     navDrawer.getMenu().findItem(R.id.nav_modules_fragment).setEnabled(false);
                     navDrawer.getMenu().findItem(R.id.nav_settings_general_fragment).setEnabled(false);
+                    navDrawer.getMenu().findItem(R.id.nav_install_modules_fragment).setEnabled(false);
                     navDrawer.getMenu().findItem(R.id.nav_settings_wifi_fragment).setEnabled(false);
                 }});
         }
@@ -347,6 +350,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_settings_App_fragment:
                 fragmentClass = SettingsFragmentApp.class;
+                break;
+            case R.id.nav_install_modules_fragment:
+                fragmentClass = RemoteModulesFragment.class;
                 break;
             default:
                 fragmentClass = MainFragment.class;

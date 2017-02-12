@@ -430,6 +430,21 @@ public class RemoteMagicMirrorAdapter implements IMagicMirrorAdapter {
     }
 
     @Override
+    public void installModule(String url, final MagicMirrorAdapterCallback callback) {
+        requestQueue.add(new StringRequest(getRequestUrl(currentConnectedMirror) + "remote?action=INSTALL&url=" + url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                callback.onInstallModule(MagicMirrorAdapterCallback.STATUS_SUCCESS);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onInstallModule(MagicMirrorAdapterCallback.STATUS_ERROR);
+            }
+        }));
+    }
+
+    @Override
     public String getAdapterIdentifier() {
         return "wifi";
     }

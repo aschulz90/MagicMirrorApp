@@ -23,6 +23,7 @@
     <string name="magicmirror">MagicMirror</string>
     <string name="magicmirror_settings">MagicMirror Settings</string>
     <string name="modules">Modules</string>
+    <string name="install_modules">Install Modules</string>
     <string name="wifi">Wifi</string>
     <string name="app">App</string>
     <string name="app_settings">App Settings</string>

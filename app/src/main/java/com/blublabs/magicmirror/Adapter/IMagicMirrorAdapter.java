@@ -68,6 +68,8 @@ public interface IMagicMirrorAdapter {
 
     void executeQuery(String query, MagicMirrorAdapterCallback callback);
 
+    void installModule(String url, MagicMirrorAdapterCallback callback);
+
     String getAdapterIdentifier();
 
     class MagicMirrorAdapterCallback {
@@ -136,6 +138,10 @@ public interface IMagicMirrorAdapter {
         }
 
         public void onExecuteQuery(int status) {
+
+        }
+
+        public void onInstallModule(int status) {
 
         }
     }
