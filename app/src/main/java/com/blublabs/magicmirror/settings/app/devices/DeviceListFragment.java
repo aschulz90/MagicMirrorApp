@@ -120,6 +120,10 @@ public class DeviceListFragment extends Fragment {
     }
 
     private void setButtonText(final String newText) {
+
+        if(getActivity() == null)
+            return;
+
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 (toolbarMenu.findItem(R.id.action_scan)).setTitle(newText);

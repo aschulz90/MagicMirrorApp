@@ -75,18 +75,18 @@ public class BindableRangeBar extends RangeBar {
         ta.recycle();
     }
 
-    public Double getCurrentValue() {
+    public Number getCurrentValue() {
         return Double.parseDouble(getRightPinValue());
     }
 
-    public void setCurrentValue(Double value) {
-        if(value != null && !Double.valueOf(getRightPinValue()).equals(value)) {
-            setRangePinsByValue(getTickStart(), value.floatValue());
+    public void setCurrentValue(Number newValue) {
+        if(newValue != null && !Double.valueOf(getRightPinValue()).equals(newValue)) {
+            setRangePinsByValue(getTickStart(), newValue.floatValue());
         }
     }
 
     @BindingAdapter("app:currentValue")
-    public static void setCurrentValue(BindableRangeBar view, Integer oldValue, Integer newValue) {
+    public static void setCurrentValue(BindableRangeBar view, Number oldValue, Number newValue) {
 
         if (!Utils.objectsEqual(oldValue, newValue)) {
             view.setCurrentValue(newValue.doubleValue());
@@ -94,7 +94,7 @@ public class BindableRangeBar extends RangeBar {
     }
 
     @InverseBindingAdapter(attribute = "app:currentValue")
-    public static Integer getCurrentValue(BindableRangeBar view) {
+    public static Number getCurrentValue(BindableRangeBar view) {
         return view.getCurrentValue().intValue();
     }
 

@@ -187,6 +187,9 @@ public class SettingsFragmentMirror extends PreferenceFragmentCompat implements 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, final String key) {
 
+        if(!settingsLoaded)
+            return;
+
         JSONObject config = new JSONObject();
 
         try {

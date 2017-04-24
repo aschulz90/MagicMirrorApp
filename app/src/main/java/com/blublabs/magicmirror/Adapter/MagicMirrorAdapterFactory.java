@@ -6,8 +6,6 @@ import android.support.v7.preference.PreferenceManager;
 
 import com.blublabs.magicmirror.R;
 
-import kotlin.NotImplementedError;
-
 /**
  * Created by andrs on 24.11.2016.
  */
@@ -61,7 +59,7 @@ public class MagicMirrorAdapterFactory {
                 }
                 return remoteMagicMirrorAdapterInstance;
             default:
-                throw new NotImplementedError("This MagicMirrorAdapter is not yet implemented!");
+                throw new RuntimeException("This MagicMirrorAdapter is not yet implemented!");
         }
     }
 

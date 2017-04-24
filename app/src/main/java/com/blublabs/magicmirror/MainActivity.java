@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 reqPermissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
             else {
-                Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+                Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getApplicationContext()));
             }
 
             if(!reqPermissions.isEmpty()) {
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
         else {
-            Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+            Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getApplicationContext()));
         }
 
         setContentView(R.layout.activity_main);
@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             break;
                         case Manifest.permission.WRITE_EXTERNAL_STORAGE:
                             if(grantResults[i] == PERMISSION_GRANTED) {
-                                Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+                                Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getApplicationContext()));
                             }
                             break;
                     }

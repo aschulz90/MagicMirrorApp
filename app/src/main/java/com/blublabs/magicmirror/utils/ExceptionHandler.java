@@ -9,14 +9,22 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
+
+import com.blublabs.magicmirror.adapter.MagicMirrorAdapterFactory;
 
 public class ExceptionHandler implements UncaughtExceptionHandler {
 
     private UncaughtExceptionHandler defaultUEH;
 
-    public ExceptionHandler() {
+    private final Context myContext;
+
+    public ExceptionHandler(Context context) {
+
+        myContext = context;
+
         //Getting the the default exception handler
         //that's executed when uncaught exception terminates a thread
         this.defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
@@ -36,6 +44,8 @@ public class ExceptionHandler implements UncaughtExceptionHandler {
 
         //Used only to prevent from any code getting executed.
         defaultUEH.uncaughtException(t, e);
+
+        MagicMirrorAdapterFactory.getAdapter(myContext).disconnectMirror();
     }
 
     private void writeToFile(String currentStacktrace) {
